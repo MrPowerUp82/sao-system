@@ -142,7 +142,7 @@ function initParticles() {
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < LINK_DISTANCE) {
                     const opacity = (1 - dist / LINK_DISTANCE) * 0.08;
-                    ctx.strokeStyle = `rgba(0, 245, 255, ${opacity})`;
+                    ctx.strokeStyle = `rgba(255, 123, 0, ${opacity})`;
                     ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
@@ -160,7 +160,7 @@ function initParticles() {
             if (p.x < 0 || p.x > width) p.vx *= -1;
             if (p.y < 0 || p.y > height) p.vy *= -1;
 
-            ctx.fillStyle = 'rgba(0, 245, 255, 0.2)';
+            ctx.fillStyle = 'rgba(255, 123, 0, 0.2)';
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fill();
