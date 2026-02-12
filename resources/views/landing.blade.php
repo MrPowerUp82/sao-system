@@ -155,7 +155,7 @@
                     <ul class="mt-6 space-y-3">
                         @foreach(['8 Módulos de treinamento', 'Sistema de XP e progressão', 'Comunidade exclusiva (Guilda)', 'Suporte direto do Mestre'] as $item)
                         <li class="flex items-center gap-3 text-gray-700">
-                            <span class="w-6 h-6 rounded-full bg-sao-orange text-white flex items-center justify-center text-xs font-bold shadow-sm">✓</span>
+                            <span class="w-6 h-6 rounded-full bg-sao-orange text-white flex items-center justify-center text-xs font-bold shadow-sm">⊕</span>
                             <span class="font-medium">{{ $item }}</span>
                         </li>
                         @endforeach
@@ -395,7 +395,7 @@
                     <ul class="space-y-2.5 mb-6 text-sm">
                         @foreach(['8 Módulos de treinamento', 'Guilda (comunidade vitalícia)', 'Suporte direto do Mestre', 'Missões Extras (bônus)', 'Atualizações vitalícias', 'Certificado de Conclusão'] as $f)
                         <li class="flex items-center gap-2.5 text-gray-700">
-                            <span class="w-5 h-5 rounded-full bg-sao-orange text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">✓</span>
+                            <span class="w-5 h-5 rounded-full bg-sao-orange text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">⊕</span>
                             {{ $f }}
                         </li>
                         @endforeach

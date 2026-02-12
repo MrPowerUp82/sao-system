@@ -37,7 +37,7 @@
 
   /* ── Glassmorphism Panel ── */
   .sao-panel {
-    background: rgba(240, 238, 235, 0.72);
+    background: rgba(255, 255, 255, 0.80);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 2px solid #FF9D00;
@@ -59,7 +59,7 @@
 
   /* ── Panel with glass shine (Quest Logs) ── */
   .sao-quest-panel {
-    background: rgba(245, 242, 238, 0.75);
+    background: rgba(255, 255, 255, 0.80);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 2px solid #FF9D00;
@@ -222,7 +222,7 @@
   .sao-title {
     font-family: 'Rajdhani', sans-serif;
     font-weight: 700;
-    color: #333;
+    color: #2d2d2d;
     position: relative;
   }
 
