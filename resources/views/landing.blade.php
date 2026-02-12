@@ -11,9 +11,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+    <div id="boot-sequence" class="boot-layer flex-col bg-black text-neon-cyan/80 z-[99999]">
+        <div id="boot-text" class="text-left w-full max-w-2xl px-6 min-h-[300px]"></div>
+        <div id="tunnel-effect" class="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-1000">
+             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[200vw] rounded-full
+                         border-[100px] border-neon-cyan animate-ping opacity-20"></div>
+        </div>
+        <button id="skip-boot" class="absolute bottom-8 text-xs font-mono text-slate-600 hover:text-white transition-colors">
+            PRESS [ESC] TO SKIP
+        </button>
+    </div>
+
     @vite(['resources/css/landing.css', 'resources/js/landing.js'])
 </head>
-<body class="noise-overlay font-body antialiased bg-hud-dark text-slate-300">
+<body class="noise-overlay crt-scanlines font-body antialiased bg-hud-dark text-slate-300 overflow-hidden">
 
 {{-- ══════════════════════════════════════════════════════
      NAVIGATION — HUD Style Fixed Bar
@@ -297,39 +308,21 @@
         ];
         @endphp
 
-        <div data-stagger class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {{-- Module List (Vertical Menu Style) --}}
+        <div data-stagger class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
             @foreach($modules as $m)
-            <div class="relative group bg-hud-panel rounded-sm overflow-hidden
-                        border border-white/5 panel-inset
-                        hover:border-neon-cyan/30
-                        hover:shadow-[0_0_20px_rgba(0,245,255,0.08)]
-                        transition-all duration-500">
-                {{-- Top Gradient Line --}}
-                <div class="h-[2px] w-full bg-gradient-to-r from-neon-cyan via-neon-blue to-transparent"></div>
-
-                {{-- Header --}}
-                <div class="flex items-center justify-between px-5 py-3 border-b border-white/5">
-                    <span class="font-mono text-xs text-neon-cyan tracking-wider uppercase">Módulo {{ $m['num'] }}</span>
-                    <span class="font-mono text-xs text-rpg-gold">+{{ $m['xp'] }} XP</span>
+            <div class="relative group bg-hud-panel border-l-4 border-l-transparent hover:border-l-neon-cyan
+                        border-y border-r border-white/5 p-4 flex items-center gap-4 transition-all duration-300
+                        hover:bg-white/[0.02]">
+                <div class="font-console text-2xl text-neon-cyan opacity-80 group-hover:opacity-100">{{ $m['icon'] }}</div>
+                <div class="flex-1">
+                    <h3 class="font-display text-base text-white tracking-wide group-hover:text-neon-cyan transition-colors">
+                        <span class="text-xs text-slate-500 mr-2">{{ $m['num'] }}</span> {{ $m['title'] }}
+                    </h3>
                 </div>
-
-                {{-- Body --}}
-                <div class="p-5 space-y-3">
-                    <span class="text-3xl block">{{ $m['icon'] }}</span>
-                    <h3 class="font-heading text-lg font-bold text-white leading-tight">{{ $m['title'] }}</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">{{ $m['desc'] }}</p>
-
-                    {{-- Progress Bar --}}
-                    <div class="pt-2">
-                        <div class="flex justify-between text-[10px] font-mono text-slate-500 mb-1">
-                            <span>Conteúdo</span>
-                            <span>{{ $m['lessons'] }} aulas</span>
-                        </div>
-                        <div class="h-1 bg-white/5 rounded-none overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-neon-cyan to-neon-blue w-full opacity-30
-                                        group-hover:opacity-100 transition-opacity duration-700"></div>
-                        </div>
-                    </div>
+                <div class="text-right">
+                    <span class="block font-console text-xs text-rpg-gold">LV.{{ $m['lessons'] }}</span>
+                    <span class="block font-mono text-[10px] text-slate-600">EXP +{{ $m['xp'] }}</span>
                 </div>
             </div>
             @endforeach
@@ -638,75 +631,41 @@
             </h2>
         </div>
 
-        {{-- Pricing Card --}}
-        <div data-animate="scale"
-             class="relative border-neon-gradient rounded-sm overflow-hidden shimmer">
-
-            {{-- Legendary Badge --}}
-            <div class="absolute -top-px left-0 right-0 h-[3px]
-                        bg-gradient-to-r from-transparent via-rpg-gold to-transparent"></div>
-
-            <div class="bg-hud-panel p-8 lg:p-10">
-                {{-- Badge --}}
-                <div class="text-center mb-8">
-                    <span class="inline-flex items-center gap-2 px-4 py-1.5
-                                bg-rpg-gold/10 border border-rpg-gold/30 rounded-sm
-                                font-mono text-xs text-rpg-gold tracking-wider uppercase font-bold">
-                        ★ ITEM LENDÁRIO
-                    </span>
-                    <h3 class="mt-4 font-display text-2xl font-bold text-white">Acesso Completo ao Sistema</h3>
+        {{-- Pricing Card (Trade Window Style) --}}
+        <div data-animate="scale" class="relative max-w-lg mx-auto bg-hud-panel border-2 border-slate-700/50 rounded-lg p-1">
+            <div class="bg-hud-dark/90 p-6 border border-white/5 relative">
+                {{-- Window Header --}}
+                <div class="absolute -top-3 left-4 bg-hud-dark px-2 font-console text-xs text-neon-cyan uppercase tracking-widest border border-neon-cyan/30">
+                    TRADE WINDOW
                 </div>
 
-                {{-- Features --}}
-                <ul class="space-y-3 mb-8">
-                    @foreach([
-                        'Todos os 8 Módulos de treinamento',
-                        'Acesso vitalício à Guilda (comunidade)',
-                        'Suporte direto do Mestre',
-                        'Pack de Missões Extras (bônus)',
-                        'Atualizações vitalícias',
-                        'Certificado de Conclusão (badge exclusivo)',
-                    ] as $feat)
-                    <li class="flex items-center gap-3">
-                        <span class="flex-shrink-0 w-5 h-5 rounded-sm bg-neon-cyan/10 border border-neon-cyan/30
-                                    flex items-center justify-center">
-                            <svg class="w-3 h-3 text-neon-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                            </svg>
-                        </span>
-                        <span class="text-sm text-slate-300">{{ $feat }}</span>
-                    </li>
-                    @endforeach
-                </ul>
-
-                {{-- Price --}}
-                <div class="text-center mb-8 py-6 border-y border-white/5">
-                    <div class="flex items-center justify-center gap-4">
-                        <span class="text-slate-500 line-through font-mono text-lg">R$ 497</span>
-                        <span class="font-display text-5xl font-black text-white text-glow-cyan">
-                            R$ 197
-                        </span>
+                {{-- Item Slot --}}
+                <div class="flex gap-4 mb-6">
+                    <div class="w-20 h-20 bg-black/40 border border-white/10 flex items-center justify-center text-4xl animate-pulse">
+                        ⚔️
                     </div>
-                    <p class="mt-2 text-xs font-mono text-slate-500">ou 12x de R$ 19,70 sem juros</p>
+                    <div>
+                        <h3 class="font-display text-xl text-white">SAO SYSTEM ACCESS</h3>
+                        <p class="font-console text-xs text-rpg-gold mt-1">Class: Legendary Item</p>
+                        <p class="font-mono text-xs text-slate-500 mt-2 max-w-xs">Grants full access to all training modules and Guild features.</p>
+                    </div>
                 </div>
 
-                {{-- CTA --}}
-                <a href="#"
-                   class="block w-full text-center px-8 py-5
-                          bg-neon-cyan/10 border-2 border-neon-cyan text-neon-cyan
-                          font-display font-black text-lg tracking-wider uppercase
-                          rounded-sm btn-glow btn-scan animate-neon-pulse
-                          hover:bg-neon-cyan/20 transition-colors duration-300">
-                    ⚔ ENTRAR NO SISTEMA
+                <div class="h-px bg-white/10 my-4"></div>
+
+                {{-- Cost --}}
+                <div class="flex justify-between items-end mb-6">
+                    <span class="font-console text-sm text-slate-400">COST:</span>
+                    <div class="text-right">
+                        <span class="block text-slate-500 line-through text-xs">R$ 497</span>
+                        <span class="font-display text-3xl text-neon-cyan text-glow-cyan">R$ 197</span>
+                    </div>
+                </div>
+
+                {{-- Accept Button --}}
+                <a href="#" class="block w-full text-center py-3 bg-neon-cyan/20 border border-neon-cyan text-neon-cyan font-bold font-display uppercase tracking-wider hover:bg-neon-cyan/30 transition-all clip-button">
+                    ⭕ ACCEPT TRADE
                 </a>
-
-                {{-- Guarantee --}}
-                <div class="mt-6 flex items-center justify-center gap-2 text-xs font-mono text-slate-500">
-                    <svg class="w-4 h-4 text-rpg-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                    <span>🛡️ Garantia de 7 dias — Sem risco. Não gostou? Devolvemos 100%.</span>
-                </div>
             </div>
         </div>
 

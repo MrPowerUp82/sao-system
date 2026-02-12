@@ -31,7 +31,8 @@ export default {
                 'display': ['Orbitron', 'sans-serif'],
                 'heading': ['Rajdhani', 'sans-serif'],
                 'body': ['Inter', 'sans-serif'],
-                'mono': ['JetBrains Mono', 'monospace'],
+                'mono': ['Share Tech Mono', 'VT323', 'monospace'],
+                'console': ['VT323', 'monospace'],
             },
             animation: {
                 'neon-pulse': 'neon-pulse 2s ease-in-out infinite',

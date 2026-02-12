@@ -4,12 +4,70 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initBootSequence();
     initScrollReveal();
     initStatusBars();
     initCounters();
     initParticles();
     initNavScroll();
 });
+
+/* ── Boot Sequence (Nervegear Link Start) ── */
+function initBootSequence() {
+    const bootLayer = document.getElementById('boot-sequence');
+    if (!bootLayer) return;
+
+    const steps = [
+        { text: 'NERVEGEAR SYSTEM STARTUP...', delay: 500 },
+        { text: 'CHECKING NEURAL LINK...', delay: 1200 },
+        { text: 'SYNCHRONIZING...', delay: 2000 },
+        { text: 'WARNING: IMMORTAL OBJECT DETECTED', delay: 2800, color: 'text-rpg-red' },
+        { text: 'LINK START!', delay: 3500, big: true }
+    ];
+
+    const consoleText = document.getElementById('boot-text');
+
+    // Skip button logic
+    document.getElementById('skip-boot')?.addEventListener('click', endBoot);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') endBoot();
+    });
+
+    let stepIndex = 0;
+
+    function nextStep() {
+        if (stepIndex >= steps.length) {
+            setTimeout(endBoot, 1000);
+            return;
+        }
+
+        const step = steps[stepIndex];
+        setTimeout(() => {
+            const p = document.createElement('p');
+            p.className = `font-console text-lg ${step.color || 'text-neon-cyan'} mb-2`;
+            if (step.big) {
+                p.className = 'font-display text-5xl md:text-7xl font-black text-white text-glow-cyan animate-pulse mt-8';
+                // Trigger tunnel effect here if we had the element
+                document.getElementById('tunnel-effect')?.classList.add('active');
+            }
+            p.textContent = `> ${step.text}`;
+            consoleText.appendChild(p);
+            stepIndex++;
+            nextStep();
+        }, stepIndex === 0 ? step.delay : (step.delay - steps[stepIndex - 1].delay));
+    }
+
+    nextStep();
+
+    function endBoot() {
+        bootLayer.style.opacity = '0';
+        bootLayer.style.pointerEvents = 'none';
+        setTimeout(() => {
+            bootLayer.remove();
+            document.body.classList.remove('overflow-hidden');
+        }, 1000);
+    }
+}
 
 /* ── Scroll Reveal (Intersection Observer) ── */
 function initScrollReveal() {
