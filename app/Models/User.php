@@ -2,45 +2,33 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Services\XpService;
 
 class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'level',
+        'xp',
+        'player_name',
+        'avatar_url',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -48,7 +36,32 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
         return str_ends_with($this->email, '@' . explode('//', config('app.url'))[1]);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(GeneralizedTransition::class);
+    }
+
+    public function financialGoals()
+    {
+        return $this->hasMany(FinancialGoal::class);
+    }
+
+    public function getXpProgress(): array
+    {
+        return XpService::xpToNextLevel($this->xp ?? 0);
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->player_name ?? $this->name;
+    }
+
+    public function guilds()
+    {
+        return $this->belongsToMany(Guild::class, 'guild_user')
+            ->withPivot('role', 'joined_at');
     }
 }
