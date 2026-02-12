@@ -20,7 +20,16 @@ class InventoryController extends Controller
             $query->where('slot', $request->input('slot'));
         }
 
-        $items = $query->orderByRaw("FIELD(rarity, 'legendary', 'epic', 'rare', 'uncommon', 'common')")
+        $items = $query->orderByRaw("
+            CASE rarity
+                WHEN 'legendary' THEN 1
+                WHEN 'epic' THEN 2
+                WHEN 'rare' THEN 3
+                WHEN 'uncommon' THEN 4
+                WHEN 'common' THEN 5
+                ELSE 6
+            END
+        ")
             ->orderBy('equipped', 'desc')
             ->get()
             ->map(fn($item) => [
