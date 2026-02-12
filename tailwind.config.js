@@ -13,13 +13,13 @@ export default {
         extend: {
             colors: {
                 'hud': {
-                    'dark': '#110f1a',
-                    'panel': '#1a1628',
-                    'surface': '#241f35',
+                    'dark': '#f0f4f8', // Light sky/cloud base
+                    'panel': 'rgba(255, 255, 255, 0.85)', // Glassmorphism base
+                    'surface': '#ffffff',
                 },
                 'neon': {
-                    'cyan': '#FF7B00',
-                    'blue': '#FFAA33',
+                    'cyan': '#FF9D00', // SAO Main Orange
+                    'blue': '#4A90E2', // Sky Blue interactions
                 },
                 'rpg': {
                     'gold': '#FFD700',

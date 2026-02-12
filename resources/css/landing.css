@@ -2,338 +2,283 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ══════════════════════════════════════════════════════
+   SAO AINCRAD FIDELITY — CSS DESIGN SYSTEM
+   ══════════════════════════════════════════════════════ */
+
 @layer base {
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    font-family: 'Inter', sans-serif;
-    background-color: #110f1a;
-    color: #e2e8f0;
+    font-family: 'Rajdhani', sans-serif;
+    color: #2d2d2d;
     overflow-x: hidden;
+    min-height: 100vh;
+    /* Aincrad sky atmosphere — dimmed warm gradient */
+    background:
+      linear-gradient(180deg,
+        rgba(30, 30, 50, 0.55) 0%,
+        rgba(40, 35, 55, 0.40) 30%,
+        rgba(180, 160, 120, 0.25) 70%,
+        rgba(60, 50, 40, 0.50) 100%),
+      linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #533483 100%);
+    background-attachment: fixed;
   }
 
   ::selection {
-    background-color: rgba(255, 123, 0, 0.3);
+    background-color: rgba(255, 157, 0, 0.35);
     color: #fff;
   }
 }
 
 @layer components {
 
-  /* ── Panel Inset Shadow (CRT feel) ── */
-  .panel-inset {
-    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6),
-      inset 0 0 20px rgba(255, 123, 0, 0.03);
+  /* ── Glassmorphism Panel ── */
+  .sao-panel {
+    background: rgba(240, 238, 235, 0.72);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 2px solid #FF9D00;
+    border-radius: 12px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.18),
+      0 2px 8px rgba(0, 0, 0, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  /* ── Neon Gradient Border ── */
-  .border-neon-gradient {
-    position: relative;
-    background: #1a1628;
-    border: none;
+  .sao-panel:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.22),
+      0 4px 12px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
   }
 
-  .border-neon-gradient::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    padding: 1px;
-    border-radius: inherit;
-    background: linear-gradient(135deg, #FF7B00, #FFAA33);
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-
-  /* ── Button Glow ── */
-  .btn-glow {
-    box-shadow: 0 0 15px rgba(255, 123, 0, 0.4),
-      0 0 40px rgba(255, 123, 0, 0.15),
-      0 0 80px rgba(255, 123, 0, 0.05);
-    transition: all 0.3s ease;
-  }
-
-  .btn-glow:hover {
-    box-shadow: 0 0 25px rgba(255, 123, 0, 0.6),
-      0 0 60px rgba(255, 123, 0, 0.25),
-      0 0 100px rgba(255, 123, 0, 0.1);
-  }
-
-  /* ── Button Scan-Line Hover Effect ── */
-  .btn-scan {
+  /* ── Panel with glass shine (Quest Logs) ── */
+  .sao-quest-panel {
+    background: rgba(245, 242, 238, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 2px solid #FF9D00;
+    border-radius: 12px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.18),
+      0 2px 8px rgba(0, 0, 0, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
     position: relative;
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .btn-scan::before {
-    content: '';
-    position: absolute;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(transparent,
-        rgba(255, 123, 0, 0.1),
-        transparent);
-    transition: top 0.6s ease;
-  }
-
-  .btn-scan:hover::before {
-    top: 100%;
-  }
-
-  /* ── Status Bar Fill ── */
-  .status-bar-fill {
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .status-bar-fill.is-filled {
-    transform: scaleX(var(--fill));
-  }
-
-  /* ── Timeline Glow Line ── */
-  .timeline-line {
-    background: linear-gradient(to bottom, #FF7B0080, #FFAA3340, transparent);
-    box-shadow: 0 0 8px rgba(255, 123, 0, 0.3);
-  }
-
-  /* ── Checkout Card Shimmer ── */
-  .shimmer {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .shimmer::after {
+  /* Glass Shine Sweep */
+  .sao-quest-panel::after {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
+    left: -60%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(255, 123, 0, 0.04),
-        transparent);
-    animation: shimmer-move 4s ease-in-out infinite;
+    background: linear-gradient(100deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.35) 50%,
+        transparent 80%);
+    transform: skewX(-15deg);
+    transition: left 0.8s ease;
+    pointer-events: none;
   }
 
-  /* ── Section Divider (Neon Line) ── */
-  .divider-neon {
-    height: 1px;
-    background: linear-gradient(to right,
-        transparent,
-        rgba(255, 123, 0, 0.3),
-        transparent);
+  .sao-quest-panel:hover::after {
+    left: 110%;
+  }
+
+  .sao-quest-panel:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 14px 44px rgba(0, 0, 0, 0.24),
+      0 4px 14px rgba(0, 0, 0, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  /* ── HP Bar ── */
+  .hp-bar-container {
+    background: #1a1a2e;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 2px;
+    height: 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  .hp-bar-fill {
+    background: linear-gradient(to right, #4CAF50, #76FF03);
+    height: 100%;
+    width: 0%;
+    border-radius: 8px;
+    box-shadow:
+      0 0 10px rgba(118, 255, 3, 0.6),
+      0 0 25px rgba(118, 255, 3, 0.3),
+      inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    transition: width 1.5s ease-out;
+    position: relative;
+  }
+
+  .hp-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 50%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), transparent);
+    border-radius: 8px 8px 0 0;
+  }
+
+  /* ── Pill Buttons (SAO Orange) ── */
+  .sao-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #FF9D00 0%, #FFB347 100%);
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 999px;
+    /* Pill shape */
+    box-shadow:
+      0 4px 14px rgba(255, 157, 0, 0.4),
+      0 2px 6px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+  }
+
+  .sao-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+      0 6px 20px rgba(255, 157, 0, 0.55),
+      0 3px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .sao-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .sao-btn .icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  /* ── Circular Nav Buttons ──*/
+  .sao-nav-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(240, 238, 235, 0.80);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    color: #555;
+    text-decoration: none;
+    font-size: 1.25rem;
+  }
+
+  .sao-nav-btn:hover {
+    border-color: #FF9D00;
+    background: rgba(255, 157, 0, 0.12);
+    color: #FF9D00;
+    transform: scale(1.12);
+    box-shadow: 0 6px 18px rgba(255, 157, 0, 0.25);
+  }
+
+  .sao-nav-btn.active {
+    border-color: #FF9D00;
+    color: #FF9D00;
+  }
+
+  /* ── Section Title with 「Brackets」 ── */
+  .sao-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    color: #333;
+    position: relative;
+  }
+
+  .sao-title .bracket {
+    color: #FF9D00;
+    font-weight: 400;
+    margin: 0 6px;
+  }
+
+  /* ── Divider ── */
+  .sao-divider {
+    height: 2px;
+    background: linear-gradient(to right, transparent, #FF9D00, transparent);
+    border: none;
+    margin: 2rem 0;
   }
 }
 
 @layer utilities {
-  .text-glow-cyan {
-    text-shadow: 0 0 40px rgba(255, 123, 0, 0.3);
+  .text-sao-orange {
+    color: #FF9D00;
   }
 
-  .text-glow-gold {
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-  }
-}
-
-/* ── Animations ── */
-@keyframes shimmer-move {
-  0% {
-    left: -100%;
+  .bg-sao-orange {
+    background-color: #FF9D00;
   }
 
-  100% {
-    left: 200%;
+  .border-sao {
+    border-color: #FF9D00;
   }
 }
 
-@keyframes link-start-zoom {
-  0% {
-    opacity: 0;
-    transform: scale(0.1) rotate(0deg);
-  }
-
-  20% {
-    opacity: 1;
-    transform: scale(0.5) rotate(10deg);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(20) rotate(45deg);
-  }
-}
-
-@keyframes blink {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0;
-  }
-}
-
-@keyframes type-cursor {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0;
-  }
-}
-
-/* ── Scroll-Triggered Reveals ── */
+/* ── Scroll Reveal ── */
 [data-animate] {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(24px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
 }
 
-[data-animate="slide-left"] {
-  transform: translateX(-40px);
-}
-
-[data-animate="slide-right"] {
-  transform: translateX(40px);
-}
-
-[data-animate="scale"] {
-  transform: scale(0.95);
-}
-
-[data-animate].is-visible {
-  opacity: 1;
-  transform: translateY(0) translateX(0) scale(1);
-}
-
-/* Stagger children */
-[data-stagger]>* {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-[data-stagger].is-visible>*:nth-child(1) {
-  transition-delay: 0ms;
-}
-
-[data-stagger].is-visible>*:nth-child(2) {
-  transition-delay: 100ms;
-}
-
-[data-stagger].is-visible>*:nth-child(3) {
-  transition-delay: 200ms;
-}
-
-[data-stagger].is-visible>*:nth-child(4) {
-  transition-delay: 300ms;
-}
-
-[data-stagger].is-visible>*:nth-child(5) {
-  transition-delay: 400ms;
-}
-
-[data-stagger].is-visible>*:nth-child(6) {
-  transition-delay: 500ms;
-}
-
-[data-stagger].is-visible>*:nth-child(7) {
-  transition-delay: 600ms;
-}
-
-[data-stagger].is-visible>*:nth-child(8) {
-  transition-delay: 700ms;
-}
-
-[data-stagger].is-visible>* {
+[data-animate].visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* ── Noise/Grain Overlay ── */
-.noise-overlay::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  pointer-events: none;
-  opacity: 0.02;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-}
-
-/* ── CRT Scanlines ── */
-.crt-scanlines::before {
-  content: '';
-  display: block;
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 0) 50%,
-      rgba(0, 0, 0, 0.2) 50%,
-      rgba(0, 0, 0, 0.2));
-  background-size: 100% 4px;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.15;
-}
-
-.font-console {
-  font-family: 'VT323', monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.animate-blink {
-  animation: blink 1s step-end infinite;
-}
-
-.boot-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  background-color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 1s ease-out;
 }
 
 /* ── Reduced Motion ── */
 @media (prefers-reduced-motion: reduce) {
 
-  [data-animate],
-  [data-stagger]>* {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 
-  .status-bar-fill {
-    transition: none !important;
-    transform: scaleX(var(--fill)) !important;
-  }
-
-  .animate-neon-pulse,
-  .animate-float,
-  .animate-bounce,
-  .shimmer::after {
-    animation: none !important;
+  [data-animate] {
+    opacity: 1;
+    transform: none;
   }
 }
