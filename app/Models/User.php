@@ -9,10 +9,12 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Services\XpService;
+use Spatie\Permission\Traits\HasRoles;
+
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
         'name',
@@ -36,7 +38,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return str_ends_with($this->email, '@' . explode('//', config('app.url'))[1]);
+        return auth()->user()->hasRole('super_admin');
     }
 
     public function transactions()

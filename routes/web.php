@@ -17,9 +17,18 @@ use App\Http\Controllers\Player\YuiController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/login', function () {
-    return redirect('/admin/login');
-})->name('login');
+use App\Http\Controllers\Player\AuthController;
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'create'])->name('login');
+    Route::post('/login', [AuthController::class, 'store']);
+    Route::get('/register', [AuthController::class, 'createRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'storeRegister']);
+});
+
+Route::post('/logout', [AuthController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
 
 Route::get('/', function () {
     return view('landing');

@@ -454,27 +454,42 @@
      ══════════════════════════════════════════════════════ --}}
     <header
         class="fixed top-0 left-0 right-0 z-50 py-3 px-4 md:px-8 flex items-center justify-between pointer-events-none">
-        {{-- Player Info (Left) --}}
-        <div class="sao-panel px-4 py-2.5 flex items-center gap-3 pointer-events-auto">
-            <div
-                class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-200 to-orange-400 border-2 border-white flex items-center justify-center text-white font-bold text-sm shadow-inner">
-                P1
+
+        @auth
+            {{-- Player Info (Logged In) --}}
+            <a href="{{ route('player.dashboard') }}"
+                class="sao-panel px-4 py-2.5 flex items-center gap-3 pointer-events-auto hover:scale-105 transition-transform">
+                <div
+                    class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-200 to-orange-400 border-2 border-white flex items-center justify-center text-white font-bold text-sm shadow-inner overflow-hidden">
+                    <img src="/images/yui.png" alt="Avatar" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <p class="font-bold text-base leading-none text-gray-800 tracking-wide">{{ Auth::user()->name }}</p>
+                    <p class="text-xs text-sao-orange font-semibold mt-0.5">LV. {{ Auth::user()->level ?? 1 }} <span
+                            class="text-gray-400 font-normal">// LOGGED IN</span></p>
+                </div>
+            </a>
+        @else
+            {{-- Guest (Login/Register) --}}
+            <div class="flex items-center gap-3 pointer-events-auto">
+                <a href="{{ route('login') }}"
+                    class="sao-panel px-5 py-2.5 font-bold text-gray-700 hover:text-sao-orange transition-colors">
+                    LINK START
+                </a>
+                <a href="{{ route('register') }}" class="sao-btn sm">
+                    REGISTER
+                </a>
             </div>
-            <div>
-                <p class="font-bold text-base leading-none text-gray-800 tracking-wide">Kirito</p>
-                <p class="text-xs text-sao-orange font-semibold mt-0.5">LV. 1 <span class="text-gray-400 font-normal">//
-                        AWAITING LINK</span></p>
-            </div>
-        </div>
+        @endauth
 
         {{-- HP / XP Bar (Center-Right) --}}
         <div class="sao-panel px-4 py-2.5 w-60 md:w-80 pointer-events-auto">
             <div class="flex justify-between items-center mb-1.5">
                 <span class="text-[11px] font-bold text-gray-500 tracking-wider uppercase">HP</span>
-                <span id="hp-text" class="text-[11px] font-bold text-gray-600 tabular-nums">0 / 12500</span>
+                <span id="hp-text" class="text-[11px] font-bold text-gray-600 tabular-nums">100 / 100</span>
             </div>
             <div class="hp-bar-container">
-                <div class="hp-bar-fill" id="hp-bar"></div>
+                <div class="hp-bar-fill" id="hp-bar" style="width: 100%"></div>
             </div>
         </div>
     </header>
@@ -483,7 +498,7 @@
      FLOATING VERTICAL MENU (Right Edge)
      ══════════════════════════════════════════════════════ --}}
     <nav class="fixed top-1/2 right-4 md:right-6 -translate-y-1/2 z-50 flex flex-col gap-3">
-        @foreach ([['icon' => '⌂', 'label' => 'Início', 'target' => '#hero'], ['icon' => '⚔', 'label' => 'Skill Tree', 'target' => '#modules'], ['icon' => '📊', 'label' => 'Status', 'target' => '#status'], ['icon' => '🗺', 'label' => 'Jornada', 'target' => '#jornada'], ['icon' => '✉', 'label' => 'Registros', 'target' => '#depoimentos'], ['icon' => '⊕', 'label' => 'Aceitar Missão', 'target' => '#checkout']] as $nav)
+        @foreach ([['icon' => '⌂', 'label' => 'Início', 'target' => '#hero'], ['icon' => '⚔', 'label' => 'Skill Tree', 'target' => '#modules'], ['icon' => '📊', 'label' => 'Status', 'target' => '#status'], ['icon' => '🗺', 'label' => 'Jornada', 'target' => '#jornada'], ['icon' => '✉', 'label' => 'Registros', 'target' => '#depoimentos'], ['icon' => '⊕', 'label' => 'Aceitar Missão', 'target' => route('register')]] as $nav)
             <a href="{{ $nav['target'] }}" class="sao-nav-btn relative group" title="{{ $nav['label'] }}">
                 <span>{{ $nav['icon'] }}</span>
                 <div
@@ -504,7 +519,8 @@
         {{-- ─── HERO ─── --}}
         <section id="hero" class="min-h-[85vh] flex items-center justify-center px-6">
             <div data-animate class="sao-panel p-10 md:p-16 max-w-3xl mx-auto text-center">
-                <p class="text-sm font-semibold text-sao-orange tracking-[0.2em] uppercase mb-4">SYSTEM NOTIFICATION</p>
+                <p class="text-sm font-semibold text-sao-orange tracking-[0.2em] uppercase mb-4">SYSTEM NOTIFICATION
+                </p>
                 <h1 class="sao-title text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] text-gray-800">
                     <span class="bracket">「</span>LINK START<span class="bracket">」</span>
                 </h1>
@@ -514,7 +530,7 @@
                 </p>
 
                 <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="#checkout" class="sao-btn">
+                    <a href="{{ route('register') }}" class="sao-btn">
                         <span class="icon-circle">⊕</span>
                         ACEITAR MISSÃO
                     </a>
@@ -1000,7 +1016,7 @@
                         </div>
 
                         {{-- CTA --}}
-                        <a href="#" class="sao-btn w-full justify-center text-lg py-4">
+                        <a href="{{ route('register') }}" class="sao-btn w-full justify-center text-lg py-4">
                             <span class="icon-circle text-xl">⊕</span>
                             ACCEPT TRADE
                         </a>
