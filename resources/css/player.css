@@ -744,6 +744,27 @@ body {
     .form-row {
         grid-template-columns: 1fr;
     }
+
+    /* Yui Mobile */
+    .yui-panel {
+        width: 100% !important;
+        height: 100% !important;
+        bottom: 0 !important;
+        right: 0 !important;
+        margin-bottom: 0 !important;
+        border-radius: 0 !important;
+        border: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hud-bar-label {
+        font-size: 0.6rem;
+    }
 }
 
 /* ── Reduced Motion ── */

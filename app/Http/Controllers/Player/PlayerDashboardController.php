@@ -90,6 +90,74 @@ class PlayerDashboardController extends Controller
         // XP progress
         $xpProgress = $user->getXpProgress();
 
+        // 7-Day Activity Chart
+        $dailyActivity = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $dayStart = $date->copy()->startOfDay();
+            $dayEnd = $date->copy()->endOfDay();
+
+            $income = GeneralizedTransition::where('user_id', $user->id)
+                ->where('input', 1)
+                ->whereBetween('start_date', [$dayStart, $dayEnd])
+                ->sum('total_value');
+
+            $expense = GeneralizedTransition::where('user_id', $user->id)
+                ->where('input', 0)
+                ->whereBetween('start_date', [$dayStart, $dayEnd])
+                ->sum('total_value');
+
+            $dailyActivity[] = [
+                'date' => $date->format('d/m'),
+                'income' => (float) $income,
+                'expense' => (float) $expense,
+            ];
+        }
+
+        // Streak Calculation
+        $streak = 0;
+        $checkDate = Carbon::now();
+        while (true) {
+            $hasTrade = GeneralizedTransition::where('user_id', $user->id)
+                ->whereDate('start_date', $checkDate->format('Y-m-d'))
+                ->exists();
+
+            if ($hasTrade) {
+                $streak++;
+                $checkDate->subDay();
+            } else {
+                break;
+            }
+        }
+
+        // Top Categories (Simple PHP processing for MVP)
+        $expenses = GeneralizedTransition::where('user_id', $user->id)
+            ->where('input', 0)
+            ->where('start_date', '>=', $startOfMonth)
+            ->get();
+
+        $categoryTotals = [];
+        foreach ($expenses as $expense) {
+            if (!empty($expense->tags) && is_array($expense->tags)) {
+                foreach ($expense->tags as $tag) {
+                    if (!isset($categoryTotals[$tag]))
+                        $categoryTotals[$tag] = 0;
+                    $categoryTotals[$tag] += $expense->total_value;
+                }
+            } else {
+                $tag = 'Outros';
+                if (!isset($categoryTotals[$tag]))
+                    $categoryTotals[$tag] = 0;
+                $categoryTotals[$tag] += $expense->total_value;
+            }
+        }
+        arsort($categoryTotals);
+        $topCategories = array_slice($categoryTotals, 0, 3, true);
+        $formattedCategories = [];
+        foreach ($topCategories as $tag => $amount) {
+            $formattedCategories[] = ['tag' => $tag, 'amount' => $amount];
+        }
+
         return Inertia::render('Dashboard', [
             'stats' => [
                 'hp_percentage' => $hpPercentage,
@@ -97,6 +165,9 @@ class PlayerDashboardController extends Controller
                 'monthly_expense' => round($monthlyExpense, 2),
                 'balance' => round($balance, 2),
                 'month_label' => $now->translatedFormat('F Y'),
+                'daily_activity' => $dailyActivity,
+                'streak' => $streak,
+                'top_categories' => $formattedCategories,
             ],
             'xp' => $xpProgress,
             'recent_trades' => $recentTrades,

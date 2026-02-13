@@ -16,29 +16,32 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
         return { text: 'DAMAGE', className: 'damage' }
     }
 
+    // Calculate max value for chart scaling
+    const maxChartValue = stats.daily_activity ? Math.max(...stats.daily_activity.map(d => Math.max(d.income, d.expense))) : 100
+
     return (
         <PlayerLayout stats={stats} xp={xp}>
             <div className="page-content">
-                {/* Quick Stats */}
+                {/* Stats Grid */}
                 <div className="stats-grid">
                     <SaoPanel>
                         <div className="stat-card">
                             <span className="stat-icon">💰</span>
-                            <span className="stat-label">Total Loot (Entradas)</span>
+                            <span className="stat-label">Total Loot</span>
                             <span className="stat-value success">{formatMoney(stats.monthly_income)}</span>
                         </div>
                     </SaoPanel>
                     <SaoPanel>
                         <div className="stat-card">
                             <span className="stat-icon">💥</span>
-                            <span className="stat-label">Total Damage (Saídas)</span>
+                            <span className="stat-label">Total Damage</span>
                             <span className="stat-value danger">{formatMoney(stats.monthly_expense)}</span>
                         </div>
                     </SaoPanel>
                     <SaoPanel>
                         <div className="stat-card">
                             <span className="stat-icon">⚖️</span>
-                            <span className="stat-label">Balance (Saldo)</span>
+                            <span className="stat-label">Balance</span>
                             <span className={`stat-value ${stats.balance >= 0 ? 'success' : 'danger'}`}>
                                 {formatMoney(stats.balance)}
                             </span>
@@ -46,16 +49,85 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                     </SaoPanel>
                     <SaoPanel>
                         <div className="stat-card">
-                            <span className="stat-icon">⭐</span>
-                            <span className="stat-label">Player Level</span>
+                            <span className="stat-icon">🔥</span>
+                            <span className="stat-label">Streak</span>
                             <span className="stat-value" style={{ color: 'var(--sao-orange)' }}>
-                                LV. {xp.current_level}
+                                {stats.streak} <span style={{ fontSize: '1rem' }}>DAYS</span>
                             </span>
                         </div>
                     </SaoPanel>
                 </div>
 
-                {/* Content Grid */}
+                {/* Charts & Breakdown */}
+                <div className="content-grid" style={{ marginBottom: '16px' }}>
+
+                    {/* 7-Day Activity Chart */}
+                    <SaoPanel>
+                        <div style={{ padding: '16px 16px 8px' }}>
+                            <h3 className="sao-title" style={{ fontSize: '1rem' }}>
+                                <span className="bracket">「</span>7-DAY ACTIVITY<span className="bracket">」</span>
+                            </h3>
+                        </div>
+                        <div style={{ padding: '0 16px 16px', height: '180px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '8px' }}>
+                            {stats.daily_activity && stats.daily_activity.map((day, i) => (
+                                <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', height: '100%' }}>
+                                    <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'flex-end', gap: '4px', position: 'relative' }}>
+                                        {/* Income Bar */}
+                                        <div style={{
+                                            flex: 1, background: 'var(--sao-success)',
+                                            height: `${Math.max(4, (day.income / maxChartValue) * 100)}%`,
+                                            borderRadius: '2px 2px 0 0', opacity: 0.8, transition: 'height 0.5s ease'
+                                        }} title={`Income: ${formatMoney(day.income)}`} />
+
+                                        {/* Expense Bar */}
+                                        <div style={{
+                                            flex: 1, background: 'var(--sao-danger)',
+                                            height: `${Math.max(4, (day.expense / maxChartValue) * 100)}%`,
+                                            borderRadius: '2px 2px 0 0', opacity: 0.8, transition: 'height 0.5s ease'
+                                        }} title={`Expense: ${formatMoney(day.expense)}`} />
+                                    </div>
+                                    <span style={{ fontSize: '0.65rem', color: 'var(--sao-text-dim)' }}>{day.date}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </SaoPanel>
+
+                    {/* Top Categories */}
+                    <SaoPanel>
+                        <div style={{ padding: '16px 16px 8px' }}>
+                            <h3 className="sao-title" style={{ fontSize: '1rem' }}>
+                                <span className="bracket">「</span>TOP EXPENSES<span className="bracket">」</span>
+                            </h3>
+                        </div>
+                        <div style={{ padding: '0 16px 16px' }}>
+                            {stats.top_categories && stats.top_categories.length > 0 ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    {stats.top_categories.map((cat, i) => (
+                                        <div key={i}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '4px' }}>
+                                                <span style={{ fontWeight: 700 }}>{cat.tag}</span>
+                                                <span style={{ color: 'var(--sao-danger)' }}>{formatMoney(cat.amount)}</span>
+                                            </div>
+                                            <div className="bar-container">
+                                                <div className="bar-fill" style={{
+                                                    width: `${(cat.amount / stats.monthly_expense) * 100}%`,
+                                                    background: 'var(--sao-danger)',
+                                                    boxShadow: '0 0 10px rgba(255, 71, 87, 0.3)'
+                                                }} />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div style={{ textAlign: 'center', color: 'var(--sao-text-muted)', padding: '20px' }}>
+                                    Sem dados de gastos.
+                                </div>
+                            )}
+                        </div>
+                    </SaoPanel>
+                </div>
+
+                {/* Content Grid (Trades & Floors) */}
                 <div className="content-grid">
                     {/* Recent Trades */}
                     <SaoPanel>

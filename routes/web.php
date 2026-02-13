@@ -9,6 +9,7 @@ use App\Http\Controllers\Player\TradeLogController;
 use App\Http\Controllers\Player\FloorMapController;
 use App\Http\Controllers\Player\InventoryController;
 use App\Http\Controllers\Player\GuildController;
+use App\Http\Controllers\Player\YuiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,4 +72,8 @@ Route::middleware(['auth', \App\Http\Middleware\HandleInertiaRequests::class])
         Route::post('/guild/join', [GuildController::class, 'join'])->name('player.guild.join');
         Route::delete('/guild/{guild}/leave', [GuildController::class, 'leave'])->name('player.guild.leave');
         Route::delete('/guild/{guild}', [GuildController::class, 'destroy'])->name('player.guild.destroy');
+
+        // Y.U.I. Routes
+        Route::post('/yui/chat', [YuiController::class, 'sendMessage'])->name('player.yui.chat');
+        Route::get('/yui/status', [YuiController::class, 'getStatus'])->name('player.yui.status');
     });

@@ -4,6 +4,7 @@ import HpBar from '../Components/HpBar'
 import XpBar from '../Components/XpBar'
 import LevelUpOverlay from '../Components/LevelUpOverlay'
 import { useSound } from '../Components/SoundManager'
+import YuiCompanion from '../Components/YuiCompanion'
 
 const NAV_ITEMS = [
     { icon: '🏠', label: 'Dashboard', href: '/player', name: 'player.dashboard' },
@@ -140,6 +141,8 @@ export default function PlayerLayout({ children, stats, xp }) {
                 {/* Page Content */}
                 {children}
             </div>
+
+            <YuiCompanion user={user} />
         </div>
     )
 }
