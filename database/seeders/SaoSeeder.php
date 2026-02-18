@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\GeneralizedTransition;
 use App\Models\FinancialGoal;
+use App\Models\ShopItem;
 use App\Services\XpService;
 use Carbon\Carbon;
 
@@ -23,6 +24,7 @@ class SaoSeeder extends Seeder
                 'level' => 10,
                 'xp' => 10500, // Level 10 approx
                 'avatar_url' => null,
+                'col' => 500,
             ]
         );
 
@@ -179,5 +181,83 @@ class SaoSeeder extends Seeder
         if ($guild->members()->count() === 0) {
             $guild->members()->attach($user->id, ['role' => 'master']);
         }
+
+        // 6. Create Shop Items
+        $shopItems = [
+            [
+                'name' => 'Black Swordsman Avatar',
+                'description' => 'Avatar exclusivo do Espadachim Negro de Aincrad.',
+                'category' => 'avatar',
+                'price' => 100,
+                'icon' => '🖤',
+                'rarity' => 'epic',
+            ],
+            [
+                'name' => 'Asuna\'s Blessing Avatar',
+                'description' => 'Avatar inspirado na Vice-Comandante dos Knights of the Blood.',
+                'category' => 'avatar',
+                'price' => 120,
+                'icon' => '⚪',
+                'rarity' => 'epic',
+            ],
+            [
+                'name' => 'Título: Beater',
+                'description' => 'O infame título dado aos beta testers mais habilidosos.',
+                'category' => 'title',
+                'price' => 200,
+                'icon' => '🏷️',
+                'rarity' => 'legendary',
+            ],
+            [
+                'name' => 'Título: Flash',
+                'description' => 'Título de velocidade suprema. Para os mais rápidos.',
+                'category' => 'title',
+                'price' => 150,
+                'icon' => '⚡',
+                'rarity' => 'rare',
+            ],
+            [
+                'name' => 'XP Boost Potion',
+                'description' => 'Poção que dobra o XP ganho pela próxima missão.',
+                'category' => 'consumable',
+                'price' => 30,
+                'icon' => '🧪',
+                'rarity' => 'common',
+                'stock' => 99,
+            ],
+            [
+                'name' => 'Health Crystal',
+                'description' => 'Cristal de cura. Recupera HP instantaneamente.',
+                'category' => 'consumable',
+                'price' => 50,
+                'icon' => '💎',
+                'rarity' => 'uncommon',
+                'stock' => 50,
+            ],
+            [
+                'name' => 'Aincrad Border Frame',
+                'description' => 'Moldura de perfil com bordas do Castelo Flutuante.',
+                'category' => 'cosmetic',
+                'price' => 80,
+                'icon' => '🏰',
+                'rarity' => 'rare',
+            ],
+            [
+                'name' => 'Teleport Crystal Glow',
+                'description' => 'Efeito visual de brilho de cristal de teleporte no perfil.',
+                'category' => 'cosmetic',
+                'price' => 250,
+                'icon' => '✨',
+                'rarity' => 'legendary',
+            ],
+        ];
+
+        foreach ($shopItems as $itemData) {
+            ShopItem::firstOrCreate(
+                ['name' => $itemData['name']],
+                $itemData
+            );
+        }
     }
 }
+

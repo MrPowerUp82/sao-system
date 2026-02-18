@@ -5,12 +5,14 @@ import XpBar from '../Components/XpBar'
 import LevelUpOverlay from '../Components/LevelUpOverlay'
 import { useSound } from '../Components/SoundManager'
 import YuiCompanion from '../Components/YuiCompanion'
+import ColBalance from '../Components/ColBalance'
 
 const NAV_ITEMS = [
     { icon: '🏠', label: 'Dashboard', href: '/player', name: 'player.dashboard' },
     { icon: '⚔️', label: 'Trade Log', href: '/player/trade-log', name: 'player.trade-log' },
     { icon: '🗺️', label: 'Floor Map', href: '/player/floor-map', name: 'player.floor-map' },
     { icon: '🎒', label: 'Inventory', href: '/player/inventory', name: 'player.inventory' },
+    { icon: '🏪', label: 'Shop', href: '/player/shop', name: 'player.shop' },
     { icon: '🏰', label: 'Guild', href: '/player/guild', name: 'player.guild' },
 ]
 
@@ -111,6 +113,7 @@ export default function PlayerLayout({ children, stats, xp }) {
                                 </span>
                             </div>
                         </div>
+                        <ColBalance col={user?.col} />
                     </div>
 
                     <div className="hud-bars">
@@ -137,6 +140,14 @@ export default function PlayerLayout({ children, stats, xp }) {
                         ⊕ {flash.success}
                     </div>
                 )}
+                {flash?.error && (
+                    <div className="flash-message" style={{
+                        borderColor: 'var(--sao-danger)',
+                        color: 'var(--sao-danger)',
+                    }}>
+                        ✕ {flash.error}
+                    </div>
+                )}
 
                 {/* Page Content */}
                 {children}
@@ -146,3 +157,4 @@ export default function PlayerLayout({ children, stats, xp }) {
         </div>
     )
 }
+

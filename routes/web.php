@@ -10,6 +10,7 @@ use App\Http\Controllers\Player\FloorMapController;
 use App\Http\Controllers\Player\InventoryController;
 use App\Http\Controllers\Player\GuildController;
 use App\Http\Controllers\Player\YuiController;
+use App\Http\Controllers\Player\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,4 +86,8 @@ Route::middleware(['auth', \App\Http\Middleware\HandleInertiaRequests::class])
         // Y.U.I. Routes
         Route::post('/yui/chat', [YuiController::class, 'sendMessage'])->name('player.yui.chat');
         Route::get('/yui/status', [YuiController::class, 'getStatus'])->name('player.yui.status');
+
+        // Shop Routes
+        Route::get('/shop', [ShopController::class, 'index'])->name('player.shop');
+        Route::post('/shop/{shopItem}/purchase', [ShopController::class, 'purchase'])->name('player.shop.purchase');
     });

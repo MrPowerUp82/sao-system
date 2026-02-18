@@ -24,6 +24,7 @@ class User extends Authenticatable implements FilamentUser
         'xp',
         'player_name',
         'avatar_url',
+        'col',
     ];
 
     protected $hidden = [
@@ -65,5 +66,10 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->belongsToMany(Guild::class, 'guild_user')
             ->withPivot('role', 'joined_at');
+    }
+
+    public function coinTransactions()
+    {
+        return $this->hasMany(CoinTransaction::class);
     }
 }

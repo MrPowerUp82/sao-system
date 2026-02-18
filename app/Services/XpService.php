@@ -10,6 +10,13 @@ class XpService
     const XP_FIXED_PAYMENT = 25;
     const XP_FLOOR_CLEARED = 100;
 
+    const COL_MAP = [
+        'trade_registered' => CoinService::COL_REGISTER_TRADE,
+        'item_added' => CoinService::COL_REGISTER_TRADE,
+        'fixed_payment' => CoinService::COL_FIXED_PAYMENT,
+        'floor_cleared' => CoinService::COL_FLOOR_CLEARED,
+    ];
+
     public static function levelFormula(int $xp): int
     {
         return max(1, (int) floor(sqrt($xp / 100)));
@@ -44,5 +51,8 @@ class XpService
         $user->xp += $amount;
         $user->level = self::levelFormula($user->xp);
         $user->save();
+
+        $colAmount = self::COL_MAP[$reason] ?? CoinService::COL_REGISTER_TRADE;
+        CoinService::awardCol($user, $colAmount, 'mission_reward', 'XP Reward: ' . $reason);
     }
 }
