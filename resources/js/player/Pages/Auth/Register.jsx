@@ -18,7 +18,7 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('register'));
+        post('/register');
     };
 
     return (
@@ -98,7 +98,7 @@ export default function Register() {
                 </div>
 
                 <Link
-                    href={route('login')}
+                    href="/login"
                     className="auth-link"
                 >
                     Already have a Player ID? Log In

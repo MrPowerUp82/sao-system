@@ -20,7 +20,7 @@ use App\Http\Controllers\Player\ShopController;
 
 use App\Http\Controllers\Player\AuthController;
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', \App\Http\Middleware\HandleInertiaRequests::class])->group(function () {
     Route::get('/login', [AuthController::class, 'create'])->name('login');
     Route::post('/login', [AuthController::class, 'store']);
     Route::get('/register', [AuthController::class, 'createRegister'])->name('register');

@@ -17,7 +17,7 @@ export default function Login({ status }) {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('login'));
+        post('/login');
     };
 
     return (
@@ -80,7 +80,7 @@ export default function Login({ status }) {
                 </div>
 
                 <Link
-                    href={route('register')}
+                    href="/register"
                     className="auth-link"
                 >
                     Initialize New Account Data
