@@ -3,24 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class YuiService
 {
-    protected string $apiKey;
-    protected string $model = 'gemini-2.0-flash';
-
-    public function __construct()
-    {
-        $this->apiKey = config('services.gemini.key', '') ?: env('GEMINI_API_KEY', '');
-    }
-
-    protected function getApiUrl(): string
-    {
-        return "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent?key={$this->apiKey}";
-    }
-
     protected function getBalance(User $user): float
     {
         $income = $user->transactions()->where('input', 1)->sum('total_value');
@@ -31,52 +16,78 @@ class YuiService
     public function chat(string $message, User $user, array $history = []): string
     {
         $balance = $this->getBalance($user);
-
-        if (empty($this->apiKey)) {
-            return "Estou em modo de economia de energia (Sem API Key). Mas posso te dizer que seu saldo atual é R$ " . number_format($balance, 2, ',', '.');
-        }
-
-        $context = $this->buildContext($user, $balance);
-
-        // Format history for Gemini
-        $contents = [];
-        $contents[] = ['role' => 'user', 'parts' => [['text' => $context]]];
-        $contents[] = ['role' => 'model', 'parts' => [['text' => 'Entendido. Sou Y.U.I., sua assistente de navegação. Estou pronta para ajudar com suas finanças.']]];
-
-        foreach ($history as $msg) {
-            $role = ($msg['role'] === 'user') ? 'user' : 'model';
-            $contents[] = ['role' => $role, 'parts' => [['text' => $msg['text']]]];
-        }
-
-        $contents[] = ['role' => 'user', 'parts' => [['text' => $message]]];
-
-        $prompt = ['contents' => $contents];
-
-        try {
-            $response = Http::post($this->getApiUrl(), $prompt);
-
-            if ($response->successful()) {
-                return $response->json()['candidates'][0]['content']['parts'][0]['text'] ?? 'Desculpe, houve uma interferência no sinal.';
-            } else {
-                Log::error('Gemini API Error: ' . $response->body());
-                return 'Erro de conexão com o sistema central (API Error).';
+        $balanceFormatted = 'R$ ' . number_format($balance, 2, ',', '.');
+        
+        $msgLower = mb_strtolower($message);
+        
+        // 1. Trigger: Saldo / HP
+        if ($this->containsAny($msgLower, ['saldo', 'money', 'dinheiro', 'col', 'hp', 'carteira', 'balance'])) {
+            if ($balance < 0) {
+                return "Cuidado, Papa! Seu HP (Saldo) está crítico: **{$balanceFormatted}**! Você está negativo e levando dano contínuo. Precisa de novos loots (receitas) urgente! 🩸";
             }
-        } catch (\Exception $e) {
-            Log::error('Yui Service Exception: ' . $e->getMessage());
-            return 'Meus circuitos estão sobrecarregados. Tente novamente em alguns instantes.';
+            return "Olá, Papa! Seu saldo atual (HP) é **{$balanceFormatted}** Cols. Seu status está seguro e pronto para os próximos andares! ⚔️";
         }
+        
+        // 2. Trigger: Gastos / Transações / Danos
+        if ($this->containsAny($msgLower, ['gasto', 'despesa', 'saida', 'damage', 'combate', 'transac', 'danos', 'loot'])) {
+            $recentTransactions = $user->transactions()
+                ->latest()
+                ->take(5)
+                ->get();
+                
+            if ($recentTransactions->isEmpty()) {
+                return "Não encontrei registros de combates recentes no seu log, Papa. Tudo limpo! 🛡️";
+            }
+            
+            $list = $recentTransactions->map(function ($t) {
+                $type = $t->input ? '🟢 Loot' : '🔴 Damage';
+                $val = 'R$ ' . number_format($t->total_value, 2, ',', '.');
+                return "- **{$type}**: {$val} (*{$t->name}*)";
+            })->implode("\n");
+            
+            return "Aqui está o relatório das suas últimas ações de combate (transações), Papa:\n\n{$list}\n\nContinue monitorando seus gastos!";
+        }
+        
+        // 3. Trigger: Quest
+        if ($this->containsAny($msgLower, ['quest', 'missao', 'missão', 'desafio'])) {
+            return "Sua Daily Quest ativa é: **Caminhada de Aincrad** (Economize R$ 50 em transporte esta semana). Você receberá **500 XP** ao completá-la! Vá na aba **Quests** para submeter. 📜";
+        }
+        
+        // 4. Trigger: Dica
+        if ($this->containsAny($msgLower, ['dica', 'conselho', 'sugestao', 'sugestão', 'ajuda', 'help'])) {
+            $tips = [
+                "Sempre defina um limite de gastos (Floor Target) para manter seu HP no verde, Papa!",
+                "Evite gastar seus Cols em poções de luxo (compras por impulso) se o seu HP estiver abaixo de 20%!",
+                "Realizar trades diários ajuda a manter a estabilidade do sistema e garante XP extra!",
+                "Fazer parte de uma guilda divide os custos das raids financeiras. Compartilhe suas metas!",
+                "Guardar pelo menos 15% dos ganhos na poupança serve como um 'Teleport Crystal' de emergência!"
+            ];
+            $tip = $tips[array_rand($tips)];
+            return "Aqui vai uma dica de sobrevivência para Aincrad, Papa:\n\n💡 *\"{$tip}\"*";
+        }
+        
+        // 5. Trigger: Greetings
+        if ($this->containsAny($msgLower, ['oi', 'ola', 'olá', 'yui', 'bom dia', 'boa tarde', 'boa noite', 'hello'])) {
+            return "Olá, Papa! Estou aqui para ajudar na sua navegação pelo sistema. Você quer ver seu **Saldo**, checar seus **Gastos**, ver sua **Quest** ou receber uma **Dica**? 🧚‍♀️";
+        }
+        
+        // Default response based on balance status
+        if ($balance < 0) {
+            return "Papa, seu HP está no vermelho! (**{$balanceFormatted}**). Por favor, evite novos combates (gastos) ou busque novos loots imediatamente! 🩸";
+        }
+        if ($balance > 5000) {
+            return "Seu HP está excelente, Papa! (**{$balanceFormatted}**). Você é um verdadeiro espadachim da linha de frente! Como posso te ajudar na navegação hoje? ⚔️";
+        }
+        
+        return "Entendido, Papa! Saldo atual: **{$balanceFormatted}**. Como posso ajudar você na navegação financeira de Aincrad hoje? 🧚‍♀️";
     }
 
     public function analyze(User $user): array
     {
-        if (empty($this->apiKey))
-            return [];
-
-        // Simple heuristic analysis (fallback or complement to AI)
         $alerts = [];
         $balance = $this->getBalance($user);
 
-        // Critical HP
+        // Critical HP Alert if balance is negative
         if ($balance < 0) {
             $alerts[] = [
                 'type' => 'warning',
@@ -86,17 +97,11 @@ class YuiService
             ];
         }
 
-        // AI Level Analysis (Simulated for now, can be expanded)
-        // Ideally we would send transaction summary to Gemini here
-
         return $alerts;
     }
 
     public function generateQuest(User $user): ?array
     {
-        // Simulated Quest Generation logic
-        // In full implementation, this would ask Gemini to create a challenge based on spending habits
-
         return [
             'title' => 'Caminhada de Aincrad',
             'description' => 'Economize R$ 50 em transporte esta semana.',
@@ -106,42 +111,13 @@ class YuiService
         ];
     }
 
-    protected function buildContext(User $user, float $balance): string
+    private function containsAny(string $haystack, array $needles): bool
     {
-        $balanceFormatted = number_format($balance, 2, ',', '.');
-        $level = $user->level;
-        $xp = $user->xp;
-
-        // Get spending info
-        $recentTransactions = $user->transactions()
-            ->latest()
-            ->take(5)
-            ->get()
-            ->map(function ($t) {
-                $type = $t->input ? 'Ganho' : 'Gasto';
-                return "- {$type}: R$ {$t->total_value} ({$t->name})";
-            })
-            ->implode("\n");
-
-        return "Você é Y.U.I. (Yui), uma 'Navigation Pixie' do universo Sword Art Online (SAO). 
-        Você é a assistente pessoal deste jogador.
-        
-        Dados do Jogador:
-        - Nome: {$user->name}
-        - Nível: {$level}
-        - XP: {$xp}
-        - HP (Saldo Financeiro): R$ {$balanceFormatted}
-
-        Últimas Transações:
-        {$recentTransactions}
-        
-        Personalidade:
-        - Carinhosa, técnica, protetora (como uma filha/assistente).
-        - Use termos de RPG/SAO (Cor, HP, Col, Itens, Guilda).
-        - Seja breve e direta.
-        - Se o saldo for baixo, mostre preocupação. Se for alto, elogie.
-        - Use Markdown para formatar a resposta (negrito, listas).
-        
-        Responda à mensagem do jogador com base nesses dados.";
+        foreach ($needles as $needle) {
+            if (str_contains($haystack, $needle)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
