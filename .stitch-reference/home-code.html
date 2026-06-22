@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SAO Aincrad System - Link Start</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&amp;family=Hanken+Grotesk:wght@400;600&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#004b73",
+                        "surface-container-highest": "#33343c",
+                        "surface-bright": "#373941",
+                        "inverse-primary": "#885200",
+                        "outline": "#a28d79",
+                        "on-error-container": "#ffdad6",
+                        "secondary-container": "#06bb63",
+                        "on-surface": "#e2e2ec",
+                        "inverse-surface": "#e2e2ec",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffdcbb",
+                        "on-error": "#690005",
+                        "secondary": "#4ae183",
+                        "on-surface-variant": "#dac2ad",
+                        "tertiary-fixed": "#cce5ff",
+                        "tertiary": "#a5d4ff",
+                        "on-secondary-container": "#00431f",
+                        "on-primary-fixed": "#2c1700",
+                        "primary-fixed-dim": "#ffb869",
+                        "on-tertiary": "#003351",
+                        "on-primary-fixed-variant": "#673d00",
+                        "inverse-on-surface": "#2e3038",
+                        "tertiary-fixed-dim": "#92ccff",
+                        "outline-variant": "#544433",
+                        "on-primary-container": "#663c00",
+                        "surface-container-lowest": "#0c0e15",
+                        "on-background": "#e2e2ec",
+                        "on-primary": "#482900",
+                        "surface-container-high": "#282a31",
+                        "primary-container": "#ff9d00",
+                        "primary": "#ffc485",
+                        "on-secondary-fixed": "#00210c",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#4ae183",
+                        "secondary-fixed": "#6bfe9c",
+                        "surface-container-low": "#191b22",
+                        "surface-tint": "#ffb869",
+                        "on-secondary-fixed-variant": "#005228",
+                        "surface-variant": "#33343c",
+                        "tertiary-container": "#62bbff",
+                        "on-tertiary-container": "#004971",
+                        "surface-container": "#1d1f26",
+                        "on-tertiary-fixed": "#001d31",
+                        "surface": "#11131a",
+                        "surface-dim": "#11131a",
+                        "background": "#11131a",
+                        "on-secondary": "#003919"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "section-gap": "80px",
+                        "gutter": "16px",
+                        "stack-md": "24px",
+                        "container-padding": "24px",
+                        "stack-sm": "12px",
+                        "base": "8px"
+                    },
+                    fontFamily: {
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-lg": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "display": ["Sora"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "stats-number": ["Sora"]
+                    },
+                    fontSize: {
+                        "label-caps": ["12px", { lineHeight: "1", letterSpacing: "0.1em", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "display": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "800" }],
+                        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "stats-number": ["14px", { lineHeight: "1", fontWeight: "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .section-title::before {
+            content: '[';
+            color: #ff9d00;
+        }
+        .section-title::after {
+            content: ']';
+            color: #ff9d00;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col relative overflow-x-hidden">
+<!-- Background Void Effect -->
+<div class="fixed inset-0 pointer-events-none z-[-1]" style="background: radial-gradient(circle at 50% 0%, rgba(255, 157, 0, 0.15) 0%, transparent 60%);"></div>
+<!-- JSON Component: TopAppBar + User Requested Header Logic -->
+<header class="bg-surface/40 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-white/10 shadow-[0_0_20px_rgba(255,157,0,0.2)]">
+<div class="flex justify-between items-center px-gutter py-base max-w-7xl mx-auto w-full">
+<!-- Left Side: Avatar & Info -->
+<div class="flex items-center gap-stack-sm bg-surface-container/50 px-4 py-2 rounded-lg border border-white/5">
+<img alt="Player Avatar" class="w-10 h-10 rounded-full border border-primary" data-alt="A small circular avatar placeholder image for a digital profile, anime style, minimalist, dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvpL2ld9WYvxZ-BhQAH3ZjCk5ymdInX136CxWF_gbeuX-W9uY0te5FnxMW08HAJNX3eKspOBQmgNo40KvPNfvgPaVgw9yHfIyjlX8UWAb4zP9e6o3S7tXTH-A5iQ7hagrTiNOA0sjOnTUig0IpXMklls2-bLTGoKgYtGkYeI2O6NmgDJDBdjNrXJRKQWbKy2ToMDtgewxbOz2KAm_AsYnwN4MP23XZCShLrLDmjLlvc7WB0eGe_LpgbnoyDajRW2M8QOomLKOB5lw"/>
+<div>
+<div class="font-headline-md text-[16px] text-on-surface leading-tight">Kazuto Kirigaya</div>
+<div class="font-label-caps text-label-caps text-primary">LV. 77 // LOGGED IN</div>
+</div>
+</div>
+<!-- Brand (Centerish) -->
+<div class="hidden md:block font-display text-headline-md text-primary tracking-widest uppercase">
+                AINCRAD SYSTEM
+            </div>
+<!-- Right Side: HP Bar -->
+<div class="w-64">
+<div class="flex justify-between items-end mb-1">
+<span class="font-label-caps text-label-caps text-on-surface">HP</span>
+<span class="font-stats-number text-stats-number text-on-surface">12500 / 12500</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden border border-white/10">
+<div class="h-full bg-secondary w-full shadow-[0_0_10px_rgba(74,225,131,0.5)]"></div>
+</div>
+</div>
+</div>
+</header>
+<!-- JSON Component: SideNavBar -->
+<nav class="hidden md:flex flex-col items-center gap-base bg-surface/30 backdrop-blur-2xl fixed right-4 top-1/2 -translate-y-1/2 rounded-full py-stack-md border border-white/10 shadow-2xl shadow-primary/10 z-40">
+<!-- Active Nav Item -->
+<a class="bg-primary text-on-primary rounded-full p-stack-sm shadow-[0_0_15px_rgba(255,157,0,0.5)] scale-95 active:scale-90 transition-transform group relative flex justify-center items-center" href="#" title="Home">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+</a>
+<!-- Inactive Nav Items -->
+<a class="text-on-surface/60 hover:text-primary p-stack-sm hover:bg-white/10 rounded-full transition-all hover:scale-110 group relative flex justify-center items-center" href="#" title="Character">
+<span class="material-symbols-outlined">person</span>
+</a>
+<a class="text-on-surface/60 hover:text-primary p-stack-sm hover:bg-white/10 rounded-full transition-all hover:scale-110 group relative flex justify-center items-center" href="#" title="Skills">
+<span class="material-symbols-outlined">account_tree</span>
+</a>
+<a class="text-on-surface/60 hover:text-primary p-stack-sm hover:bg-white/10 rounded-full transition-all hover:scale-110 group relative flex justify-center items-center" href="#" title="Quest Log">
+<span class="material-symbols-outlined">assignment</span>
+</a>
+<a class="text-on-surface/60 hover:text-primary p-stack-sm hover:bg-white/10 rounded-full transition-all hover:scale-110 group relative flex justify-center items-center" href="#" title="Guild">
+<span class="material-symbols-outlined">group</span>
+</a>
+<a class="text-on-surface/60 hover:text-primary p-stack-sm hover:bg-white/10 rounded-full transition-all hover:scale-110 group relative flex justify-center items-center" href="#" title="Settings">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</nav>
+<main class="flex-grow flex flex-col items-center pt-[120px] pb-section-gap px-container-padding max-w-7xl mx-auto w-full gap-section-gap">
+<!-- 2. Hero Section -->
+<section class="w-full max-w-4xl">
+<div class="glass-panel rounded-xl p-8 md:p-16 text-center relative overflow-hidden shadow-[0_0_40px_rgba(255,157,0,0.1)]">
+<!-- Inner Decorative Brackets -->
+<div class="absolute top-8 left-8 text-primary/30 font-display text-display opacity-50">[</div>
+<div class="absolute bottom-8 right-8 text-primary/30 font-display text-display opacity-50">]</div>
+<h2 class="font-label-caps text-label-caps text-primary tracking-widest mb-stack-md uppercase">System Notification</h2>
+<h1 class="font-display text-display text-on-surface mb-stack-md flex items-center justify-center gap-4">
+<span class="text-primary-container">[</span> LINK START <span class="text-primary-container">]</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-stack-md">
+                    Bem-vindo a Aincrad. O sistema detectou potencial em você. Aceite a missão e desbloqueie sua evolução.
+                </p>
+<button class="bg-primary-container text-on-primary font-label-caps text-label-caps px-8 py-4 rounded-full uppercase tracking-widest shadow-[0_0_20px_rgba(255,157,0,0.4)] hover:bg-primary transition-colors flex items-center justify-center gap-2 mx-auto">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+                    Aceitar Missão
+                </button>
+<div class="mt-8 flex justify-center gap-8 font-label-caps text-[10px] text-on-surface/50">
+<span>✓ +2.400 Players</span>
+<span>★ 4.9/5 Rating</span>
+<span>⟳ Garantia 7 Dias</span>
+</div>
+</div>
+</section>
+<!-- 3. Debuffs Grid -->
+<section class="w-full">
+<h2 class="section-title font-headline-md text-headline-md mb-2 uppercase tracking-wide">Debuffs Detectados</h2>
+<p class="text-center font-body-md text-on-surface-variant mb-stack-md">Status negativos travando sua evolução.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md">
+<!-- Card 1 -->
+<div class="glass-panel rounded-lg p-6 hover:border-primary/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-[32px]">local_fire_department</span>
+<span class="font-label-caps text-[10px] text-error">-40% Energia</span>
+</div>
+<h3 class="font-headline-md text-[18px] text-on-surface mb-2 group-hover:text-primary transition-colors">Burnout</h3>
+<p class="font-body-md text-on-surface-variant text-[14px]">Energia mental esgotada.</p>
+</div>
+<!-- Card 2 -->
+<div class="glass-panel rounded-lg p-6 hover:border-primary/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-[32px]">hourglass_empty</span>
+<span class="font-label-caps text-[10px] text-error">-60% Ação</span>
+</div>
+<h3 class="font-headline-md text-[18px] text-on-surface mb-2 group-hover:text-primary transition-colors">Procrastinação</h3>
+<p class="font-body-md text-on-surface-variant text-[14px]">Paralisia por análise travando ações.</p>
+</div>
+<!-- Card 3 -->
+<div class="glass-panel rounded-lg p-6 hover:border-primary/50 transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-[32px]">block</span>
+<span class="font-label-caps text-[10px] text-error">-80% XP</span>
+</div>
+<h3 class="font-headline-md text-[18px] text-on-surface mb-2 group-hover:text-primary transition-colors">Estagnação</h3>
+<p class="font-body-md text-on-surface-variant text-[14px]">Sem progresso visível nas skills.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- JSON Component: Footer -->
+<footer class="w-full py-stack-md mt-section-gap border-t border-outline-variant bg-surface-container-lowest flex flex-col items-center justify-center gap-base px-container-padding relative z-10">
+<div class="flex gap-stack-md mb-2">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary underline opacity-80 hover:opacity-100 transition-opacity" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary underline opacity-80 hover:opacity-100 transition-opacity" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary underline opacity-80 hover:opacity-100 transition-opacity" href="#">System Status</a>
+</div>
+<div class="font-label-caps text-on-surface-variant text-center opacity-50">
+            © 2024 SAO System Interface // Aincrad Floor 1. All rights reserved.
+        </div>
+</footer>
+</body></html>

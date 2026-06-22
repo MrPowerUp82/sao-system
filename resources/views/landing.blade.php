@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -11,13 +11,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@700&family=Rajdhani:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet">
 
     @vite(['resources/css/landing.css', 'resources/js/landing.js'])
 </head>
 
-<body class="antialiased">
+<body class="antialiased bg-grid">
 
     {{-- ══════════════════════════════════════════════════════
      NERVEGEAR BOOT SEQUENCE — Fullscreen Overlay
@@ -139,7 +141,7 @@
 
         /* Boot Lines */
         .ng-line {
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 14px;
             color: #0a0;
             margin: 6px 0;
@@ -164,7 +166,7 @@
         }
 
         .ng-label {
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'JetBrains Mono', 'Rajdhani', sans-serif;
             font-size: 13px;
             color: #666;
             letter-spacing: 0.2em;
@@ -172,7 +174,7 @@
         }
 
         .ng-value {
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'Sora', 'Rajdhani', sans-serif;
             font-size: 28px;
             font-weight: 700;
             color: #fff;
@@ -209,7 +211,7 @@
         }
 
         .ng-sense-label {
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'JetBrains Mono', 'Rajdhani', sans-serif;
             font-size: 12px;
             font-weight: 700;
             color: #888;
@@ -240,7 +242,7 @@
         .ng-sub-text {
             text-align: center;
             margin-top: 20px;
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 11px;
             color: #555;
             animation: blink-text 1s infinite;
@@ -272,9 +274,9 @@
         }
 
         .ng-link-text span {
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'Sora', 'Rajdhani', sans-serif;
             font-size: clamp(48px, 12vw, 96px);
-            font-weight: 700;
+            font-weight: 800;
             color: transparent;
             letter-spacing: 0.05em;
             animation: link-letter 0.6s forwards;
@@ -295,14 +297,14 @@
 
             50% {
                 color: #fff;
-                text-shadow: 0 0 40px rgba(100, 200, 255, 0.8);
+                text-shadow: 0 0 40px rgba(255, 157, 0, 0.8);
                 opacity: 1;
                 transform: scale(1.1);
             }
 
             100% {
                 color: #fff;
-                text-shadow: 0 0 20px rgba(100, 200, 255, 0.4);
+                text-shadow: 0 0 20px rgba(255, 157, 0, 0.4);
                 opacity: 1;
                 transform: scale(1);
             }
@@ -337,7 +339,7 @@
             background: none;
             border: 1px solid #333;
             color: #555;
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'JetBrains Mono', 'Rajdhani', sans-serif;
             font-size: 12px;
             font-weight: 700;
             letter-spacing: 0.15em;
@@ -348,8 +350,8 @@
         }
 
         #ng-skip:hover {
-            color: #fff;
-            border-color: #666;
+            color: #ff9d00;
+            border-color: #ff9d00;
         }
     </style>
 
@@ -453,27 +455,29 @@
      HEADER — Player HUD (Fixed Top)
      ══════════════════════════════════════════════════════ --}}
     <header
-        class="fixed top-0 left-0 right-0 z-50 py-3 px-4 md:px-8 flex items-center justify-between pointer-events-none">
+        class="fixed top-0 left-0 right-0 z-50 py-3 px-4 md:px-8 flex items-center justify-between pointer-events-none"
+        style="background: rgba(17,19,26,0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.05); box-shadow: 0 0 20px rgba(255,157,0,0.1);">
 
         @auth
             {{-- Player Info (Logged In) --}}
             <a href="{{ route('player.dashboard') }}"
                 class="sao-panel px-4 py-2.5 flex items-center gap-3 pointer-events-auto hover:scale-105 transition-transform">
                 <div
-                    class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-200 to-orange-400 border-2 border-white flex items-center justify-center text-white font-bold text-sm shadow-inner overflow-hidden">
+                    class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-orange-400 flex items-center justify-center text-white font-bold text-sm shadow-inner overflow-hidden"
+                    style="box-shadow: 0 0 12px rgba(255,157,0,0.4);">
                     <img src="/images/yui.png" alt="Avatar" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <p class="font-bold text-base leading-none text-gray-800 tracking-wide">{{ Auth::user()->name }}</p>
-                    <p class="text-xs text-sao-orange font-semibold mt-0.5">LV. {{ Auth::user()->level ?? 1 }} <span
-                            class="text-gray-400 font-normal">// LOGGED IN</span></p>
+                    <p class="font-bold text-base leading-none text-gray-100 tracking-wide">{{ Auth::user()->name }}</p>
+                    <p class="text-xs text-sao-orange font-semibold mt-0.5" style="font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em;">LV. {{ Auth::user()->level ?? 1 }} <span
+                            class="text-gray-500 font-normal">// LOGGED IN</span></p>
                 </div>
             </a>
         @else
             {{-- Guest (Login/Register) --}}
             <div class="flex items-center gap-3 pointer-events-auto">
                 <a href="{{ route('login') }}"
-                    class="sao-panel px-5 py-2.5 font-bold text-gray-700 hover:text-sao-orange transition-colors">
+                    class="sao-panel px-5 py-2.5 font-bold text-gray-300 hover:text-sao-orange transition-colors">
                     LINK START
                 </a>
                 <a href="{{ route('register') }}" class="sao-btn sm">
@@ -485,8 +489,8 @@
         {{-- HP / XP Bar (Center-Right) --}}
         <div class="sao-panel px-4 py-2.5 w-60 md:w-80 pointer-events-auto">
             <div class="flex justify-between items-center mb-1.5">
-                <span class="text-[11px] font-bold text-gray-500 tracking-wider uppercase">HP</span>
-                <span id="hp-text" class="text-[11px] font-bold text-gray-600 tabular-nums">100 / 100</span>
+                <span class="text-[11px] font-bold text-gray-400 tracking-wider uppercase" style="font-family: 'JetBrains Mono', monospace;">HP</span>
+                <span id="hp-text" class="text-[11px] font-bold text-gray-300 tabular-nums" style="font-family: 'JetBrains Mono', monospace;">100 / 100</span>
             </div>
             <div class="hp-bar-container">
                 <div class="hp-bar-fill" id="hp-bar" style="width: 100%"></div>
@@ -495,102 +499,129 @@
     </header>
 
     {{-- ══════════════════════════════════════════════════════
-     FLOATING VERTICAL MENU (Right Edge)
+     FLOATING VERTICAL MENU (Right Edge) — Material Symbols
      ══════════════════════════════════════════════════════ --}}
-    <nav class="fixed top-1/2 right-4 md:right-6 -translate-y-1/2 z-50 flex flex-col gap-3">
-        @foreach ([['icon' => '⌂', 'label' => 'Início', 'target' => '#hero'], ['icon' => '⚔', 'label' => 'Skill Tree', 'target' => '#modules'], ['icon' => '📊', 'label' => 'Status', 'target' => '#status'], ['icon' => '🗺', 'label' => 'Jornada', 'target' => '#jornada'], ['icon' => '✉', 'label' => 'Registros', 'target' => '#depoimentos'], ['icon' => '⊕', 'label' => 'Aceitar Missão', 'target' => route('register')]] as $nav)
-            <a href="{{ $nav['target'] }}" class="sao-nav-btn relative group" title="{{ $nav['label'] }}">
-                <span>{{ $nav['icon'] }}</span>
-                <div
-                    class="absolute right-16 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100
-                    transition-opacity duration-200
-                    sao-panel px-3 py-1.5 text-xs font-bold text-gray-600 whitespace-nowrap">
-                    {{ $nav['label'] }}
-                </div>
-            </a>
+    <nav class="hidden md:flex fixed top-1/2 right-4 md:right-6 -translate-y-1/2 z-50 flex-col gap-3 py-6 px-2 rounded-full"
+        style="background: rgba(17,19,26,0.3); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+        @foreach ([
+            ['icon' => 'home', 'fill' => true, 'label' => 'Início', 'target' => '#hero', 'active' => true],
+            ['icon' => 'account_tree', 'fill' => false, 'label' => 'Skill Tree', 'target' => '#modules', 'active' => false],
+            ['icon' => 'monitoring', 'fill' => false, 'label' => 'Status', 'target' => '#status', 'active' => false],
+            ['icon' => 'map', 'fill' => false, 'label' => 'Jornada', 'target' => '#jornada', 'active' => false],
+            ['icon' => 'forum', 'fill' => false, 'label' => 'Registros', 'target' => '#depoimentos', 'active' => false],
+            ['icon' => 'play_circle', 'fill' => false, 'label' => 'Aceitar Missão', 'target' => route('register'), 'active' => false],
+        ] as $nav)
+            @if ($nav['active'])
+                <a href="{{ $nav['target'] }}"
+                    class="w-12 h-12 rounded-full flex items-center justify-center relative group transition-transform active:scale-90"
+                    style="background: #ff9d00; color: #11131a; box-shadow: 0 0 15px rgba(255,157,0,0.5);"
+                    title="{{ $nav['label'] }}">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 22px;">{{ $nav['icon'] }}</span>
+                    <div
+                        class="absolute right-16 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 sao-panel px-3 py-1.5 text-xs font-bold text-gray-300 whitespace-nowrap">
+                        {{ $nav['label'] }}
+                    </div>
+                </a>
+            @else
+                <a href="{{ $nav['target'] }}"
+                    class="w-12 h-12 rounded-full flex items-center justify-center relative group transition-all hover:scale-110 hover:bg-white/10"
+                    style="color: rgba(226,226,236,0.6);"
+                    title="{{ $nav['label'] }}"
+                    onmouseover="this.style.color='#ff9d00'" onmouseout="this.style.color='rgba(226,226,236,0.6)'">
+                    <span class="material-symbols-outlined" style="font-size: 22px;">{{ $nav['icon'] }}</span>
+                    <div
+                        class="absolute right-16 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 sao-panel px-3 py-1.5 text-xs font-bold text-gray-300 whitespace-nowrap">
+                        {{ $nav['label'] }}
+                    </div>
+                </a>
+            @endif
         @endforeach
     </nav>
 
     {{-- ══════════════════════════════════════════════════════
      MAIN CONTENT
      ══════════════════════════════════════════════════════ --}}
-    <main class="relative z-10 pt-28 pb-20">
+    <main class="relative z-10 pt-28 pb-20 max-w-7xl mx-auto">
 
         {{-- ─── HERO ─── --}}
         <section id="hero" class="min-h-[85vh] flex items-center justify-center px-6">
-            <div data-animate class="sao-panel p-10 md:p-16 max-w-3xl mx-auto text-center">
-                <p class="text-sm font-semibold text-sao-orange tracking-[0.2em] uppercase mb-4">SYSTEM NOTIFICATION
-                </p>
-                <h1 class="sao-title text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] text-gray-800">
-                    <span class="bracket">「</span>LINK START<span class="bracket">」</span>
+            <div data-animate class="sao-panel p-10 md:p-16 max-w-4xl mx-auto text-center relative overflow-hidden"
+                style="box-shadow: 0 0 40px rgba(255,157,0,0.08);">
+                {{-- Decorative corner brackets --}}
+                <div class="absolute top-8 left-8 text-5xl opacity-30" style="color: #ff9d00; font-family: 'Sora', sans-serif; font-weight: 800;">[</div>
+                <div class="absolute bottom-8 right-8 text-5xl opacity-30" style="color: #ff9d00; font-family: 'Sora', sans-serif; font-weight: 800;">]</div>
+
+                <p class="text-sm font-semibold text-sao-orange tracking-[0.2em] uppercase mb-6 label-caps">SYSTEM NOTIFICATION</p>
+                <h1 class="text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] text-white"
+                    style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em;">
+                    <span style="color: #ff9d00;">[</span> LINK START <span style="color: #ff9d00;">]</span>
                 </h1>
-                <p class="mt-6 text-lg md:text-xl text-gray-600 max-w-xl mx-auto leading-relaxed font-medium">
+                <p class="mt-6 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium"
+                    style="font-family: 'Hanken Grotesk', sans-serif; color: #dac2ad;">
                     Bem-vindo a Aincrad. O sistema detectou potencial em você.
                     Aceite a missão e desbloqueie sua evolução.
                 </p>
 
                 <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                     <a href="{{ route('register') }}" class="sao-btn">
-                        <span class="icon-circle">⊕</span>
+                        <span class="material-symbols-outlined" style="font-size: 18px;">play_circle</span>
                         ACEITAR MISSÃO
                     </a>
                 </div>
 
                 {{-- Trust --}}
-                <div class="mt-8 flex flex-wrap justify-center gap-6 text-xs text-gray-500 font-medium">
+                <div class="mt-8 flex flex-wrap justify-center gap-8 label-caps text-[10px]" style="color: rgba(226,226,236,0.5);">
                     <span>✓ +2.400 Players</span>
                     <span>★ 4.9/5 Rating</span>
-                    <span>🛡 Garantia 7 Dias</span>
+                    <span>⟳ Garantia 7 Dias</span>
                 </div>
             </div>
         </section>
 
         <hr class="sao-divider max-w-xs mx-auto">
 
-        {{-- ─── PROBLEMA ─── --}}
+        {{-- ─── PROBLEMA (Debuffs) ─── --}}
         <section class="py-16 md:py-24 px-6">
             <div class="max-w-6xl mx-auto">
                 <div data-animate class="text-center mb-12">
-                    <h2 class="sao-title text-3xl md:text-4xl font-bold">
-                        <span class="bracket">「</span>DEBUFFS DETECTADOS<span class="bracket">」</span>
-                    </h2>
-                    <p class="mt-3 text-gray-500 max-w-lg mx-auto">Status negativos travando sua evolução.</p>
+                    <h2 class="section-title text-3xl md:text-4xl font-bold">DEBUFFS DETECTADOS</h2>
+                    <p class="mt-3 max-w-lg mx-auto" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Status negativos travando sua evolução.</p>
                 </div>
 
                 @php
                     $debuffs = [
                         [
-                            'icon' => '🔥',
+                            'icon' => 'local_fire_department',
                             'title' => 'Burnout',
                             'desc' => 'Energia mental esgotada.',
                             'stat' => '-40% Energia',
                         ],
                         [
-                            'icon' => '😶‍🌫️',
+                            'icon' => 'hourglass_empty',
                             'title' => 'Procrastinação',
                             'desc' => 'Paralisia por análise travando ações.',
                             'stat' => '-60% Ação',
                         ],
                         [
-                            'icon' => '📉',
+                            'icon' => 'block',
                             'title' => 'Estagnação',
                             'desc' => 'Sem progresso visível nas skills.',
                             'stat' => '-80% XP',
                         ],
                         [
-                            'icon' => '🌀',
+                            'icon' => 'blur_on',
                             'title' => 'Falta de Foco',
                             'desc' => 'Distrações constantes, zero resultados.',
                             'stat' => '-50% Precisão',
                         ],
                         [
-                            'icon' => '😰',
+                            'icon' => 'sentiment_stressed',
                             'title' => 'Impostor',
                             'desc' => 'Medo de agir por insegurança.',
                             'stat' => '-70% Confiança',
                         ],
                         [
-                            'icon' => '⏰',
+                            'icon' => 'schedule',
                             'title' => 'Sem Rotina',
                             'desc' => 'Dias caóticos sem estrutura.',
                             'stat' => '-55% Disciplina',
@@ -600,14 +631,15 @@
 
                 <div data-animate class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     @foreach ($debuffs as $d)
-                        <div class="sao-panel p-5 group">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-2xl">{{ $d['icon'] }}</span>
-                                <span class="text-xs font-bold text-red-500 tracking-wider">{{ $d['stat'] }}</span>
+                        <div class="sao-panel p-6 group hover:border-orange-500/40">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="material-symbols-outlined text-3xl text-sao-orange">{{ $d['icon'] }}</span>
+                                <span class="label-caps text-[10px]" style="color: #ffb4ab;">{{ $d['stat'] }}</span>
                             </div>
-                            <h3 class="font-bold text-lg text-gray-800 group-hover:text-sao-orange transition-colors">
+                            <h3 class="font-bold text-lg text-gray-100 group-hover:text-sao-orange transition-colors"
+                                style="font-family: 'Sora', sans-serif;">
                                 {{ $d['title'] }}</h3>
-                            <p class="mt-1 text-sm text-gray-500">{{ $d['desc'] }}</p>
+                            <p class="mt-1 text-sm" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">{{ $d['desc'] }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -621,37 +653,41 @@
             <div class="max-w-5xl mx-auto">
                 <div class="grid lg:grid-cols-2 gap-10 items-center">
                     <div data-animate>
-                        <h2 class="sao-title text-3xl md:text-4xl font-bold">
-                            <span class="bracket">「</span>O SISTEMA<span class="bracket">」</span>
-                        </h2>
-                        <p class="mt-4 text-gray-600 leading-relaxed text-lg">
+                        <h2 class="section-title text-3xl md:text-4xl font-bold justify-start">O SISTEMA</h2>
+                        <p class="mt-4 leading-relaxed text-lg"
+                            style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">
                             O SAO System é um programa de transformação pessoal gamificado.
                             Cada módulo é uma skill. Cada semana é um nível.
-                            Você não estuda — você <strong>treina, evolui e sobe de nível</strong>.
+                            Você não estuda — você <strong class="text-gray-100">treina, evolui e sobe de nível</strong>.
                         </p>
                         <ul class="mt-6 space-y-3">
                             @foreach (['8 Módulos de treinamento', 'Sistema de XP e progressão', 'Comunidade exclusiva (Guilda)', 'Suporte direto do Mestre'] as $item)
-                                <li class="flex items-center gap-3 text-gray-700">
+                                <li class="flex items-center gap-3 text-gray-300">
                                     <span
-                                        class="w-6 h-6 rounded-full bg-sao-orange text-white flex items-center justify-center text-xs font-bold shadow-sm">⊕</span>
-                                    <span class="font-medium">{{ $item }}</span>
+                                        class="w-6 h-6 rounded-full bg-sao-orange text-white flex items-center justify-center text-xs font-bold"
+                                        style="box-shadow: 0 0 10px rgba(255,157,0,0.3);">
+                                        <span class="material-symbols-outlined" style="font-size: 14px;">add</span>
+                                    </span>
+                                    <span class="font-medium" style="font-family: 'Hanken Grotesk', sans-serif;">{{ $item }}</span>
                                 </li>
                             @endforeach
                         </ul>
                     </div>
 
                     {{-- Stats Card --}}
-                    <div data-animate class="sao-panel p-8 text-center">
-                        <div class="text-5xl mb-4">⚔️</div>
-                        <h3 class="sao-title text-xl font-bold">
-                            <span class="bracket">「</span>SAO SYSTEM<span class="bracket">」</span>
+                    <div data-animate class="sao-panel-orange p-8 text-center" style="border-radius: 12px;">
+                        <div class="mb-4">
+                            <span class="material-symbols-outlined text-sao-orange" style="font-size: 48px; font-variation-settings: 'FILL' 1;">swords</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-100" style="font-family: 'Sora', sans-serif;">
+                            <span style="color: #ff9d00;">[</span> SAO SYSTEM <span style="color: #ff9d00;">]</span>
                         </h3>
-                        <p class="text-xs text-sao-orange font-semibold mt-1">PROGRAMA COMPLETO DE EVOLUÇÃO</p>
+                        <p class="label-caps text-sao-orange mt-1">PROGRAMA COMPLETO DE EVOLUÇÃO</p>
                         <div class="mt-6 grid grid-cols-2 gap-3">
                             @foreach ([['val' => '8', 'label' => 'Módulos'], ['val' => '50+', 'label' => 'Aulas'], ['val' => '2.4k+', 'label' => 'Players'], ['val' => '4 sem', 'label' => 'Duração']] as $stat)
-                                <div class="bg-white/50 rounded-lg p-3 border border-gray-200">
-                                    <span class="text-2xl font-black text-gray-800">{{ $stat['val'] }}</span>
-                                    <p class="text-[10px] text-gray-500 font-semibold mt-0.5 uppercase tracking-wider">
+                                <div class="rounded-lg p-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);">
+                                    <span class="text-2xl font-black text-gray-100" style="font-family: 'Sora', sans-serif;">{{ $stat['val'] }}</span>
+                                    <p class="label-caps text-[10px] mt-0.5" style="color: rgba(226,226,236,0.5);">
                                         {{ $stat['label'] }}</p>
                                 </div>
                             @endforeach
@@ -667,10 +703,8 @@
         <section id="modules" class="py-16 md:py-24 px-6">
             <div class="max-w-6xl mx-auto">
                 <div data-animate class="text-center mb-12">
-                    <h2 class="sao-title text-3xl md:text-4xl font-bold">
-                        <span class="bracket">「</span>SKILL TREE<span class="bracket">」</span>
-                    </h2>
-                    <p class="mt-3 text-gray-500 max-w-lg mx-auto">Desbloqueie cada skill para atingir o nível máximo.
+                    <h2 class="section-title text-3xl md:text-4xl font-bold">SKILL TREE</h2>
+                    <p class="mt-3 max-w-lg mx-auto" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Desbloqueie cada skill para atingir o nível máximo.
                     </p>
                 </div>
 
@@ -678,7 +712,7 @@
                     $modules = [
                         [
                             'num' => '01',
-                            'icon' => '🧠',
+                            'icon' => 'psychology',
                             'title' => 'Mentalidade de Jogador',
                             'desc' => 'Reprograme sua mente para operar como um Player de elite.',
                             'xp' => 250,
@@ -686,7 +720,7 @@
                         ],
                         [
                             'num' => '02',
-                            'icon' => '🎯',
+                            'icon' => 'target',
                             'title' => 'Missões & Objetivos',
                             'desc' => 'Transforme metas em missões executáveis.',
                             'xp' => 300,
@@ -694,7 +728,7 @@
                         ],
                         [
                             'num' => '03',
-                            'icon' => '⚡',
+                            'icon' => 'bolt',
                             'title' => 'Produtividade Extrema',
                             'desc' => 'Técnicas de alto rendimento para multiplicar seu output.',
                             'xp' => 350,
@@ -702,7 +736,7 @@
                         ],
                         [
                             'num' => '04',
-                            'icon' => '🗡️',
+                            'icon' => 'swords',
                             'title' => 'Disciplina Forjada',
                             'desc' => 'Hábitos no piloto automático. Sem motivação, só sistema.',
                             'xp' => 400,
@@ -710,7 +744,7 @@
                         ],
                         [
                             'num' => '05',
-                            'icon' => '📖',
+                            'icon' => 'menu_book',
                             'title' => 'Aprendizado Acelerado',
                             'desc' => 'Domine qualquer skill 3x mais rápido.',
                             'xp' => 300,
@@ -718,7 +752,7 @@
                         ],
                         [
                             'num' => '06',
-                            'icon' => '💰',
+                            'icon' => 'account_balance',
                             'title' => 'Finanças do Player',
                             'desc' => 'Gold management aplicado à vida real.',
                             'xp' => 350,
@@ -726,7 +760,7 @@
                         ],
                         [
                             'num' => '07',
-                            'icon' => '🤝',
+                            'icon' => 'diversity_3',
                             'title' => 'Social Engineering',
                             'desc' => 'Comunicação, networking e influência.',
                             'xp' => 300,
@@ -734,7 +768,7 @@
                         ],
                         [
                             'num' => '08',
-                            'icon' => '🏆',
+                            'icon' => 'trophy',
                             'title' => 'Boss Final',
                             'desc' => 'Integre tudo. Projeto final com mentoria exclusiva.',
                             'xp' => 500,
@@ -748,19 +782,22 @@
                         <div data-animate class="sao-quest-panel p-5 flex flex-col">
                             {{-- Quest Header --}}
                             <div class="flex items-center justify-between mb-3">
-                                <span class="text-xs font-bold text-sao-orange tracking-wider">QUEST
+                                <span class="label-caps text-sao-orange">QUEST
                                     {{ $m['num'] }}</span>
-                                <span class="text-[10px] font-bold text-gray-400">+{{ $m['xp'] }} EXP</span>
+                                <span class="label-caps text-[10px]" style="color: rgba(226,226,236,0.4);">+{{ $m['xp'] }} EXP</span>
                             </div>
                             {{-- Icon & Title --}}
-                            <div class="text-3xl mb-2">{{ $m['icon'] }}</div>
-                            <h4 class="font-bold text-base text-gray-800 leading-snug">{{ $m['title'] }}</h4>
-                            <p class="text-xs text-gray-500 mt-1 flex-1">{{ $m['desc'] }}</p>
+                            <div class="mb-2">
+                                <span class="material-symbols-outlined text-sao-orange" style="font-size: 32px;">{{ $m['icon'] }}</span>
+                            </div>
+                            <h4 class="font-bold text-base text-gray-100 leading-snug" style="font-family: 'Sora', sans-serif;">{{ $m['title'] }}</h4>
+                            <p class="text-xs mt-1 flex-1" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">{{ $m['desc'] }}</p>
                             {{-- Level Requirement --}}
-                            <div class="mt-4 pt-3 border-t border-gray-200 flex items-center justify-between">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase">{{ $m['lv'] }}
+                            <div class="mt-4 pt-3 flex items-center justify-between"
+                                style="border-top: 1px solid rgba(255,255,255,0.08);">
+                                <span class="label-caps text-[10px]" style="color: rgba(226,226,236,0.4);">{{ $m['lv'] }}
                                     Aulas</span>
-                                <span class="text-sao-orange text-lg font-bold">⊕</span>
+                                <span class="material-symbols-outlined text-sao-orange" style="font-size: 20px;">add_circle</span>
                             </div>
                         </div>
                     @endforeach
@@ -775,10 +812,8 @@
             <div class="max-w-5xl mx-auto">
                 <div class="grid lg:grid-cols-2 gap-10 items-center">
                     <div data-animate>
-                        <h2 class="sao-title text-3xl md:text-4xl font-bold">
-                            <span class="bracket">「</span>CHARACTER STATUS<span class="bracket">」</span>
-                        </h2>
-                        <p class="mt-4 text-gray-600 leading-relaxed">
+                        <h2 class="section-title text-3xl md:text-4xl font-bold justify-start">CHARACTER STATUS</h2>
+                        <p class="mt-4 leading-relaxed" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">
                             Projeção de evolução baseada nos resultados médios dos players que completaram o
                             treinamento.
                         </p>
@@ -799,8 +834,8 @@
                             <div>
                                 <div class="flex justify-between mb-1">
                                     <span
-                                        class="text-xs font-bold text-gray-600 tracking-wider uppercase">{{ $s['name'] }}</span>
-                                    <span class="text-xs font-bold text-sao-orange">{{ $s['val'] }}%</span>
+                                        class="label-caps text-[11px]" style="color: rgba(226,226,236,0.6);">{{ $s['name'] }}</span>
+                                    <span class="label-caps text-[11px] text-sao-orange">{{ $s['val'] }}%</span>
                                 </div>
                                 <div class="hp-bar-container">
                                     <div class="hp-bar-fill status-fill"
@@ -819,15 +854,13 @@
         <section id="jornada" class="py-16 md:py-24 px-6">
             <div class="max-w-3xl mx-auto">
                 <div data-animate class="text-center mb-12">
-                    <h2 class="sao-title text-3xl md:text-4xl font-bold">
-                        <span class="bracket">「</span>QUEST MAP<span class="bracket">」</span>
-                    </h2>
+                    <h2 class="section-title text-3xl md:text-4xl font-bold">QUEST MAP</h2>
                 </div>
 
                 <div class="relative">
                     <div
-                        class="absolute left-6 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-sao-orange/60 via-sao-orange/30 to-transparent">
-                    </div>
+                        class="absolute left-6 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-0.5"
+                        style="background: linear-gradient(to bottom, rgba(255,157,0,0.5), rgba(255,157,0,0.2), transparent);"></div>
 
                     @php
                         $quests = [
@@ -835,25 +868,25 @@
                                 'week' => 'Semana 1',
                                 'title' => 'Despertar',
                                 'desc' => 'Conecte-se ao sistema. Diagnóstico completo e definição da build ideal.',
-                                'icon' => '🌅',
+                                'icon' => 'wb_twilight',
                             ],
                             [
                                 'week' => 'Semana 2',
                                 'title' => 'Primeira Missão',
                                 'desc' => 'Execute sua primeira quest. Implemente os fundamentos.',
-                                'icon' => '⚔️',
+                                'icon' => 'swords',
                             ],
                             [
                                 'week' => 'Semana 3',
                                 'title' => 'Boss Fight',
                                 'desc' => 'Quebre padrões limitantes. Avance para a fase avançada.',
-                                'icon' => '🐉',
+                                'icon' => 'bug_report',
                             ],
                             [
                                 'week' => 'Semana 4',
                                 'title' => 'Ascensão',
                                 'desc' => 'Integração total. New Game+ desbloqueado.',
-                                'icon' => '🏆',
+                                'icon' => 'trophy',
                             ],
                         ];
                     @endphp
@@ -864,13 +897,13 @@
                                 class="relative flex items-start gap-5 {{ $idx % 2 !== 0 ? 'md:flex-row-reverse md:text-right' : '' }}">
                                 <div
                                     class="z-10 flex-shrink-0 w-12 h-12 sao-panel flex items-center justify-center rounded-full text-xl shadow-lg">
-                                    {{ $q['icon'] }}
+                                    <span class="material-symbols-outlined text-sao-orange" style="font-size: 24px;">{{ $q['icon'] }}</span>
                                 </div>
                                 <div class="flex-1 sao-panel p-5">
                                     <span
-                                        class="text-xs font-bold text-sao-orange tracking-wider">{{ $q['week'] }}</span>
-                                    <h3 class="mt-1 font-bold text-lg text-gray-800">{{ $q['title'] }}</h3>
-                                    <p class="mt-1 text-sm text-gray-500">{{ $q['desc'] }}</p>
+                                        class="label-caps text-sao-orange">{{ $q['week'] }}</span>
+                                    <h3 class="mt-1 font-bold text-lg text-gray-100" style="font-family: 'Sora', sans-serif;">{{ $q['title'] }}</h3>
+                                    <p class="mt-1 text-sm" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">{{ $q['desc'] }}</p>
                                 </div>
                             </div>
                         @endforeach
@@ -885,10 +918,8 @@
         <section id="depoimentos" class="py-16 md:py-24 px-6">
             <div class="max-w-6xl mx-auto">
                 <div data-animate class="text-center mb-12">
-                    <h2 class="sao-title text-3xl md:text-4xl font-bold">
-                        <span class="bracket">「</span>SYSTEM LOGS<span class="bracket">」</span>
-                    </h2>
-                    <p class="mt-3 text-gray-500 max-w-lg mx-auto">Feedbacks verificados dos players.</p>
+                    <h2 class="section-title text-3xl md:text-4xl font-bold">SYSTEM LOGS</h2>
+                    <p class="mt-3 max-w-lg mx-auto" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Feedbacks verificados dos players.</p>
                 </div>
 
                 @php
@@ -939,23 +970,25 @@
                         <div data-animate class="sao-panel p-5">
                             <div class="flex items-center gap-3 mb-3">
                                 <div
-                                    class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-200 to-orange-400 flex items-center justify-center text-white text-sm font-bold">
+                                    class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center text-white text-sm font-bold"
+                                    style="box-shadow: 0 0 10px rgba(255,157,0,0.3); border: 1px solid rgba(255,157,0,0.5);">
                                     {{ strtoupper(substr($t['name'], 0, 1)) }}
                                 </div>
                                 <div>
-                                    <span class="font-bold text-sm text-gray-800">{{ '@' . $t['name'] }}</span>
-                                    <span class="block text-[10px] text-sao-orange font-semibold">Nível
+                                    <span class="font-bold text-sm text-gray-100">{{ '@' . $t['name'] }}</span>
+                                    <span class="block label-caps text-[10px] text-sao-orange">Nível
                                         {{ $t['lv'] }}</span>
                                 </div>
                             </div>
-                            <p class="text-sm text-gray-600 italic leading-relaxed">"{{ $t['text'] }}"</p>
-                            <div class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
+                            <p class="text-sm italic leading-relaxed" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">"{{ $t['text'] }}"</p>
+                            <div class="mt-3 pt-3 flex justify-between items-center"
+                                style="border-top: 1px solid rgba(255,255,255,0.08);">
                                 <div class="text-yellow-500 text-xs">
                                     @for ($i = 0; $i < $t['stars']; $i++)
                                         ⭐
                                     @endfor
                                 </div>
-                                <span class="text-[10px] text-green-600 font-bold">✓ Verificado</span>
+                                <span class="label-caps text-[10px]" style="color: #4ae183;">✓ Verificado</span>
                             </div>
                         </div>
                     @endforeach
@@ -969,23 +1002,22 @@
         <section id="checkout" class="py-16 md:py-32 px-6">
             <div class="max-w-lg mx-auto">
                 <div data-animate class="text-center mb-10">
-                    <h2 class="sao-title text-3xl md:text-4xl font-bold">
-                        <span class="bracket">「</span>MISSÃO FINAL<span class="bracket">」</span>
-                    </h2>
+                    <h2 class="section-title text-3xl md:text-4xl font-bold">MISSÃO FINAL</h2>
                 </div>
 
-                <div data-animate class="sao-panel p-1.5">
-                    <div class="bg-white/60 backdrop-blur-sm p-6 md:p-8 rounded-[10px] border border-gray-200/50">
+                <div data-animate class="sao-panel-orange p-1.5" style="border-radius: 12px;">
+                    <div class="p-6 md:p-8 rounded-[10px]" style="background: rgba(17,19,26,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05);">
                         {{-- Item --}}
                         <div class="flex items-start gap-5 mb-6">
                             <div
-                                class="w-20 h-20 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-sao flex items-center justify-center shadow-inner flex-shrink-0">
-                                <span class="text-4xl">📜</span>
+                                class="w-20 h-20 rounded-xl flex items-center justify-center shadow-inner flex-shrink-0"
+                                style="background: linear-gradient(135deg, rgba(255,157,0,0.15), rgba(255,157,0,0.05)); border: 2px solid rgba(255,157,0,0.3);">
+                                <span class="material-symbols-outlined text-sao-orange" style="font-size: 40px; font-variation-settings: 'FILL' 1;">description</span>
                             </div>
                             <div>
-                                <h3 class="font-bold text-xl text-gray-800">SAO SYSTEM ACCESS</h3>
-                                <p class="text-xs text-sao-orange font-bold mt-0.5">CLASS: UNIQUE ITEM</p>
-                                <p class="text-xs text-gray-500 mt-2 leading-relaxed">Acesso completo a todos os
+                                <h3 class="font-bold text-xl text-gray-100" style="font-family: 'Sora', sans-serif;">SAO SYSTEM ACCESS</h3>
+                                <p class="label-caps text-sao-orange mt-0.5">CLASS: UNIQUE ITEM</p>
+                                <p class="text-xs mt-2 leading-relaxed" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Acesso completo a todos os
                                     módulos, Guilda, suporte e atualizações vitalícias.</p>
                             </div>
                         </div>
@@ -995,10 +1027,13 @@
                         {{-- Features --}}
                         <ul class="space-y-2.5 mb-6 text-sm">
                             @foreach (['8 Módulos de treinamento', 'Guilda (comunidade vitalícia)', 'Suporte direto do Mestre', 'Missões Extras (bônus)', 'Atualizações vitalícias', 'Certificado de Conclusão'] as $f)
-                                <li class="flex items-center gap-2.5 text-gray-700">
+                                <li class="flex items-center gap-2.5 text-gray-300">
                                     <span
-                                        class="w-5 h-5 rounded-full bg-sao-orange text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">⊕</span>
-                                    {{ $f }}
+                                        class="w-5 h-5 rounded-full bg-sao-orange flex items-center justify-center flex-shrink-0"
+                                        style="box-shadow: 0 0 8px rgba(255,157,0,0.3);">
+                                        <span class="material-symbols-outlined" style="font-size: 12px; color: #11131a;">add</span>
+                                    </span>
+                                    <span style="font-family: 'Hanken Grotesk', sans-serif;">{{ $f }}</span>
                                 </li>
                             @endforeach
                         </ul>
@@ -1007,22 +1042,22 @@
 
                         {{-- Price --}}
                         <div class="flex items-end justify-between mb-6">
-                            <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Cost:</span>
+                            <span class="label-caps" style="color: rgba(226,226,236,0.5);">Cost:</span>
                             <div class="text-right">
-                                <span class="block text-sm text-gray-400 line-through">R$ 497</span>
-                                <span class="text-4xl font-black text-gray-800">R$ 197</span>
-                                <p class="text-[10px] text-gray-500 mt-0.5">ou 12x de R$ 19,70</p>
+                                <span class="block text-sm line-through" style="color: rgba(226,226,236,0.3);">R$ 497</span>
+                                <span class="text-4xl font-black text-gray-100" style="font-family: 'Sora', sans-serif;">R$ 197</span>
+                                <p class="label-caps text-[10px] mt-0.5" style="color: rgba(226,226,236,0.4);">ou 12x de R$ 19,70</p>
                             </div>
                         </div>
 
                         {{-- CTA --}}
                         <a href="{{ route('register') }}" class="sao-btn w-full justify-center text-lg py-4">
-                            <span class="icon-circle text-xl">⊕</span>
+                            <span class="material-symbols-outlined" style="font-size: 22px;">play_circle</span>
                             ACCEPT TRADE
                         </a>
 
                         {{-- Guarantee --}}
-                        <p class="mt-4 text-center text-xs text-gray-500">
+                        <p class="mt-4 text-center text-xs" style="color: rgba(226,226,236,0.4);">
                             🛡️ Garantia de 7 dias — Sem risco. Devolvemos 100%.
                         </p>
                     </div>
@@ -1033,9 +1068,15 @@
     </main>
 
     {{-- ─── FOOTER ─── --}}
-    <footer class="text-center py-10 text-xs text-gray-400 font-medium">
-        <p>SAO System Interface // Aincrad Floor 1</p>
-        <p class="mt-1">© {{ date('Y') }} SAO System. Todos os direitos reservados.</p>
+    <footer class="text-center py-10 border-t" style="border-color: rgba(255,255,255,0.05); background: rgba(12,14,21,0.8);">
+        <div class="flex justify-center gap-6 mb-3">
+            <a href="#" class="text-sm hover:text-sao-orange transition-colors" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Terms of Service</a>
+            <a href="#" class="text-sm hover:text-sao-orange transition-colors" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Privacy Policy</a>
+            <a href="#" class="text-sm hover:text-sao-orange transition-colors" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">System Status</a>
+        </div>
+        <p class="label-caps" style="color: rgba(226,226,236,0.3);">
+            © {{ date('Y') }} SAO System Interface // Aincrad Floor 1. All rights reserved.
+        </p>
     </footer>
 
 </body>
