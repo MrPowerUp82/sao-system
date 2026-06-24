@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { router } from '@inertiajs/react'
+import React, { useState, useEffect, useRef } from 'react'
+import { router, usePage } from '@inertiajs/react'
+import axios from 'axios'
 import PlayerLayout from '../Layouts/PlayerLayout'
 import SaoPanel from '../Components/SaoPanel'
 import { useSound } from '../Components/SoundManager'
@@ -68,14 +69,90 @@ function MemberRow({ member, rank }) {
 
 function GuildCard({ guild, onLeave }) {
     const { play } = useSound()
+    const { auth } = usePage().props
+    const currentUser = auth?.user
     const [showMembers, setShowMembers] = useState(false)
     const [copied, setCopied] = useState(false)
+    
+    const [showChat, setShowChat] = useState(false)
+    const [messages, setMessages] = useState([])
+    const [newMessage, setNewMessage] = useState('')
+    const [loadingChat, setLoadingChat] = useState(false)
+    const [sendingMessage, setSendingMessage] = useState(false)
+    const chatEndRef = useRef(null)
 
     const copyCode = () => {
         navigator.clipboard.writeText(guild.invite_code)
         setCopied(true)
         play('confirm')
         setTimeout(() => setCopied(false), 2000)
+    }
+
+    const fetchMessages = async () => {
+        try {
+            const response = await axios.get(`/player/guild/${guild.id}/messages`)
+            setMessages(response.data)
+        } catch (error) {
+            console.error('Error fetching guild messages:', error)
+        }
+    }
+
+    useEffect(() => {
+        let intervalId = null
+
+        if (showChat) {
+            setLoadingChat(true)
+            fetchMessages().finally(() => {
+                setLoadingChat(false)
+                scrollToBottom()
+            })
+
+            intervalId = setInterval(() => {
+                fetchMessages()
+            }, 5000)
+        } else {
+            setMessages([])
+        }
+
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId)
+            }
+        }
+    }, [showChat])
+
+    const scrollToBottom = () => {
+        setTimeout(() => {
+            chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+        }, 50)
+    }
+
+    useEffect(() => {
+        if (showChat) {
+            scrollToBottom()
+        }
+    }, [messages.length])
+
+    const handleSendMessage = async (e) => {
+        e.preventDefault()
+        if (!newMessage.trim() || sendingMessage) return
+
+        const messageText = newMessage.trim()
+        setNewMessage('')
+        setSendingMessage(true)
+        play('click')
+
+        try {
+            const response = await axios.post(`/player/guild/${guild.id}/messages`, {
+                message: messageText
+            })
+            setMessages(prev => [...prev, response.data])
+            scrollToBottom()
+        } catch (error) {
+            console.error('Error sending message:', error)
+        } finally {
+            setSendingMessage(false)
+        }
     }
 
     return (
@@ -160,20 +237,237 @@ function GuildCard({ guild, onLeave }) {
                 </button>
             </div>
 
-            {/* Member list toggle */}
-            <button
-                className="sao-btn outline"
-                onClick={() => { play('click'); setShowMembers(!showMembers) }}
-                style={{ width: '100%', justifyContent: 'center', fontSize: '0.75rem', marginBottom: showMembers ? '10px' : '0' }}
-            >
-                {showMembers ? '▲ Esconder Ranking' : '▼ Ver Ranking'}
-            </button>
+            {/* Member list toggle & Chat toggle */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: (showMembers || showChat) ? '10px' : '0' }}>
+                <button
+                    className="sao-btn outline"
+                    onClick={() => { play('click'); setShowMembers(!showMembers); setShowChat(false); }}
+                    style={{ flex: 1, justifyContent: 'center', fontSize: '0.75rem' }}
+                >
+                    {showMembers ? '▲ Ranking' : '▼ Ranking'}
+                </button>
+                <button
+                    className="sao-btn outline"
+                    onClick={() => { play('click'); setShowChat(!showChat); setShowMembers(false); }}
+                    style={{ flex: 1, justifyContent: 'center', fontSize: '0.75rem' }}
+                >
+                    {showChat ? '▲ Chat' : '💬 Chat'}
+                </button>
+            </div>
 
             {showMembers && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '6px' }}>
                     {guild.members.map((m, i) => (
                         <MemberRow key={m.id} member={m} rank={i + 1} />
                     ))}
+                </div>
+            )}
+
+            {showChat && (
+                <div style={{
+                    marginTop: '10px',
+                    border: '1px solid var(--sao-border-subtle)',
+                    borderRadius: '8px',
+                    background: 'rgba(10, 10, 16, 0.6)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '350px',
+                    overflow: 'hidden',
+                }}>
+                    {/* Header/Refresh */}
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '8px 12px',
+                        background: 'rgba(0, 0, 0, 0.2)',
+                        borderBottom: '1px solid var(--sao-border-subtle)',
+                    }}>
+                        <span style={{
+                            fontFamily: 'Rajdhani, sans-serif',
+                            fontWeight: 700,
+                            fontSize: '0.8rem',
+                            color: 'var(--sao-orange)',
+                            letterSpacing: '0.1em',
+                        }}>
+                            💬 GUILD CHAT
+                        </span>
+                        <button
+                            onClick={() => { play('click'); fetchMessages() }}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                color: 'var(--sao-text-dim)',
+                                cursor: 'pointer',
+                                fontSize: '0.7rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                            }}
+                        >
+                            🔄 Refresh
+                        </button>
+                    </div>
+
+                    {/* Messages Area */}
+                    <div style={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        padding: '12px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
+                    }}>
+                        {loadingChat ? (
+                            <div style={{
+                                flex: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'var(--sao-text-dim)',
+                                fontSize: '0.75rem',
+                                fontFamily: 'Rajdhani, sans-serif',
+                                letterSpacing: '0.05em',
+                            }}>
+                                ⏳ SYNCING WITH AINCRAD...
+                            </div>
+                        ) : messages.length === 0 ? (
+                            <div style={{
+                                flex: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'var(--sao-text-muted)',
+                                fontSize: '0.75rem',
+                                fontStyle: 'italic',
+                            }}>
+                                Nenhuma mensagem enviada ainda.
+                            </div>
+                        ) : (
+                            messages.map((m) => {
+                                const isSelf = m.user.id === currentUser?.id
+                                const role = ROLE_BADGES[m.user.role] || ROLE_BADGES.member
+
+                                return (
+                                    <div
+                                        key={m.id}
+                                        style={{
+                                            alignSelf: isSelf ? 'flex-end' : 'flex-start',
+                                            maxWidth: '85%',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: isSelf ? 'flex-end' : 'flex-start',
+                                        }}
+                                    >
+                                        {/* Sender Name & Role */}
+                                        {!isSelf && (
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '6px',
+                                                marginBottom: '3px',
+                                                padding: '0 4px',
+                                            }}>
+                                                <span style={{
+                                                    fontWeight: 600,
+                                                    fontSize: '0.75rem',
+                                                    color: 'var(--sao-text)',
+                                                }}>
+                                                    {m.user.name}
+                                                </span>
+                                                <span style={{
+                                                    fontSize: '0.55rem',
+                                                    color: role.color,
+                                                    fontWeight: 700,
+                                                    background: `${role.color}15`,
+                                                    padding: '1px 5px',
+                                                    borderRadius: '3px',
+                                                    border: `1px solid ${role.color}30`,
+                                                }}>
+                                                    {role.icon} {role.label}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {/* Message Bubble */}
+                                        <div style={{
+                                            background: isSelf
+                                                ? 'linear-gradient(135deg, rgba(255, 157, 0, 0.2), rgba(255, 157, 0, 0.1))'
+                                                : 'rgba(255, 255, 255, 0.08)',
+                                            padding: '8px 12px',
+                                            borderRadius: isSelf ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
+                                            fontSize: '0.8rem',
+                                            lineHeight: '1.4',
+                                            border: isSelf
+                                                ? '1px solid rgba(255,157,0,0.3)'
+                                                : '1px solid var(--sao-border-subtle)',
+                                            color: 'var(--sao-text)',
+                                            wordBreak: 'break-word',
+                                        }}>
+                                            {m.message}
+                                        </div>
+
+                                        {/* Time */}
+                                        <span style={{
+                                            fontSize: '0.6rem',
+                                            color: 'var(--sao-text-muted)',
+                                            marginTop: '3px',
+                                            marginRight: isSelf ? '4px' : '0',
+                                            marginLeft: isSelf ? '0' : '4px',
+                                        }}>
+                                            {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                )
+                            })
+                        )}
+                        <div ref={chatEndRef} />
+                    </div>
+
+                    {/* Input Area */}
+                    <form
+                        onSubmit={handleSendMessage}
+                        style={{
+                            display: 'flex',
+                            gap: '6px',
+                            padding: '8px',
+                            background: 'rgba(0, 0, 0, 0.3)',
+                            borderTop: '1px solid var(--sao-border-subtle)',
+                        }}
+                    >
+                        <input
+                            type="text"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            placeholder="Envie uma mensagem..."
+                            maxLength={500}
+                            style={{
+                                flex: 1,
+                                background: 'rgba(10, 10, 18, 0.6)',
+                                border: '1px solid var(--sao-border-subtle)',
+                                borderRadius: '6px',
+                                padding: '8px 12px',
+                                color: '#fff',
+                                fontSize: '0.8rem',
+                                outline: 'none',
+                            }}
+                        />
+                        <button
+                            type="submit"
+                            disabled={!newMessage.trim() || sendingMessage}
+                            className="sao-btn"
+                            style={{
+                                padding: '0 12px',
+                                borderRadius: '6px',
+                                height: '32px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            {sendingMessage ? '...' : '➤'}
+                        </button>
+                    </form>
                 </div>
             )}
 

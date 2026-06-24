@@ -51,4 +51,9 @@ class Guild extends Model
     {
         return $this->members()->count();
     }
+
+    public function messages()
+    {
+        return $this->hasMany(GuildMessage::class);
+    }
 }

@@ -82,6 +82,8 @@ Route::middleware(['auth', \App\Http\Middleware\HandleInertiaRequests::class])
         Route::post('/guild/join', [GuildController::class, 'join'])->name('player.guild.join');
         Route::delete('/guild/{guild}/leave', [GuildController::class, 'leave'])->name('player.guild.leave');
         Route::delete('/guild/{guild}', [GuildController::class, 'destroy'])->name('player.guild.destroy');
+        Route::get('/guild/{guild}/messages', [GuildController::class, 'messages'])->name('player.guild.messages');
+        Route::post('/guild/{guild}/messages', [GuildController::class, 'sendMessage'])->name('player.guild.send_message');
 
         // Y.U.I. Routes
         Route::post('/yui/chat', [YuiController::class, 'sendMessage'])->name('player.yui.chat');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Player;
 
 use App\Http\Controllers\Controller;
 use App\Models\Guild;
+use App\Models\GuildMessage;
 use App\Services\XpService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -131,5 +132,77 @@ class GuildController extends Controller
         $guild->delete();
 
         return redirect()->back()->with('success', 'Guild encerrada.');
+    }
+
+    public function messages(Guild $guild)
+    {
+        $user = auth()->user();
+
+        // Check if user is a member of this guild
+        if (!$guild->members()->where('user_id', $user->id)->exists()) {
+            abort(403, 'Você não faz parte desta guild.');
+        }
+
+        $messages = $guild->messages()
+            ->with('user:id,name,player_name,avatar_url')
+            ->latest()
+            ->limit(50)
+            ->get()
+            ->reverse()
+            ->values()
+            ->map(function ($msg) use ($guild) {
+                $member = $guild->members->firstWhere('id', $msg->user_id);
+                $role = $member ? $member->pivot->role : 'member';
+                return [
+                    'id' => $msg->id,
+                    'message' => $msg->message,
+                    'created_at' => $msg->created_at->toISOString(),
+                    'user' => [
+                        'id' => $msg->user->id,
+                        'name' => $msg->user->player_name ?? $msg->user->name,
+                        'avatar' => $msg->user->avatar_url,
+                        'role' => $role,
+                    ]
+                ];
+            });
+
+        return response()->json($messages);
+    }
+
+    public function sendMessage(Request $request, Guild $guild)
+    {
+        $user = auth()->user();
+
+        // Check if user is a member of this guild
+        if (!$guild->members()->where('user_id', $user->id)->exists()) {
+            abort(403, 'Você não faz parte desta guild.');
+        }
+
+        $validated = $request->validate([
+            'message' => 'required|string|max:500',
+        ]);
+
+        $msg = GuildMessage::create([
+            'guild_id' => $guild->id,
+            'user_id' => $user->id,
+            'message' => $validated['message'],
+        ]);
+
+        // Load relations and pivot role for response
+        $msg->load('user:id,name,player_name,avatar_url');
+        $member = $guild->members->firstWhere('id', $user->id);
+        $role = $member ? $member->pivot->role : 'member';
+
+        return response()->json([
+            'id' => $msg->id,
+            'message' => $msg->message,
+            'created_at' => $msg->created_at->toISOString(),
+            'user' => [
+                'id' => $msg->user->id,
+                'name' => $msg->user->player_name ?? $msg->user->name,
+                'avatar' => $msg->user->avatar_url,
+                'role' => $role,
+            ]
+        ]);
     }
 }
