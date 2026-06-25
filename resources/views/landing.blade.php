@@ -1,9 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
+        function toggleTheme() {
+            const doc = document.documentElement;
+            const isDark = doc.classList.contains('dark');
+            const themeIcons = document.querySelectorAll('.theme-icon');
+            
+            if (isDark) {
+                doc.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                themeIcons.forEach(icon => icon.textContent = 'dark_mode');
+            } else {
+                doc.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcons.forEach(icon => icon.textContent = 'light_mode');
+            }
+        }
+
+        // Set correct icon on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            const themeIcons = document.querySelectorAll('.theme-icon');
+            themeIcons.forEach(icon => {
+                icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+            });
+        });
+    </script>
     <title>SAO System — Interface de Aincrad</title>
     <meta name="description"
         content="O sistema que vai transformar sua vida. Desbloqueie seu potencial com módulos de treinamento estilo RPG.">
@@ -456,7 +491,7 @@
      ══════════════════════════════════════════════════════ --}}
     <header
         class="fixed top-0 left-0 right-0 z-50 py-3 px-4 md:px-8 flex items-center justify-between pointer-events-none"
-        style="background: rgba(17,19,26,0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.05); box-shadow: 0 0 20px rgba(255,157,0,0.1);">
+        style="background: var(--sao-header-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--sao-border-subtle); box-shadow: var(--sao-header-shadow); transition: all 0.3s ease;">
 
         @auth
             {{-- Player Info (Logged In) --}}
@@ -468,16 +503,16 @@
                     <img src="/images/yui.png" alt="Avatar" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <p class="font-bold text-base leading-none text-gray-100 tracking-wide">{{ Auth::user()->name }}</p>
+                    <p class="font-bold text-base leading-none text-sao-text tracking-wide">{{ Auth::user()->name }}</p>
                     <p class="text-xs text-sao-orange font-semibold mt-0.5" style="font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em;">LV. {{ Auth::user()->level ?? 1 }} <span
-                            class="text-gray-500 font-normal">// LOGGED IN</span></p>
+                            class="text-sao-muted font-normal">// LOGGED IN</span></p>
                 </div>
             </a>
         @else
             {{-- Guest (Login/Register) --}}
             <div class="flex items-center gap-3 pointer-events-auto">
                 <a href="{{ route('login') }}"
-                    class="sao-panel px-5 py-2.5 font-bold text-gray-300 hover:text-sao-orange transition-colors">
+                    class="sao-panel px-5 py-2.5 font-bold text-sao-text hover:text-sao-orange transition-colors">
                     LINK START
                 </a>
                 <a href="{{ route('register') }}" class="sao-btn sm">
@@ -486,14 +521,21 @@
             </div>
         @endauth
 
-        {{-- HP / XP Bar (Center-Right) --}}
-        <div class="sao-panel px-4 py-2.5 w-60 md:w-80 pointer-events-auto">
-            <div class="flex justify-between items-center mb-1.5">
-                <span class="text-[11px] font-bold text-gray-400 tracking-wider uppercase" style="font-family: 'JetBrains Mono', monospace;">HP</span>
-                <span id="hp-text" class="text-[11px] font-bold text-gray-300 tabular-nums" style="font-family: 'JetBrains Mono', monospace;">100 / 100</span>
-            </div>
-            <div class="hp-bar-container">
-                <div class="hp-bar-fill" id="hp-bar" style="width: 100%"></div>
+        <div class="flex items-center gap-3 pointer-events-auto">
+            {{-- Theme Toggle --}}
+            <button onclick="toggleTheme()" class="sao-nav-btn flex items-center justify-center rounded-full border border-sao transition-all cursor-pointer" style="width: 40px; height: 40px;" title="Alternar Tema">
+                <span class="material-symbols-outlined theme-icon" style="font-size: 20px;">light_mode</span>
+            </button>
+
+            {{-- HP / XP Bar (Center-Right) --}}
+            <div class="sao-panel px-4 py-2.5 w-48 md:w-64">
+                <div class="flex justify-between items-center mb-1.5">
+                    <span class="text-[11px] font-bold text-sao-muted tracking-wider uppercase" style="font-family: 'JetBrains Mono', monospace;">HP</span>
+                    <span id="hp-text" class="text-[11px] font-bold text-sao-dim tabular-nums" style="font-family: 'JetBrains Mono', monospace;">100 / 100</span>
+                </div>
+                <div class="hp-bar-container">
+                    <div class="hp-bar-fill" id="hp-bar" style="width: 100%"></div>
+                </div>
             </div>
         </div>
     </header>
@@ -502,7 +544,7 @@
      FLOATING VERTICAL MENU (Right Edge) — Material Symbols
      ══════════════════════════════════════════════════════ --}}
     <nav class="hidden md:flex fixed top-1/2 right-4 md:right-6 -translate-y-1/2 z-50 flex-col gap-3 py-6 px-2 rounded-full"
-        style="background: rgba(17,19,26,0.3); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+        style="background: var(--sao-header-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--sao-panel-border); box-shadow: var(--sao-panel-shadow);">
         @foreach ([
             ['icon' => 'home', 'fill' => true, 'label' => 'Início', 'target' => '#hero', 'active' => true],
             ['icon' => 'account_tree', 'fill' => false, 'label' => 'Skill Tree', 'target' => '#modules', 'active' => false],
@@ -525,12 +567,13 @@
             @else
                 <a href="{{ $nav['target'] }}"
                     class="w-12 h-12 rounded-full flex items-center justify-center relative group transition-all hover:scale-110 hover:bg-white/10"
-                    style="color: rgba(226,226,236,0.6);"
+                    style="color: var(--sao-text-dim);"
                     title="{{ $nav['label'] }}"
-                    onmouseover="this.style.color='#ff9d00'" onmouseout="this.style.color='rgba(226,226,236,0.6)'">
+                    onmouseover="this.style.color='#ff9d00'" onmouseout="this.style.color='var(--sao-text-dim)'">
                     <span class="material-symbols-outlined" style="font-size: 22px;">{{ $nav['icon'] }}</span>
                     <div
-                        class="absolute right-16 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 sao-panel px-3 py-1.5 text-xs font-bold text-gray-300 whitespace-nowrap">
+                        class="absolute right-16 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 sao-panel px-3 py-1.5 text-xs font-bold whitespace-nowrap"
+                        style="color: var(--sao-text);">
                         {{ $nav['label'] }}
                     </div>
                 </a>
@@ -552,12 +595,12 @@
                 <div class="absolute bottom-8 right-8 text-5xl opacity-30" style="color: #ff9d00; font-family: 'Sora', sans-serif; font-weight: 800;">]</div>
 
                 <p class="text-sm font-semibold text-sao-orange tracking-[0.2em] uppercase mb-6 label-caps">SYSTEM NOTIFICATION</p>
-                <h1 class="text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] text-white"
-                    style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em;">
+                <h1 class="text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95]"
+                    style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--sao-text);">
                     <span style="color: #ff9d00;">[</span> LINK START <span style="color: #ff9d00;">]</span>
                 </h1>
                 <p class="mt-6 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium"
-                    style="font-family: 'Hanken Grotesk', sans-serif; color: #dac2ad;">
+                    style="font-family: 'Hanken Grotesk', sans-serif; color: var(--sao-text-dim);">
                     Bem-vindo a Aincrad. O sistema detectou potencial em você.
                     Aceite a missão e desbloqueie sua evolução.
                 </p>
@@ -570,7 +613,7 @@
                 </div>
 
                 {{-- Trust --}}
-                <div class="mt-8 flex flex-wrap justify-center gap-8 label-caps text-[10px]" style="color: rgba(226,226,236,0.5);">
+                <div class="mt-8 flex flex-wrap justify-center gap-8 label-caps text-[10px]" style="color: var(--sao-text-muted);">
                     <span>✓ +2.400 Players</span>
                     <span>★ 4.9/5 Rating</span>
                     <span>⟳ Garantia 7 Dias</span>
@@ -1006,7 +1049,7 @@
                 </div>
 
                 <div data-animate class="sao-panel-orange p-1.5" style="border-radius: 12px;">
-                    <div class="p-6 md:p-8 rounded-[10px]" style="background: rgba(17,19,26,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05);">
+                    <div class="p-6 md:p-8 rounded-[10px]" style="background: var(--sao-surface, rgba(17,19,26,0.6)); backdrop-filter: blur(12px); border: 1px solid var(--sao-panel-border);">
                         {{-- Item --}}
                         <div class="flex items-start gap-5 mb-6">
                             <div
@@ -1015,7 +1058,7 @@
                                 <span class="material-symbols-outlined text-sao-orange" style="font-size: 40px; font-variation-settings: 'FILL' 1;">description</span>
                             </div>
                             <div>
-                                <h3 class="font-bold text-xl text-gray-100" style="font-family: 'Sora', sans-serif;">SAO SYSTEM ACCESS</h3>
+                                <h3 class="font-bold text-xl" style="font-family: 'Sora', sans-serif; color: var(--sao-text);">SAO SYSTEM ACCESS</h3>
                                 <p class="label-caps text-sao-orange mt-0.5">CLASS: UNIQUE ITEM</p>
                                 <p class="text-xs mt-2 leading-relaxed" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Acesso completo a todos os
                                     módulos, Guilda, suporte e atualizações vitalícias.</p>
@@ -1027,7 +1070,7 @@
                         {{-- Features --}}
                         <ul class="space-y-2.5 mb-6 text-sm">
                             @foreach (['8 Módulos de treinamento', 'Guilda (comunidade vitalícia)', 'Suporte direto do Mestre', 'Missões Extras (bônus)', 'Atualizações vitalícias', 'Certificado de Conclusão'] as $f)
-                                <li class="flex items-center gap-2.5 text-gray-300">
+                                <li class="flex items-center gap-2.5" style="color: var(--sao-text);">
                                     <span
                                         class="w-5 h-5 rounded-full bg-sao-orange flex items-center justify-center flex-shrink-0"
                                         style="box-shadow: 0 0 8px rgba(255,157,0,0.3);">
@@ -1042,11 +1085,11 @@
 
                         {{-- Price --}}
                         <div class="flex items-end justify-between mb-6">
-                            <span class="label-caps" style="color: rgba(226,226,236,0.5);">Cost:</span>
+                            <span class="label-caps" style="color: var(--sao-text-muted);">Cost:</span>
                             <div class="text-right">
                                 <span class="block text-sm line-through" style="color: rgba(226,226,236,0.3);">R$ 497</span>
-                                <span class="text-4xl font-black text-gray-100" style="font-family: 'Sora', sans-serif;">R$ 197</span>
-                                <p class="label-caps text-[10px] mt-0.5" style="color: rgba(226,226,236,0.4);">ou 12x de R$ 19,70</p>
+                                <span class="text-4xl font-black" style="font-family: 'Sora', sans-serif; color: var(--sao-text);">R$ 197</span>
+                                <p class="label-caps text-[10px] mt-0.5" style="color: var(--sao-text-muted);">ou 12x de R$ 19,70</p>
                             </div>
                         </div>
 
@@ -1057,7 +1100,7 @@
                         </a>
 
                         {{-- Guarantee --}}
-                        <p class="mt-4 text-center text-xs" style="color: rgba(226,226,236,0.4);">
+                        <p class="mt-4 text-center text-xs" style="color: var(--sao-text-muted);">
                             🛡️ Garantia de 7 dias — Sem risco. Devolvemos 100%.
                         </p>
                     </div>
@@ -1068,13 +1111,13 @@
     </main>
 
     {{-- ─── FOOTER ─── --}}
-    <footer class="text-center py-10 border-t" style="border-color: rgba(255,255,255,0.05); background: rgba(12,14,21,0.8);">
+    <footer class="text-center py-10 border-t" style="border-color: var(--sao-border-subtle); background: var(--sao-header-bg); transition: all 0.3s ease;">
         <div class="flex justify-center gap-6 mb-3">
-            <a href="#" class="text-sm hover:text-sao-orange transition-colors" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Terms of Service</a>
-            <a href="#" class="text-sm hover:text-sao-orange transition-colors" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Privacy Policy</a>
-            <a href="#" class="text-sm hover:text-sao-orange transition-colors" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">System Status</a>
+            <a href="#" class="text-sm text-sao-dim hover:text-sao-orange transition-colors" style="font-family: 'Hanken Grotesk', sans-serif;">Terms of Service</a>
+            <a href="#" class="text-sm text-sao-dim hover:text-sao-orange transition-colors" style="font-family: 'Hanken Grotesk', sans-serif;">Privacy Policy</a>
+            <a href="#" class="text-sm text-sao-dim hover:text-sao-orange transition-colors" style="font-family: 'Hanken Grotesk', sans-serif;">System Status</a>
         </div>
-        <p class="label-caps" style="color: rgba(226,226,236,0.3);">
+        <p class="label-caps text-sao-muted">
             © {{ date('Y') }} SAO System Interface // Aincrad Floor 1. All rights reserved.
         </p>
     </footer>

@@ -174,7 +174,7 @@ function AddItemModal({ isOpen, onClose }) {
                     <div className="form-group">
                         <label>Item Name</label>
                         <input type="text" value={form.name} onChange={e => handleChange('name', e.target.value)}
-                            placeholder="Ex: Nubank Ultravioleta, Bitcoin..." required />
+                            placeholder="Ex: Nubank Black, Bitcoin..." required />
                     </div>
 
                     <div className="form-row">

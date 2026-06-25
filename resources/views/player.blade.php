@@ -4,6 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
     <title>SAO System — Player HUD</title>
     <meta name="description" content="Sistema financeiro gamificado com temática SAO (Sword Art Online).">
 
@@ -13,6 +23,7 @@
         href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
 
+    @viteReactRefresh
     @vite(['resources/css/player.css', 'resources/js/player/app.jsx'])
     @inertiaHead
 </head>

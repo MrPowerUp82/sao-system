@@ -268,7 +268,7 @@ function GuildCard({ guild, onLeave }) {
                     marginTop: '10px',
                     border: '1px solid var(--sao-border-subtle)',
                     borderRadius: '8px',
-                    background: 'rgba(10, 10, 16, 0.6)',
+                    background: 'var(--sao-surface)',
                     display: 'flex',
                     flexDirection: 'column',
                     height: '350px',
@@ -280,7 +280,7 @@ function GuildCard({ guild, onLeave }) {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         padding: '8px 12px',
-                        background: 'rgba(0, 0, 0, 0.2)',
+                        background: 'var(--sao-bg)',
                         borderBottom: '1px solid var(--sao-border-subtle)',
                     }}>
                         <span style={{
@@ -393,7 +393,7 @@ function GuildCard({ guild, onLeave }) {
                                         <div style={{
                                             background: isSelf
                                                 ? 'linear-gradient(135deg, rgba(255, 157, 0, 0.2), rgba(255, 157, 0, 0.1))'
-                                                : 'rgba(255, 255, 255, 0.08)',
+                                                : 'var(--sao-bg)',
                                             padding: '8px 12px',
                                             borderRadius: isSelf ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
                                             fontSize: '0.8rem',
@@ -431,7 +431,7 @@ function GuildCard({ guild, onLeave }) {
                             display: 'flex',
                             gap: '6px',
                             padding: '8px',
-                            background: 'rgba(0, 0, 0, 0.3)',
+                            background: 'var(--sao-surface)',
                             borderTop: '1px solid var(--sao-border-subtle)',
                         }}
                     >
@@ -443,11 +443,11 @@ function GuildCard({ guild, onLeave }) {
                             maxLength={500}
                             style={{
                                 flex: 1,
-                                background: 'rgba(10, 10, 18, 0.6)',
+                                background: 'var(--sao-bg)',
                                 border: '1px solid var(--sao-border-subtle)',
                                 borderRadius: '6px',
                                 padding: '8px 12px',
-                                color: '#fff',
+                                color: 'var(--sao-text)',
                                 fontSize: '0.8rem',
                                 outline: 'none',
                             }}

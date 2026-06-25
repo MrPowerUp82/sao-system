@@ -59,7 +59,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                         {/* Status Card */}
                         <div className="glass-panel rounded-xl p-6 relative overflow-hidden" 
                              style={{ 
-                                 background: 'rgba(23,31,51,0.4)', 
+                                 background: 'var(--sao-glass)', 
                                  borderRadius: '12px', 
                                  border: '1px solid rgba(0, 209, 255, 0.2)',
                                  padding: '24px',
@@ -71,7 +71,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                      top: '8px',
                                      right: '12px',
                                      fontFamily: "'JetBrains Mono', monospace", 
-                                     color: 'rgba(255,255,255,0.3)',
+                                     color: 'var(--sao-text-muted)',
                                      fontSize: '10px'
                                  }}>
                                 ID: 00{user?.id || 1}-PL
@@ -112,7 +112,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                              fontWeight: 700, 
                                              margin: 0, 
                                              textShadow: '0 0 10px rgba(0, 209, 255, 0.4)',
-                                             color: '#e8e6e3',
+                                             color: 'var(--sao-text)',
                                              display: 'flex',
                                              alignItems: 'center',
                                              gap: '8px'
@@ -145,7 +145,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                             LVL {xp?.current_level || user?.level || 1}
                                         </span>
                                         <span className="text-on-surface-variant font-data-label text-xs uppercase" 
-                                              style={{ fontFamily: "'JetBrains Mono', monospace", color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>
+                                              style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--sao-text-dim)', fontSize: '12px' }}>
                                             Front Liner
                                         </span>
                                     </div>
@@ -156,7 +156,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                             <div className="space-y-2" style={{ marginTop: '16px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
                                     <span className="font-data-label text-data-label text-on-surface-variant uppercase" 
-                                          style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                                          style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'var(--sao-text-dim)' }}>
                                         Current Col (HP)
                                     </span>
                                     <span className="font-data-value text-data-value text-primary text-glow" 
@@ -188,7 +188,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                         }} 
                                     />
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: "'JetBrains Mono', monospace", marginTop: '4px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--sao-text-muted)', fontFamily: "'JetBrains Mono', monospace", marginTop: '4px' }}>
                                     <span>HP: {stats?.hp_percentage || 0}%</span>
                                     <span>Limit: {formatMoney(stats?.monthly_income || 0)}</span>
                                 </div>
@@ -201,17 +201,17 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                  display: 'flex', 
                                  justifyContent: 'space-between', 
                                  alignItems: 'center', 
-                                 background: 'rgba(23,31,51,0.4)', 
+                                 background: 'var(--sao-glass)', 
                                  borderLeft: '4px solid #00D1FF', 
-                                 borderTop: '1px solid rgba(255,255,255,0.05)', 
-                                 borderRight: '1px solid rgba(255,255,255,0.05)', 
-                                 borderBottom: '1px solid rgba(255,255,255,0.05)', 
+                                 borderTop: '1px solid var(--sao-border-subtle)', 
+                                 borderRight: '1px solid var(--sao-border-subtle)', 
+                                 borderBottom: '1px solid var(--sao-border-subtle)', 
                                  padding: '20px', 
                                  borderRadius: '8px' 
                              }}>
                             <div>
                                 <div className="font-data-label text-[12px] text-on-surface-variant uppercase mb-1 flex items-center gap-1" 
-                                     style={{ display: 'flex', alignItems: 'center', gap: '4px', fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                                     style={{ display: 'flex', alignItems: 'center', gap: '4px', fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'var(--sao-text-dim)' }}>
                                     <span className="material-symbols-outlined text-[14px]" style={{ fontSize: '16px' }}>trending_up</span>
                                     Monthly Loot (Income)
                                 </div>
@@ -306,11 +306,11 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                     height: '46px',
                                     borderRadius: '50%',
                                     border: '1px solid rgba(0, 209, 255, 0.3)',
-                                    background: 'rgba(23,31,51,0.6)',
+                                    background: 'var(--sao-glass)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    color: '#8a8a9a',
+                                    color: 'var(--sao-text-dim)',
                                     cursor: 'pointer'
                                 }}
                                 title="Trade Log"
@@ -330,11 +330,11 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                     height: '46px',
                                     borderRadius: '50%',
                                     border: '1px solid rgba(0, 209, 255, 0.3)',
-                                    background: 'rgba(23,31,51,0.6)',
+                                    background: 'var(--sao-glass)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    color: '#8a8a9a',
+                                    color: 'var(--sao-text-dim)',
                                     cursor: 'pointer'
                                 }}
                                 title="Registrar Trade"
@@ -355,11 +355,11 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                     height: '46px',
                                     borderRadius: '50%',
                                     border: '1px solid rgba(0, 209, 255, 0.3)',
-                                    background: 'rgba(23,31,51,0.6)',
+                                    background: 'var(--sao-glass)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    color: '#8a8a9a',
+                                    color: 'var(--sao-text-dim)',
                                     cursor: 'pointer'
                                 }}
                                 title="Shop"
@@ -380,11 +380,11 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                     height: '46px',
                                     borderRadius: '50%',
                                     border: '1px solid rgba(0, 209, 255, 0.3)',
-                                    background: 'rgba(23,31,51,0.6)',
+                                    background: 'var(--sao-glass)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    color: '#8a8a9a',
+                                    color: 'var(--sao-text-dim)',
                                     cursor: 'pointer'
                                 }}
                                 title="Floor Map"
@@ -405,7 +405,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                 <div className="ledger-section">
                     <div className="ledger-header" style={{ marginBottom: '24px' }}>
                         <h3 className="ledger-title" style={{ margin: 0 }}>Tactical Ledger</h3>
-                        <span className="label-caps" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: "'JetBrains Mono', monospace" }}>
+                        <span className="label-caps" style={{ fontSize: '11px', color: 'var(--sao-text-dim)', fontFamily: "'JetBrains Mono', monospace" }}>
                             System Ledger // Detailed Logs & Progression
                         </span>
                     </div>
@@ -499,11 +499,11 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                         
                         {/* 7-Day Activity Chart */}
                         <div className="sao-panel glass-panel glass-panel-teal" style={{ overflow: 'hidden' }}>
-                            <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid var(--sao-border-subtle)' }}>
                                 <h3 style={{ color: '#00D1FF', fontFamily: "'Sora', sans-serif", fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', margin: 0, textShadow: '0 0 10px rgba(0, 209, 255, 0.3)' }}>
                                     7-Day Activity
                                 </h3>
-                                <span className="material-symbols-outlined" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '18px' }}>more_horiz</span>
+                                <span className="material-symbols-outlined" style={{ color: 'var(--sao-text-muted)', fontSize: '18px' }}>more_horiz</span>
                             </div>
                             <div style={{ padding: '16px', height: '180px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '8px' }}>
                                 {stats.daily_activity && stats.daily_activity.map((day, i) => (
@@ -533,11 +533,11 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
 
                         {/* Top Categories */}
                         <div className="sao-panel glass-panel glass-panel-teal" style={{ overflow: 'hidden' }}>
-                            <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid var(--sao-border-subtle)' }}>
                                 <h3 style={{ color: '#00D1FF', fontFamily: "'Sora', sans-serif", fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', margin: 0, textShadow: '0 0 10px rgba(0, 209, 255, 0.3)' }}>
                                     Top Expenses
                                 </h3>
-                                <span className="material-symbols-outlined" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '18px' }}>more_horiz</span>
+                                <span className="material-symbols-outlined" style={{ color: 'var(--sao-text-muted)', fontSize: '18px' }}>more_horiz</span>
                             </div>
                             <div style={{ padding: '16px' }}>
                                 {stats.top_categories && stats.top_categories.length > 0 ? (
@@ -548,7 +548,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                     <span style={{ fontWeight: 700, fontFamily: "'Sora', sans-serif" }}>{cat.tag}</span>
                                                     <span style={{ color: 'var(--sao-danger)' }}>{formatMoney(cat.amount)}</span>
                                                 </div>
-                                                <div className="progress-track" style={{ height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                                                <div className="progress-track" style={{ height: '6px', background: 'var(--sao-surface)', borderRadius: '4px', overflow: 'hidden' }}>
                                                     <div className="progress-fill-hp" style={{
                                                         width: `${(cat.amount / stats.monthly_expense) * 100}%`,
                                                         background: 'linear-gradient(90deg, #e74c3c, #ff6b6b)',
@@ -577,7 +577,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                         
                         {/* Recent Trades */}
                         <div className="sao-panel glass-panel glass-panel-teal" style={{ overflow: 'hidden' }}>
-                            <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid var(--sao-border-subtle)' }}>
                                 <h3 style={{ color: '#00D1FF', fontFamily: "'Sora', sans-serif", fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', margin: 0, textShadow: '0 0 10px rgba(0, 209, 255, 0.3)' }}>
                                     Recent Trades
                                 </h3>
@@ -610,7 +610,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                      justifyContent: 'space-between', 
                                                      alignItems: 'center', 
                                                      padding: '12px 16px', 
-                                                     borderBottom: '1px solid rgba(255,255,255,0.02)' 
+                                                     borderBottom: '1px solid var(--sao-border-subtle)' 
                                                  }}>
                                                 <div className="trade-info" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                                     <span className={`badge ${label.className}`} 
@@ -623,7 +623,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                                 ? 'rgba(74,225,131,0.1)' 
                                                                 : label.className === 'damage' 
                                                                     ? 'rgba(255,71,87,0.1)' 
-                                                                    : 'rgba(255,255,255,0.05)',
+                                                                    : 'var(--sao-surface)',
                                                               color: label.className === 'loot' 
                                                                 ? '#4ae183' 
                                                                 : label.className === 'damage' 
@@ -631,8 +631,8 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                                     : '#8a8a9a'
                                                           }}>{label.text}</span>
                                                     <div>
-                                                        <div className="trade-name" style={{ fontSize: '13px', fontWeight: 600, color: '#e8e6e3' }}>{trade.name}</div>
-                                                        <div className="trade-date" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{trade.created_at}</div>
+                                                        <div className="trade-name" style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sao-text)' }}>{trade.name}</div>
+                                                        <div className="trade-date" style={{ fontSize: '10px', color: 'var(--sao-text-muted)', marginTop: '2px' }}>{trade.created_at}</div>
                                                     </div>
                                                 </div>
                                                 <div className={`trade-value`}
@@ -657,11 +657,11 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
 
                         {/* Aincrad Boss Battle Progress */}
                         <div className="sao-panel glass-panel glass-panel-teal" style={{ overflow: 'hidden' }}>
-                            <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid var(--sao-border-subtle)' }}>
                                 <h3 style={{ color: '#ff4757', fontFamily: "'Sora', sans-serif", fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', margin: 0, textShadow: '0 0 10px rgba(255, 71, 87, 0.3)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                     ⚔️ Aincrad Boss Battles
                                 </h3>
-                                <span className="material-symbols-outlined" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '18px' }}>more_horiz</span>
+                                <span className="material-symbols-outlined" style={{ color: 'var(--sao-text-muted)', fontSize: '18px' }}>more_horiz</span>
                             </div>
                             <div style={{ padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {active_floors && active_floors.length > 0 ? (
@@ -688,8 +688,8 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                             <div key={floor.id} style={{
                                                 padding: '14px',
                                                 borderRadius: '8px',
-                                                background: floor.status === 'cleared' ? 'rgba(74,225,131,0.03)' : 'rgba(23,31,51,0.4)',
-                                                border: `1px solid ${floor.status === 'cleared' ? 'rgba(74,225,131,0.2)' : floor.status === 'active' ? 'rgba(255,71,87,0.25)' : 'rgba(255,255,255,0.05)'}`,
+                                                background: floor.status === 'cleared' ? 'rgba(74,225,131,0.03)' : 'var(--sao-surface)',
+                                                border: `1px solid ${floor.status === 'cleared' ? 'rgba(74,225,131,0.2)' : floor.status === 'active' ? 'rgba(255,71,87,0.25)' : 'var(--sao-border-subtle)'}`,
                                                 transition: 'border-color 0.2s',
                                                 display: 'flex',
                                                 flexDirection: 'column',
@@ -700,7 +700,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                                     <div style={{
                                                         width: '36px', height: '36px', borderRadius: '8px',
-                                                        background: 'rgba(255,255,255,0.03)', border: `1px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : 'var(--sao-danger)'}`,
+                                                        background: 'var(--sao-bg)', border: `1px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : 'var(--sao-danger)'}`,
                                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                         fontSize: '1.4rem'
                                                     }}>
@@ -708,7 +708,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                     </div>
                                                     <div style={{ flex: 1 }}>
                                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                                                            <span style={{ fontFamily: "'Sora', sans-serif", fontSize: '0.85rem', fontWeight: 700, color: floor.status === 'cleared' ? '#4ae183' : '#FFF' }}>
+                                                            <span style={{ fontFamily: "'Sora', sans-serif", fontSize: '0.85rem', fontWeight: 700, color: floor.status === 'cleared' ? '#4ae183' : 'var(--sao-text)' }}>
                                                                 Floor {floor.floor_number}: {floor.name}
                                                             </span>
                                                             {floor.status === 'cleared' ? (
@@ -733,7 +733,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                         <span>{floor.status === 'cleared' ? 'BOSS HP: 0 / ' + formatMoney(bossMaxHp) : `BOSS HP: ${formatMoney(bossCurrentHp)} / ${formatMoney(bossMaxHp)}`}</span>
                                                         <span>{floor.status === 'cleared' ? '0%' : `${bossHpPercentage}%`}</span>
                                                     </div>
-                                                    <div className="progress-track" style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.03)' }}>
+                                                    <div className="progress-track" style={{ height: '8px', background: 'var(--sao-surface)', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--sao-border-subtle)' }}>
                                                         <div className="progress-fill-hp" style={{
                                                             width: `${floor.status === 'cleared' ? 0 : bossHpPercentage}%`,
                                                             background: 'linear-gradient(90deg, #ff4757, #ff6b6b)',

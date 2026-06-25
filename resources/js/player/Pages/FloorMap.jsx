@@ -130,7 +130,7 @@ export default function FloorMap({ floors }) {
                                         {/* Boss/Floor Avatar */}
                                         <div style={{
                                             width: '56px', height: '56px', borderRadius: '12px',
-                                            background: 'rgba(255,255,255,0.03)',
+                                            background: 'var(--sao-bg)',
                                             border: `2px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : 'var(--sao-danger)'}`,
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                                             fontSize: '2rem', flexShrink: 0
@@ -181,7 +181,7 @@ export default function FloorMap({ floors }) {
                                                 <span>{floor.status === 'cleared' ? '0%' : `${100 - floor.progress}%`}</span>
                                             </div>
 
-                                            <div className="progress-track" style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden', marginTop: '4px' }}>
+                                            <div className="progress-track" style={{ height: '8px', background: 'var(--sao-surface)', borderRadius: '4px', overflow: 'hidden', marginTop: '4px' }}>
                                                 <div className="progress-fill-hp" style={{
                                                     width: `${floor.status === 'cleared' ? 0 : 100 - floor.progress}%`,
                                                     background: 'linear-gradient(90deg, #ff4757, #ff6b6b)',

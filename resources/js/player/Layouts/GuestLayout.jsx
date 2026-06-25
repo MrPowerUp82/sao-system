@@ -4,7 +4,12 @@ import { Head } from '@inertiajs/react';
 export default function GuestLayout({ children, title }) {
     return (
         <div className="auth-layout">
-            <Head title={title} />
+            <Head title={title}>
+                <meta name="description" content="Acesse o painel do SAO System, o gerenciador financeiro gamificado de Aincrad." />
+                <meta property="og:title" content={`${title} - SAO System`} />
+                <meta property="og:description" content="Link Start! Gerencie suas finanças como se estivesse jogando Sword Art Online." />
+                <meta property="og:type" content="website" />
+            </Head>
 
             {/* Background Rings */}
             <div className="auth-ring" />

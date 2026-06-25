@@ -53,7 +53,7 @@ export default function DailyQuests({ stats, recent_trades, openTradeModal }) {
                 {/* 1. Completed Quest: Pay Utility Bill / Monthly Expenses */}
                 <div className="glass-panel rounded-lg opacity-70 hover:opacity-90 transition-opacity" 
                      style={{ 
-                         background: 'rgba(23,31,51,0.2)',
+                         background: 'var(--sao-glass)',
                          display: 'flex',
                          alignItems: 'center',
                          gap: '16px',
@@ -92,7 +92,7 @@ export default function DailyQuests({ stats, recent_trades, openTradeModal }) {
                     /* Completed state */
                     <div className="glass-panel rounded-lg opacity-70 hover:opacity-90 transition-opacity" 
                          style={{ 
-                             background: 'rgba(23,31,51,0.2)',
+                             background: 'var(--sao-glass)',
                              display: 'flex',
                              alignItems: 'center',
                              gap: '16px',
@@ -130,7 +130,7 @@ export default function DailyQuests({ stats, recent_trades, openTradeModal }) {
                     <div className="glass-panel rounded-lg relative overflow-hidden group hover:bg-surface-variant/30 transition-colors" 
                          style={{ 
                              borderLeft: '2px solid #ff9d00', 
-                             background: 'rgba(23,31,51,0.4)',
+                             background: 'var(--sao-glass)',
                              display: 'flex',
                              alignItems: 'center',
                              gap: '16px',
@@ -139,7 +139,7 @@ export default function DailyQuests({ stats, recent_trades, openTradeModal }) {
                          }}>
                         <div className="w-8 h-8 rounded-full border border-on-surface-variant/50 flex items-center justify-center text-on-surface-variant" 
                              style={{ 
-                                 borderColor: 'rgba(255,255,255,0.2)',
+                                 borderColor: 'var(--sao-border-subtle)',
                                  width: '32px',
                                  height: '32px',
                                  borderRadius: '50%',
@@ -184,7 +184,7 @@ export default function DailyQuests({ stats, recent_trades, openTradeModal }) {
                    className="glass-panel rounded-lg relative overflow-hidden group hover:bg-surface-variant/30 transition-colors block text-left" 
                    style={{ 
                        borderLeft: '2px solid #00D1FF', 
-                       background: 'rgba(23,31,51,0.4)', 
+                       background: 'var(--sao-glass)', 
                        textDecoration: 'none',
                        padding: '16px',
                        borderRadius: '8px',
@@ -193,7 +193,7 @@ export default function DailyQuests({ stats, recent_trades, openTradeModal }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%' }}>
                         <div className="w-8 h-8 rounded-full border border-on-surface-variant/50 flex items-center justify-center text-on-surface-variant" 
                              style={{ 
-                                 borderColor: 'rgba(255,255,255,0.2)',
+                                 borderColor: 'var(--sao-border-subtle)',
                                  width: '32px',
                                  height: '32px',
                                  borderRadius: '50%',
@@ -212,7 +212,7 @@ export default function DailyQuests({ stats, recent_trades, openTradeModal }) {
                                 Reward: XP Progression
                             </div>
                         </div>
-                        <span className="material-symbols-outlined text-sm text-on-surface-variant group-hover:translate-x-1 transition-transform" style={{ color: 'rgba(255,255,255,0.4)' }}>chevron_right</span>
+                        <span className="material-symbols-outlined text-sm text-on-surface-variant group-hover:translate-x-1 transition-transform" style={{ color: 'var(--sao-text-muted)' }}>chevron_right</span>
                     </div>
                 </a>
             </div>
@@ -222,7 +222,7 @@ export default function DailyQuests({ stats, recent_trades, openTradeModal }) {
                onMouseEnter={() => play('hover')}
                className="w-full mt-4 py-2 border border-white/10 rounded text-xs font-data-label text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors uppercase tracking-widest bg-surface-container-highest/30 block text-center"
                style={{ 
-                   borderColor: 'rgba(255,255,255,0.05)',
+                   borderColor: 'var(--sao-border-subtle)',
                    color: 'var(--sao-text-dim)',
                    fontFamily: "'JetBrains Mono', monospace",
                    textDecoration: 'none',

@@ -23,6 +23,19 @@ export default function PlayerLayout({ children, stats, xp }) {
     const currentPath = window.location.pathname
     const { play, enabled: soundEnabled, toggle: toggleSound } = useSound()
 
+    // Theme management
+    const [theme, setTheme] = useState('light')
+
+    useEffect(() => {
+        const activeTheme = localStorage.getItem('theme') || 'light'
+        setTheme(activeTheme)
+        if (activeTheme === 'dark') {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    }, [])
+
     // Level-up detection
     const [showLevelUp, setShowLevelUp] = useState(false)
     const [levelUpLevel, setLevelUpLevel] = useState(1)
@@ -89,7 +102,7 @@ export default function PlayerLayout({ children, stats, xp }) {
             />
 
             {/* Sidebar — Expanded with labels */}
-            <aside className="player-sidebar" style={{ width: '96px', borderRight: '1px solid rgba(255,255,255,0.05)', background: 'rgba(25,27,34,0.8)', backdropFilter: 'blur(16px)' }}>
+            <aside className="player-sidebar" style={{ width: '96px', borderRight: '1px solid var(--sao-border-subtle)', background: 'var(--sao-glass)', backdropFilter: 'blur(16px)', transition: 'background-color 0.3s ease, border-color 0.3s ease' }}>
                 {/* Logo */}
                 <div style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -108,29 +121,16 @@ export default function PlayerLayout({ children, stats, xp }) {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={isActive ? 'nav-orb-active' : ''}
+                                className={isActive ? 'nav-orb-active' : 'hud-sidebar-link'}
                                 onClick={() => play('click')}
                                 style={{
                                     display: 'flex', flexDirection: 'column',
                                     alignItems: 'center', justifyContent: 'center',
                                     padding: '12px 8px', width: '100%',
                                     borderRadius: '0', gap: '4px',
-                                    color: isActive ? '#62bbff' : 'var(--sao-text-dim)',
+                                    color: isActive ? '#62bbff' : undefined,
                                     textDecoration: 'none', transition: 'all 0.2s ease',
                                     borderLeft: isActive ? undefined : '3px solid transparent',
-                                    background: isActive ? undefined : 'transparent',
-                                }}
-                                onMouseEnter={e => {
-                                    if (!isActive) {
-                                        e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                                        e.currentTarget.style.color = 'var(--sao-text)'
-                                    }
-                                }}
-                                onMouseLeave={e => {
-                                    if (!isActive) {
-                                        e.currentTarget.style.background = 'transparent'
-                                        e.currentTarget.style.color = 'var(--sao-text-dim)'
-                                    }
                                 }}
                             >
                                 <span className="material-symbols-outlined" style={{
@@ -145,14 +145,49 @@ export default function PlayerLayout({ children, stats, xp }) {
                     })}
                 </nav>
 
-                {/* Sound Toggle + Settings */}
-                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', paddingBottom: '12px' }}>
+                {/* Theme & Sound Toggle + Settings */}
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', paddingBottom: '12px', width: '100%' }}>
+                    {/* Theme Toggle */}
                     <button
-                        onClick={() => { toggleSound(); play('click') }}
+                        onClick={() => {
+                            const doc = document.documentElement;
+                            const isDark = doc.classList.contains('dark');
+                            if (isDark) {
+                                doc.classList.remove('dark');
+                                localStorage.setItem('theme', 'light');
+                                setTheme('light');
+                            } else {
+                                doc.classList.add('dark');
+                                localStorage.setItem('theme', 'dark');
+                                setTheme('dark');
+                            }
+                            play('click');
+                        }}
+                        className="hud-sidebar-link"
                         style={{
                             width: '100%', padding: '12px 8px',
                             borderRadius: '0', border: 'none',
-                            background: 'transparent', color: 'var(--sao-text-dim)',
+                            background: 'transparent',
+                            cursor: 'pointer', fontSize: '0.7rem', display: 'flex',
+                            flexDirection: 'column', alignItems: 'center', gap: '4px',
+                            transition: 'all 0.2s ease',
+                        }}
+                        title={theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'}
+                    >
+                        <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
+                            {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+                        </span>
+                        <span className="label-caps" style={{ fontSize: '9px' }}>THEME</span>
+                    </button>
+
+                    {/* Sound Toggle */}
+                    <button
+                        onClick={() => { toggleSound(); play('click') }}
+                        className="hud-sidebar-link"
+                        style={{
+                            width: '100%', padding: '12px 8px',
+                            borderRadius: '0', border: 'none',
+                            background: 'transparent',
                             cursor: 'pointer', fontSize: '0.7rem', display: 'flex',
                             flexDirection: 'column', alignItems: 'center', gap: '4px',
                             transition: 'all 0.2s ease',
@@ -171,21 +206,23 @@ export default function PlayerLayout({ children, stats, xp }) {
             <div className="player-main" style={{ marginLeft: '96px' }}>
                 {/* Top HUD Bar — Premium */}
                 <header className="hud-topbar" style={{
-                    background: 'rgba(12,14,21,0.9)',
+                    background: 'var(--sao-header-bg)',
                     backdropFilter: 'blur(16px)',
-                    borderBottom: '1px solid rgba(255,255,255,0.05)',
-                    boxShadow: '0 4px 20px rgba(255,157,0,0.05)',
+                    borderBottom: '1px solid var(--sao-border-subtle)',
+                    boxShadow: 'var(--sao-header-shadow)',
+                    transition: 'all 0.3s ease',
                 }}>
                     <div className="hud-player-info">
                         {/* Avatar with glow ring */}
                         <div style={{ position: 'relative', flexShrink: 0 }}>
                             <div className="hud-avatar avatar-glow" style={{
                                 width: '42px', height: '42px',
-                                background: user?.equipped_avatar ? 'rgba(12,14,21,0.9)' : 'linear-gradient(135deg, var(--sao-orange), var(--sao-orange-light))',
+                                background: user?.equipped_avatar ? 'var(--sao-bg)' : 'linear-gradient(135deg, var(--sao-orange), var(--sao-orange-light))',
                                 position: 'relative', zIndex: 1,
                                 border: user?.equipped_avatar ? '1.5px solid var(--sao-orange)' : undefined,
                                 fontSize: user?.equipped_avatar ? '1.4rem' : undefined,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                transition: 'background-color 0.3s ease'
                             }}>
                                 {user?.equipped_avatar || user?.player_name?.[0]?.toUpperCase() || user?.name?.[0]?.toUpperCase() || 'P'}
                             </div>

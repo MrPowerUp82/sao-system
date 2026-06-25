@@ -130,7 +130,7 @@ export default function YuiCompanion({ user }) {
                 }}>
                     {/* Header */}
                     <div style={{
-                        padding: '12px 16px', background: 'rgba(20,20,30,0.95)', borderBottom: '1px solid var(--sao-border-subtle)',
+                        padding: '12px 16px', background: 'var(--sao-surface)', borderBottom: '1px solid var(--sao-border-subtle)',
                         display: 'flex', alignItems: 'center', gap: '12px'
                     }}>
                         <div style={{ position: 'relative' }}>
@@ -155,7 +155,7 @@ export default function YuiCompanion({ user }) {
                     </div>
 
                     {/* Tabs */}
-                    <div style={{ display: 'flex', borderBottom: '1px solid var(--sao-border-subtle)', background: 'rgba(0,0,0,0.2)' }}>
+                    <div style={{ display: 'flex', borderBottom: '1px solid var(--sao-border-subtle)', background: 'var(--sao-bg)' }}>
                         {['chat', 'alerts', 'quests'].map(t => (
                             <button key={t}
                                 onClick={() => { setTab(t); play('click') }}
@@ -174,7 +174,7 @@ export default function YuiCompanion({ user }) {
                     </div>
 
                     {/* Content */}
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(10,10,16,0.8)' }}>
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'transparent' }}>
 
                         {/* CHAT TAB */}
                         {tab === 'chat' && (
@@ -187,7 +187,7 @@ export default function YuiCompanion({ user }) {
                                             alignItems: m.role === 'user' ? 'flex-end' : 'flex-start'
                                         }}>
                                             <div style={{
-                                                background: m.role === 'user' ? 'linear-gradient(135deg, rgba(255, 157, 0, 0.2), rgba(255, 157, 0, 0.1))' : 'rgba(255, 255, 255, 0.08)',
+                                                background: m.role === 'user' ? 'linear-gradient(135deg, rgba(255, 157, 0, 0.2), rgba(255, 157, 0, 0.1))' : 'var(--sao-surface)',
                                                 padding: '10px 14px', borderRadius: m.role === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
                                                 fontSize: '0.9rem', lineHeight: '1.5',
                                                 border: m.role === 'user' ? '1px solid rgba(255,157,0,0.3)' : '1px solid var(--sao-border-subtle)',
@@ -202,7 +202,7 @@ export default function YuiCompanion({ user }) {
                                     {/* Typing Indicator */}
                                     {loading && (
                                         <div style={{
-                                            alignSelf: 'flex-start', background: 'rgba(255, 255, 255, 0.05)',
+                                            alignSelf: 'flex-start', background: 'var(--sao-surface)',
                                             padding: '8px 12px', borderRadius: '12px 12px 12px 2px',
                                             border: '1px solid var(--sao-border-subtle)', display: 'flex', gap: '4px'
                                         }}>
@@ -221,7 +221,7 @@ export default function YuiCompanion({ user }) {
                                             <button key={action}
                                                 onClick={() => handleSend(action)}
                                                 style={{
-                                                    background: 'rgba(255,255,255,0.05)', border: '1px solid var(--sao-border-subtle)',
+                                                    background: 'var(--sao-surface)', border: '1px solid var(--sao-border-subtle)',
                                                     borderRadius: '12px', padding: '6px 12px', fontSize: '0.75rem', color: 'var(--sao-text-dim)',
                                                     whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.2s'
                                                 }}
@@ -239,9 +239,9 @@ export default function YuiCompanion({ user }) {
                                         type="text" value={input} onChange={e => setInput(e.target.value)}
                                         placeholder="Pergunte algo..."
                                         style={{
-                                            flex: 1, background: 'rgba(0,0,0,0.4)',
+                                            flex: 1, background: 'var(--sao-bg)',
                                             border: '1px solid var(--sao-border-subtle)', borderRadius: '8px',
-                                            padding: '10px', color: '#fff', fontSize: '0.9rem', outline: 'none'
+                                            padding: '10px', color: 'var(--sao-text)', fontSize: '0.9rem', outline: 'none'
                                         }}
                                     />
                                     <button type="submit" disabled={loading} className="sao-btn" style={{ padding: '0 14px', borderRadius: '8px' }}>➤</button>
