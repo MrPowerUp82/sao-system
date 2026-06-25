@@ -91,9 +91,54 @@ class InventoryController extends Controller
             'attributes' => 'nullable|array',
         ]);
 
+        if (isset($validated['equipped']) && $validated['equipped']) {
+            if ($item->slot === 'accessory') {
+                if (str_contains($item->name, 'Título:')) {
+                    InventoryItem::where('user_id', auth()->id())
+                        ->where('slot', 'accessory')
+                        ->where('name', 'like', 'Título:%')
+                        ->where('id', '!=', $item->id)
+                        ->update(['equipped' => false]);
+                } elseif (str_contains($item->name, 'Avatar')) {
+                    InventoryItem::where('user_id', auth()->id())
+                        ->where('slot', 'accessory')
+                        ->where('name', 'like', '%Avatar%')
+                        ->where('id', '!=', $item->id)
+                        ->update(['equipped' => false]);
+                }
+            }
+        }
+
         $item->update(array_filter($validated, fn($v) => $v !== null));
 
         return redirect()->back()->with('success', 'Item atualizado!');
+    }
+
+    public function consume(Request $request, InventoryItem $item)
+    {
+        if ($item->user_id !== auth()->id())
+            abort(403);
+
+        if ($item->slot !== 'consumable') {
+            return redirect()->back()->with('error', 'Este item não pode ser consumido.');
+        }
+
+        $user = auth()->user();
+
+        if (str_contains($item->name, 'XP Boost')) {
+            XpService::awardXp($user, 150, 'potion_use');
+            $item->delete();
+            return redirect()->back()->with('success', '🧪 Potion consumida: +150 XP!');
+        }
+
+        if (str_contains($item->name, 'Health Crystal')) {
+            \App\Services\CoinService::awardCol($user, 50, 'mission_reward', 'Health Crystal Use');
+            $item->delete();
+            return redirect()->back()->with('success', '💎 Health Crystal consumido: +50 Col recuperados!');
+        }
+
+        $item->delete();
+        return redirect()->back()->with('success', 'Item consumido.');
     }
 
     public function destroy(InventoryItem $item)

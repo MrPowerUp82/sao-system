@@ -76,6 +76,7 @@ Route::middleware(['auth', \App\Http\Middleware\HandleInertiaRequests::class])
         Route::get('/inventory', [InventoryController::class, 'index'])->name('player.inventory');
         Route::post('/inventory', [InventoryController::class, 'store'])->name('player.inventory.store');
         Route::put('/inventory/{item}', [InventoryController::class, 'update'])->name('player.inventory.update');
+        Route::post('/inventory/{item}/consume', [InventoryController::class, 'consume'])->name('player.inventory.consume');
         Route::delete('/inventory/{item}', [InventoryController::class, 'destroy'])->name('player.inventory.destroy');
         Route::get('/guild', [GuildController::class, 'index'])->name('player.guild');
         Route::post('/guild', [GuildController::class, 'store'])->name('player.guild.store');

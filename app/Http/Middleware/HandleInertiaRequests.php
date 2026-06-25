@@ -22,6 +22,8 @@ class HandleInertiaRequests extends Middleware
                     'xp' => $request->user()->xp ?? 0,
                     'avatar_url' => $request->user()->avatar_url,
                     'col' => $request->user()->col ?? 0,
+                    'equipped_title' => $request->user()->equipped_title,
+                    'equipped_avatar' => $request->user()->equipped_avatar,
                 ] : null,
             ],
             'flash' => [

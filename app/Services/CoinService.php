@@ -71,6 +71,22 @@ class CoinService
             if ($item->stock !== null) {
                 $item->decrement('stock');
             }
+
+            // Create inventory item for the user
+            \App\Models\InventoryItem::create([
+                'user_id' => $user->id,
+                'name' => $item->name,
+                'slot' => $item->category === 'consumable' ? 'consumable' : 'accessory',
+                'rarity' => $item->rarity,
+                'value' => 0.00,
+                'icon' => $item->icon ?: '📦',
+                'description' => $item->description,
+                'attributes' => [
+                    'category' => $item->category,
+                    'price' => $item->price,
+                ],
+                'equipped' => false,
+            ]);
         });
     }
 }

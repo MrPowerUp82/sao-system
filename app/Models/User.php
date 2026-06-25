@@ -72,4 +72,31 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(CoinTransaction::class);
     }
+
+    public function inventoryItems()
+    {
+        return $this->hasMany(InventoryItem::class);
+    }
+
+    public function getEquippedTitleAttribute()
+    {
+        $item = $this->inventoryItems()
+            ->where('equipped', true)
+            ->where('slot', 'accessory')
+            ->where('name', 'like', 'Título:%')
+            ->first();
+
+        return $item ? str_replace('Título: ', '', $item->name) : null;
+    }
+
+    public function getEquippedAvatarAttribute()
+    {
+        $item = $this->inventoryItems()
+            ->where('equipped', true)
+            ->where('slot', 'accessory')
+            ->where('name', 'like', '%Avatar%')
+            ->first();
+
+        return $item ? $item->icon : null;
+    }
 }

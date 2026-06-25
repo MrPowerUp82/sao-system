@@ -126,28 +126,70 @@ export default function FloorMap({ floors }) {
                                 )}
 
                                 <SaoPanel className={floor.status === 'active' ? 'pulse' : ''}>
-                                    <div className={`floor-card ${floor.status}`}>
-                                        <div className="floor-number">{floor.icon}</div>
+                                    <div className={`floor-card ${floor.status}`} style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                        {/* Boss/Floor Avatar */}
+                                        <div style={{
+                                            width: '56px', height: '56px', borderRadius: '12px',
+                                            background: 'rgba(255,255,255,0.03)',
+                                            border: `2px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : 'var(--sao-danger)'}`,
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontSize: '2rem', flexShrink: 0
+                                        }}>
+                                            {floor.status === 'cleared' ? '🏆' : (
+                                                {
+                                                    1: '👹',
+                                                    22: '🧙‍♀️',
+                                                    48: '🐉',
+                                                    74: '👿',
+                                                    100: '👑',
+                                                }[floor.floor_number] || ['👾', '🕷️', '🦁', '🦅', '🦍', '🦂', '👹'][floor.floor_number % 7]
+                                            )}
+                                        </div>
+
                                         <div className="floor-info" style={{ flex: 1 }}>
-                                            <div className="floor-name">
-                                                Floor {floor.floor_number}: {floor.name}
-                                                {floor.status === 'cleared' && (
-                                                    <span style={{ marginLeft: '8px', color: 'var(--sao-success)' }}>
-                                                        ✅ CLEARED
+                                            <div className="floor-name" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                                                <span style={{ fontSize: '1rem', fontWeight: 700 }}>
+                                                    Floor {floor.floor_number}: {floor.name}
+                                                </span>
+                                                {floor.status === 'cleared' ? (
+                                                    <span style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--sao-success)', background: 'rgba(74,225,131,0.1)', padding: '2px 8px', borderRadius: '4px', border: '1px solid rgba(74,225,131,0.3)', letterSpacing: '0.05em' }}>
+                                                        BOSS DEFEATED
+                                                    </span>
+                                                ) : (
+                                                    <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#ff4757', background: 'rgba(255,71,87,0.1)', padding: '2px 8px', borderRadius: '4px', border: '1px solid rgba(255,71,87,0.3)', letterSpacing: '0.05em', animation: 'sao-blink 2s infinite' }}>
+                                                        BOSS ACTIVE
                                                     </span>
                                                 )}
                                             </div>
-                                            <div className="floor-amount">
-                                                {formatMoney(floor.current_amount)} / {formatMoney(floor.target_amount)}
-                                                <span style={{ marginLeft: '8px', color: 'var(--sao-orange)' }}>
-                                                    ({floor.progress}%)
-                                                </span>
+                                            
+                                            <div style={{ fontSize: '0.75rem', color: 'var(--sao-text-dim)', marginTop: '2px' }}>
+                                                {floor.status === 'cleared' ? 'O guardião deste andar foi derrotado com sucesso!' : (
+                                                    `Boss: ${
+                                                        {
+                                                            1: 'Illfang the Kobold Lord',
+                                                            22: 'The Witch of the Lake',
+                                                            48: 'The Wyrm of the Snow',
+                                                            74: 'The Gleam Eyes',
+                                                            100: 'An Incarnation of the Radius',
+                                                        }[floor.floor_number] || `Floor ${floor.floor_number} Guardian`
+                                                    }`
+                                                )}
                                             </div>
-                                            <div className="bar-container" style={{ marginTop: '8px' }}>
-                                                <div className="bar-fill hp" style={{
-                                                    width: `${floor.progress}%`,
-                                                    background: floor.status === 'cleared' ? 'var(--sao-xp)' : 'var(--sao-hp-full)',
-                                                }} />
+
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--sao-text-muted)', fontFamily: "'JetBrains Mono', monospace", marginTop: '8px' }}>
+                                                <span>{floor.status === 'cleared' ? `BOSS HP: 0 / ${formatMoney(floor.target_amount)}` : `BOSS HP: ${formatMoney(Math.max(0, floor.target_amount - floor.current_amount))} / ${formatMoney(floor.target_amount)}`}</span>
+                                                <span>{floor.status === 'cleared' ? '0%' : `${100 - floor.progress}%`}</span>
+                                            </div>
+
+                                            <div className="progress-track" style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden', marginTop: '4px' }}>
+                                                <div className="progress-fill-hp" style={{
+                                                    width: `${floor.status === 'cleared' ? 0 : 100 - floor.progress}%`,
+                                                    background: 'linear-gradient(90deg, #ff4757, #ff6b6b)',
+                                                    boxShadow: '0 0 10px rgba(255, 71, 87, 0.4)',
+                                                    height: '100%',
+                                                }}>
+                                                    <div className="progress-glint" />
+                                                </div>
                                             </div>
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

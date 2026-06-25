@@ -75,7 +75,7 @@ class FloorMapController extends Controller
             $goal->update(['status' => 'cleared']);
             XpService::awardXp(auth()->user(), XpService::XP_FLOOR_CLEARED, 'floor_cleared');
 
-            return redirect()->back()->with('success', '🏆 FLOOR CLEARED! +' . XpService::XP_FLOOR_CLEARED . ' XP!');
+            return redirect()->back()->with('success', '🏆 FLOOR CLEARED: Floor ' . $goal->floor_number . ' - ' . $goal->name . '! +' . XpService::XP_FLOOR_CLEARED . ' XP!');
         }
 
         return redirect()->back()->with('success', 'Progresso atualizado!');

@@ -3,6 +3,7 @@ import { Link, usePage } from '@inertiajs/react'
 import HpBar from '../Components/HpBar'
 import XpBar from '../Components/XpBar'
 import LevelUpOverlay from '../Components/LevelUpOverlay'
+import FloorClearedOverlay from '../Components/FloorClearedOverlay'
 import { useSound } from '../Components/SoundManager'
 import YuiCompanion from '../Components/YuiCompanion'
 import ColBalance from '../Components/ColBalance'
@@ -27,6 +28,11 @@ export default function PlayerLayout({ children, stats, xp }) {
     const [levelUpLevel, setLevelUpLevel] = useState(1)
     const prevLevelRef = useRef(null)
 
+    // Floor cleared detection
+    const [showFloorCleared, setShowFloorCleared] = useState(false)
+    const [clearedFloorNum, setClearedFloorNum] = useState(1)
+    const [clearedFloorName, setClearedFloorName] = useState('')
+
     useEffect(() => {
         const currentLevel = xp?.current_level || user?.level || 1
         if (prevLevelRef.current !== null && currentLevel > prevLevelRef.current) {
@@ -41,6 +47,19 @@ export default function PlayerLayout({ children, stats, xp }) {
         if (flash?.success) {
             if (flash.success.includes('FLOOR CLEARED')) {
                 play('floorCleared')
+                try {
+                    const parts = flash.success.split('FLOOR CLEARED: Floor ')
+                    if (parts.length > 1) {
+                        const subparts = parts[1].split(' - ')
+                        const num = parseInt(subparts[0], 10)
+                        const namePart = subparts[1].split('!')[0]
+                        setClearedFloorNum(num)
+                        setClearedFloorName(namePart)
+                        setShowFloorCleared(true)
+                    }
+                } catch (err) {
+                    console.error('Error parsing floor cleared message:', err)
+                }
             } else if (flash.success.includes('XP')) {
                 play('confirm')
             } else {
@@ -59,6 +78,14 @@ export default function PlayerLayout({ children, stats, xp }) {
                 show={showLevelUp}
                 level={levelUpLevel}
                 onClose={() => setShowLevelUp(false)}
+            />
+
+            {/* Floor Cleared Overlay */}
+            <FloorClearedOverlay
+                show={showFloorCleared}
+                floorNumber={clearedFloorNum}
+                floorName={clearedFloorName}
+                onClose={() => setShowFloorCleared(false)}
             />
 
             {/* Sidebar — Expanded with labels */}
@@ -154,16 +181,30 @@ export default function PlayerLayout({ children, stats, xp }) {
                         <div style={{ position: 'relative', flexShrink: 0 }}>
                             <div className="hud-avatar avatar-glow" style={{
                                 width: '42px', height: '42px',
-                                background: 'linear-gradient(135deg, var(--sao-orange), var(--sao-orange-light))',
+                                background: user?.equipped_avatar ? 'rgba(12,14,21,0.9)' : 'linear-gradient(135deg, var(--sao-orange), var(--sao-orange-light))',
                                 position: 'relative', zIndex: 1,
+                                border: user?.equipped_avatar ? '1.5px solid var(--sao-orange)' : undefined,
+                                fontSize: user?.equipped_avatar ? '1.4rem' : undefined,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center'
                             }}>
-                                {user?.player_name?.[0]?.toUpperCase() || user?.name?.[0]?.toUpperCase() || 'P'}
+                                {user?.equipped_avatar || user?.player_name?.[0]?.toUpperCase() || user?.name?.[0]?.toUpperCase() || 'P'}
                             </div>
                             <div className="avatar-ring-outer" />
                         </div>
                         <div>
-                            <div className="hud-player-name" style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700 }}>
+                            <div className="hud-player-name" style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
                                 {user?.player_name || user?.name || 'Player'}
+                                {user?.equipped_title && (
+                                    <span style={{
+                                        fontSize: '9px', fontWeight: 700, color: 'var(--sao-orange)',
+                                        background: 'rgba(255, 157, 0, 0.1)', padding: '1px 6px',
+                                        borderRadius: '3px', border: '1px solid rgba(255, 157, 0, 0.3)',
+                                        textTransform: 'uppercase', letterSpacing: '0.05em',
+                                        fontFamily: "'JetBrains Mono', monospace"
+                                    }}>
+                                        {user.equipped_title}
+                                    </span>
+                                )}
                             </div>
                             <div className="label-caps" style={{ fontSize: '10px', color: 'var(--sao-orange)', marginTop: '2px' }}>
                                 LV. {xp?.current_level || user?.level || 1}

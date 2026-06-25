@@ -20,7 +20,7 @@ const RARITY_STYLES = {
     legendary: { color: '#FF9D00', label: 'Legendary', glow: '0 0 20px rgba(255, 157, 0, 0.5)' },
 }
 
-function ItemCard({ item, onDelete, onToggleEquip }) {
+function ItemCard({ item, onDelete, onToggleEquip, onConsume }) {
     const rarity = RARITY_STYLES[item.rarity] || RARITY_STYLES.common
     const slot = SLOT_INFO[item.slot] || {}
     const { play } = useSound()
@@ -90,13 +90,23 @@ function ItemCard({ item, onDelete, onToggleEquip }) {
 
             {/* Actions */}
             <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
-                <button
-                    className="sao-btn outline"
-                    style={{ flex: 1, padding: '4px 8px', fontSize: '0.7rem', justifyContent: 'center' }}
-                    onClick={() => { play('click'); onToggleEquip(item) }}
-                >
-                    {item.equipped ? '📦 Unequip' : '⚔️ Equip'}
-                </button>
+                {item.slot === 'consumable' ? (
+                    <button
+                        className="sao-btn"
+                        style={{ flex: 1, padding: '4px 8px', fontSize: '0.7rem', justifyContent: 'center', background: 'linear-gradient(90deg, #4CAF50, #00D1FF)', border: 'none' }}
+                        onClick={() => { play('confirm'); onConsume(item) }}
+                    >
+                        🧪 Use Potion
+                    </button>
+                ) : (
+                    <button
+                        className="sao-btn outline"
+                        style={{ flex: 1, padding: '4px 8px', fontSize: '0.7rem', justifyContent: 'center' }}
+                        onClick={() => { play('click'); onToggleEquip(item) }}
+                    >
+                        {item.equipped ? '📦 Unequip' : '⚔️ Equip'}
+                    </button>
+                )}
                 <button
                     className="sao-btn outline"
                     style={{ padding: '4px 8px', fontSize: '0.7rem', color: '#ff4444' }}
@@ -271,6 +281,10 @@ export default function Inventory({ items, total_value, filters, slot_options })
         router.put(`/player/inventory/${item.id}`, { equipped: !item.equipped })
     }
 
+    const handleConsume = (item) => {
+        router.post(`/player/inventory/${item.id}/consume`, {})
+    }
+
     // Group by slot
     const equippedCount = items.filter(i => i.equipped).length
     const totalItems = items.length
@@ -356,6 +370,7 @@ export default function Inventory({ items, total_value, filters, slot_options })
                                 item={item}
                                 onDelete={handleDelete}
                                 onToggleEquip={handleToggleEquip}
+                                onConsume={handleConsume}
                             />
                         ))}
                     </div>

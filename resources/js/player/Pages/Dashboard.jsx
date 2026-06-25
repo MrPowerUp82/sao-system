@@ -93,7 +93,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                          style={{ 
                                              color: '#00D1FF', 
                                              fontFamily: "'Sora', sans-serif",
-                                             fontSize: '1.5rem',
+                                             fontSize: user?.equipped_avatar ? '2rem' : '1.5rem',
                                              fontWeight: 700,
                                              width: '100%',
                                              height: '100%',
@@ -101,7 +101,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                              alignItems: 'center',
                                              justifyContent: 'center'
                                          }}>
-                                        {user?.player_name?.[0]?.toUpperCase() || user?.name?.[0]?.toUpperCase() || 'P'}
+                                        {user?.equipped_avatar || user?.player_name?.[0]?.toUpperCase() || user?.name?.[0]?.toUpperCase() || 'P'}
                                     </div>
                                 </div>
                                 <div>
@@ -112,9 +112,24 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                              fontWeight: 700, 
                                              margin: 0, 
                                              textShadow: '0 0 10px rgba(0, 209, 255, 0.4)',
-                                             color: '#e8e6e3'
+                                             color: '#e8e6e3',
+                                             display: 'flex',
+                                             alignItems: 'center',
+                                             gap: '8px'
                                          }}>
                                         {user?.player_name || user?.name || 'Player'}
+                                        {user?.equipped_title && (
+                                            <span style={{
+                                                fontSize: '9px', fontWeight: 700, color: 'var(--sao-orange)',
+                                                background: 'rgba(255, 157, 0, 0.1)', padding: '2px 8px',
+                                                borderRadius: '4px', border: '1px solid rgba(255, 157, 0, 0.3)',
+                                                textTransform: 'uppercase', letterSpacing: '0.05em',
+                                                fontFamily: "'JetBrains Mono', monospace",
+                                                textShadow: 'none'
+                                            }}>
+                                                {user.equipped_title}
+                                            </span>
+                                        )}
                                     </h3>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
                                         <span className="px-2 py-0.5 font-data-label text-[10px] rounded uppercase" 
@@ -640,52 +655,99 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                             </div>
                         </div>
 
-                        {/* Floor Progress */}
+                        {/* Aincrad Boss Battle Progress */}
                         <div className="sao-panel glass-panel glass-panel-teal" style={{ overflow: 'hidden' }}>
                             <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <h3 style={{ color: '#00D1FF', fontFamily: "'Sora', sans-serif", fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', margin: 0, textShadow: '0 0 10px rgba(0, 209, 255, 0.3)' }}>
-                                    Floor Progress
+                                <h3 style={{ color: '#ff4757', fontFamily: "'Sora', sans-serif", fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', margin: 0, textShadow: '0 0 10px rgba(255, 71, 87, 0.3)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    ⚔️ Aincrad Boss Battles
                                 </h3>
                                 <span className="material-symbols-outlined" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '18px' }}>more_horiz</span>
                             </div>
-                            <div style={{ padding: '8px' }}>
+                            <div style={{ padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {active_floors && active_floors.length > 0 ? (
-                                    active_floors.map(floor => (
-                                        <div key={floor.id} style={{
-                                            padding: '14px',
-                                            margin: '4px 0',
-                                            borderRadius: '8px',
-                                            background: 'rgba(51,52,60,0.2)',
-                                            border: `1px solid ${floor.status === 'active' ? 'rgba(0,209,255,0.3)' : 'rgba(255,255,255,0.05)'}`,
-                                            transition: 'border-color 0.2s',
-                                        }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8px' }}>
-                                                <span style={{ fontFamily: "'Sora', sans-serif", fontSize: '0.85rem', fontWeight: 600 }}>
-                                                    Floor {floor.floor_number}: {floor.name}
-                                                    {floor.status === 'cleared' && (
-                                                        <span className="material-symbols-outlined" style={{ fontSize: '14px', marginLeft: '6px', color: '#4ae183', verticalAlign: 'middle' }}>check_circle</span>
-                                                    )}
-                                                </span>
-                                                <span className="label-caps" style={{ fontSize: '10px', color: 'rgba(0,209,255,0.8)', fontFamily: "'JetBrains Mono', monospace" }}>
-                                                    {formatMoney(floor.current_amount)} / {formatMoney(floor.target_amount)}
-                                                </span>
-                                            </div>
-                                            <div className="progress-track" style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
-                                                <div className="progress-fill-hp" style={{
-                                                    width: `${floor.progress}%`,
-                                                    background: floor.status === 'cleared'
-                                                        ? 'linear-gradient(90deg, #4ae183, #06bb63)'
-                                                        : 'linear-gradient(90deg, #00D1FF, #0082A0)',
-                                                    boxShadow: floor.status === 'cleared'
-                                                        ? '0 0 8px rgba(74, 225, 131, 0.4)'
-                                                        : '0 0 8px rgba(0, 209, 255, 0.4)',
-                                                    height: '100%'
-                                                }}>
-                                                    <div className="progress-glint" />
+                                    active_floors.map(floor => {
+                                        // Boss dictionary mapping
+                                        const BOSSES = {
+                                            1: { name: 'Illfang the Kobold Lord', avatar: '👹', desc: 'Dificuldade Inicial: Junte seus primeiros Col!' },
+                                            22: { name: 'The Witch of the Lake', avatar: '🧙‍♀️', desc: 'Dona do Lago da Floresta: Desbloqueie sua cabana!' },
+                                            48: { name: 'The Wyrm of the Snow', avatar: '🐉', desc: 'Dragão de Gelo Cristalino: Forje sua arma!' },
+                                            74: { name: 'The Gleam Eyes', avatar: '👿', desc: 'O Demônio de Olhos Azuis: Enfrente o boss!' },
+                                            100: { name: 'An Incarnation of the Radius', avatar: '👑', desc: 'O Boss Final de Aincrad!' },
+                                        };
+                                        const boss = BOSSES[floor.floor_number] || {
+                                            name: `Floor ${floor.floor_number} Guardian`,
+                                            avatar: ['👾', '🕷️', '🦁', '🦅', '🦍', '🦂', '👹'][floor.floor_number % 7],
+                                            desc: `Guardião do andar ${floor.floor_number}`
+                                        };
+
+                                        const bossMaxHp = floor.target_amount;
+                                        const bossCurrentHp = Math.max(0, floor.target_amount - floor.current_amount);
+                                        const bossHpPercentage = 100 - floor.progress;
+
+                                        return (
+                                            <div key={floor.id} style={{
+                                                padding: '14px',
+                                                borderRadius: '8px',
+                                                background: floor.status === 'cleared' ? 'rgba(74,225,131,0.03)' : 'rgba(23,31,51,0.4)',
+                                                border: `1px solid ${floor.status === 'cleared' ? 'rgba(74,225,131,0.2)' : floor.status === 'active' ? 'rgba(255,71,87,0.25)' : 'rgba(255,255,255,0.05)'}`,
+                                                transition: 'border-color 0.2s',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '8px',
+                                                boxShadow: floor.status === 'cleared' ? '0 0 10px rgba(74, 225, 131, 0.05)' : undefined
+                                            }}>
+                                                {/* Header: Floor & Boss info */}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                    <div style={{
+                                                        width: '36px', height: '36px', borderRadius: '8px',
+                                                        background: 'rgba(255,255,255,0.03)', border: `1px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : 'var(--sao-danger)'}`,
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                        fontSize: '1.4rem'
+                                                    }}>
+                                                        {floor.status === 'cleared' ? '🏆' : boss.avatar}
+                                                    </div>
+                                                    <div style={{ flex: 1 }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                                                            <span style={{ fontFamily: "'Sora', sans-serif", fontSize: '0.85rem', fontWeight: 700, color: floor.status === 'cleared' ? '#4ae183' : '#FFF' }}>
+                                                                Floor {floor.floor_number}: {floor.name}
+                                                            </span>
+                                                            {floor.status === 'cleared' ? (
+                                                                <span style={{ fontSize: '9px', fontWeight: 700, color: '#4ae183', background: 'rgba(74,225,131,0.1)', padding: '1px 6px', borderRadius: '3px', border: '1px solid rgba(74,225,131,0.3)', fontFamily: "'JetBrains Mono', monospace" }}>
+                                                                    DEFEATED
+                                                                </span>
+                                                            ) : (
+                                                                <span style={{ fontSize: '9px', fontWeight: 700, color: '#ff4757', background: 'rgba(255,71,87,0.1)', padding: '1px 6px', borderRadius: '3px', border: '1px solid rgba(255,71,87,0.3)', fontFamily: "'JetBrains Mono', monospace", animation: 'sao-blink 2s infinite' }}>
+                                                                    ACTIVE
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div style={{ fontSize: '0.65rem', color: 'var(--sao-text-dim)', marginTop: '2px' }}>
+                                                            {floor.status === 'cleared' ? 'O boss deste andar foi derrotado!' : `Boss: ${boss.name}`}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Bar & Stats */}
+                                                <div style={{ marginTop: '4px' }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--sao-text-muted)', fontFamily: "'JetBrains Mono', monospace", marginBottom: '4px' }}>
+                                                        <span>{floor.status === 'cleared' ? 'BOSS HP: 0 / ' + formatMoney(bossMaxHp) : `BOSS HP: ${formatMoney(bossCurrentHp)} / ${formatMoney(bossMaxHp)}`}</span>
+                                                        <span>{floor.status === 'cleared' ? '0%' : `${bossHpPercentage}%`}</span>
+                                                    </div>
+                                                    <div className="progress-track" style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.03)' }}>
+                                                        <div className="progress-fill-hp" style={{
+                                                            width: `${floor.status === 'cleared' ? 0 : bossHpPercentage}%`,
+                                                            background: 'linear-gradient(90deg, #ff4757, #ff6b6b)',
+                                                            boxShadow: '0 0 10px rgba(255, 71, 87, 0.4)',
+                                                            height: '100%',
+                                                            transition: 'width 1s ease-in-out'
+                                                        }}>
+                                                            <div className="progress-glint" />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))
+                                        );
+                                    })
                                 ) : (
                                     <div style={{ padding: '32px 16px', textAlign: 'center', color: 'var(--sao-text-dim)' }}>
                                         <span className="material-symbols-outlined" style={{ fontSize: '32px', marginBottom: '8px', display: 'block', opacity: 0.5 }}>castle</span>
