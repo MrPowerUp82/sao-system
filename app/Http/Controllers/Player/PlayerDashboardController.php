@@ -197,6 +197,11 @@ class PlayerDashboardController extends Controller
             $formattedCategories[] = ['tag' => $tag, 'amount' => $amount];
         }
 
+        $equippedArmor = \App\Models\InventoryItem::where('user_id', $user->id)
+            ->where('slot', 'armor')
+            ->where('equipped', true)
+            ->first();
+
         return Inertia::render('Dashboard', [
             'stats' => [
                 'hp_percentage' => $hpPercentage,
@@ -211,6 +216,11 @@ class PlayerDashboardController extends Controller
             'xp' => $xpProgress,
             'recent_trades' => $recentTrades,
             'active_floors' => $activeFloors,
+            'equipped_armor' => $equippedArmor ? [
+                'name' => $equippedArmor->name,
+                'refinement_level' => $equippedArmor->refinement_level,
+                'mitigation' => $equippedArmor->refinement_level * 3,
+            ] : null,
         ]);
     }
 }

@@ -48,6 +48,16 @@ class XpService
 
     public static function awardXp(User $user, int $amount, string $reason = ''): void
     {
+        $equippedWeapon = \App\Models\InventoryItem::where('user_id', $user->id)
+            ->where('slot', 'weapon')
+            ->where('equipped', true)
+            ->first();
+
+        if ($equippedWeapon && $equippedWeapon->refinement_level > 0) {
+            $bonusPercentage = 1 + ($equippedWeapon->refinement_level * 0.05);
+            $amount = (int) round($amount * $bonusPercentage);
+        }
+
         $user->xp += $amount;
         $user->level = self::levelFormula($user->xp);
         $user->save();

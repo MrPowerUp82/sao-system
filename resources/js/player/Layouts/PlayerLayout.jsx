@@ -15,6 +15,7 @@ const NAV_ITEMS = [
     { icon: 'inventory_2', label: 'Inventory', href: '/player/inventory', name: 'player.inventory' },
     { icon: 'storefront', label: 'Shop', href: '/player/shop', name: 'player.shop' },
     { icon: 'menu_book', label: 'Bestiary', href: '/player/bestiary', name: 'player.bestiary' },
+    { icon: 'construction', label: 'Blacksmith', href: '/player/blacksmith', name: 'player.blacksmith' },
     { icon: 'groups', label: 'Guild', href: '/player/guild', name: 'player.guild' },
 ]
 

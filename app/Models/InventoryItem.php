@@ -19,12 +19,14 @@ class InventoryItem extends Model
         'description',
         'attributes',
         'equipped',
+        'refinement_level',
     ];
 
     protected $casts = [
         'value' => 'decimal:2',
         'attributes' => 'array',
         'equipped' => 'boolean',
+        'refinement_level' => 'integer',
     ];
 
     const SLOT_LABELS = [
@@ -64,5 +66,12 @@ class InventoryItem extends Model
     public function getRarityColor(): string
     {
         return self::RARITY_COLORS[$this->rarity] ?? '#8a8a9a';
+    }
+
+    public function getRefinedNameAttribute(): string
+    {
+        return $this->refinement_level > 0 
+            ? "{$this->name} +{$this->refinement_level}" 
+            : $this->name;
     }
 }

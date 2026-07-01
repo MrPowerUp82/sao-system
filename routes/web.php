@@ -89,6 +89,10 @@ Route::middleware(['auth', \App\Http\Middleware\HandleInertiaRequests::class])
         // Bestiary Routes
         Route::get('/bestiary', [\App\Http\Controllers\Player\BestiaryController::class, 'index'])->name('player.bestiary');
 
+        // Blacksmith Routes
+        Route::get('/blacksmith', [\App\Http\Controllers\Player\BlacksmithController::class, 'index'])->name('player.blacksmith');
+        Route::post('/blacksmith/{item}/refine', [\App\Http\Controllers\Player\BlacksmithController::class, 'refine'])->name('player.blacksmith.refine');
+
         // Y.U.I. Routes
         Route::post('/yui/chat', [YuiController::class, 'sendMessage'])->name('player.yui.chat');
         Route::get('/yui/status', [YuiController::class, 'getStatus'])->name('player.yui.status');

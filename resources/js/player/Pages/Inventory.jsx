@@ -67,8 +67,18 @@ function ItemCard({ item, onDelete, onToggleEquip, onConsume }) {
                     <div style={{
                         fontWeight: 600, color: rarity.color,
                         fontFamily: 'Rajdhani, sans-serif', fontSize: '1.05rem',
+                        display: 'flex', alignItems: 'center', gap: '6px'
                     }}>
                         {item.name}
+                        {item.refinement_level > 0 && (
+                            <span style={{
+                                fontSize: '10px', fontWeight: 800, color: 'var(--sao-orange)',
+                                background: 'rgba(255,157,0,0.1)', padding: '1px 5px', borderRadius: '3px',
+                                border: '1px solid rgba(255,157,0,0.3)', fontFamily: "'JetBrains Mono', monospace"
+                            }}>
+                                +{item.refinement_level}
+                            </span>
+                        )}
                     </div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--sao-text-dim)' }}>
                         {slot.icon} {slot.label} — {slot.desc}

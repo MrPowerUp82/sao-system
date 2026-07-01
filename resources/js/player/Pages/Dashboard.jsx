@@ -5,7 +5,7 @@ import TradeModal from '../Components/TradeModal'
 import DailyQuests from '../Components/DailyQuests'
 import { useSound } from '../Components/SoundManager'
 
-export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
+export default function Dashboard({ stats, xp, recent_trades, active_floors, equipped_armor }) {
     const { auth } = usePage().props
     const user = auth?.user
     const { play } = useSound()
@@ -631,7 +631,19 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                                     : '#8a8a9a'
                                                           }}>{label.text}</span>
                                                     <div>
-                                                        <div className="trade-name" style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sao-text)' }}>{trade.name}</div>
+                                                        <div className="trade-name" style={{ fontSize: '13px', fontWeight: 600, color: 'var(--sao-text)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                            {trade.name}
+                                                            {trade.input === 0 && equipped_armor && equipped_armor.mitigation > 0 && (
+                                                                <span style={{
+                                                                    fontSize: '8px', fontWeight: 700, color: '#3498db',
+                                                                    background: 'rgba(52,152,219,0.1)', padding: '1px 4px', borderRadius: '2px',
+                                                                    border: '1px solid rgba(52,152,219,0.3)', display: 'inline-flex', alignItems: 'center', gap: '2px'
+                                                                }} title={`Dano reduzido em ${equipped_armor.mitigation}% por ${equipped_armor.name}`}>
+                                                                    <span className="material-symbols-outlined" style={{ fontSize: '9px' }}>shield</span>
+                                                                    -{equipped_armor.mitigation}%
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                         <div className="trade-date" style={{ fontSize: '10px', color: 'var(--sao-text-muted)', marginTop: '2px' }}>{trade.created_at}</div>
                                                     </div>
                                                 </div>
