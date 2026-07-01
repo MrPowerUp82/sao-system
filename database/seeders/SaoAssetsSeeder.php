@@ -528,6 +528,7 @@ class SaoAssetsSeeder extends Seeder
         // 3. Query Fandom API for all images in batches of 15
         $allTitles = collect($monstersData)->pluck('wiki_title')
             ->concat(collect($itemsData)->pluck('wiki_title'))
+            ->concat(['NerveGear'])
             ->unique()
             ->values();
 
@@ -618,6 +619,28 @@ class SaoAssetsSeeder extends Seeder
                 ]
             );
         }
+
+        // 6. Update starting user's inventory items with resolved images
+        $inventoryUpdates = [
+            'Elucidator Black Card' => 'Elucidator',
+            'Dark Repulser Card' => 'Dark Repulser',
+            'Health Potion Sub' => 'Potion of Healing',
+            'Col Crystal Reserve' => 'Teleport Crystal',
+        ];
+
+        foreach ($inventoryUpdates as $invName => $shopItemName) {
+            $shopItem = ShopItem::where('name', $shopItemName)->first();
+            if ($shopItem && $shopItem->image_url) {
+                \App\Models\InventoryItem::where('name', $invName)->update([
+                    'image_url' => $shopItem->image_url,
+                ]);
+            }
+        }
+
+        $nerveGearUrl = $imageMapping['NerveGear'] ?? $this->getStaticFallback('NerveGear');
+        \App\Models\InventoryItem::where('name', 'NerveGear Savings')->update([
+            'image_url' => $nerveGearUrl,
+        ]);
     }
 
     private function getStaticFallback(string $title): ?string
@@ -638,6 +661,7 @@ class SaoAssetsSeeder extends Seeder
             'Steel Breastplate' => 'https://static.wikia.nocookie.net/swordartonline/images/1/1b/Breastplate_of_Steel.png/revision/latest/scale-to-width-down/500',
             'Teleport Crystal' => 'https://static.wikia.nocookie.net/swordartonline/images/3/36/Teleport_Crystal.png/revision/latest/scale-to-width-down/500',
             'Healing Potion' => 'https://static.wikia.nocookie.net/swordartonline/images/0/07/Potion.png/revision/latest/scale-to-width-down/500',
+            'NerveGear' => 'https://static.wikia.nocookie.net/swordartonline/images/f/f0/NerveGear.png/revision/latest/scale-to-width-down/500',
         ];
 
         return $fallbacks[$title] ?? null;

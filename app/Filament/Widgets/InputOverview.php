@@ -15,6 +15,7 @@ class InputOverview extends BaseWidget
     public $start_date;
     public $end_date;
     public $temporaryTransitions = [];
+    protected static bool $isDiscovered = false;
 
     public function mount($start_date = null, $end_date = null, $temporaryTransitions = []): void
     {
@@ -26,7 +27,7 @@ class InputOverview extends BaseWidget
             $end_date = Carbon::parse($end_date);
         }
     }
-    
+
     protected function getTemporaryTransactionsCollection()
     {
         return collect($this->temporaryTransitions)->map(function ($item) {
@@ -42,7 +43,7 @@ class InputOverview extends BaseWidget
         $start_date = $this->start_date ?? Carbon::create(now()->year, now()->month, 1);
         $end_date = $this->end_date ?? now()->endOfMonth();
         $tempTransactions = $this->getTemporaryTransactionsCollection();
-        
+
         $transactions_1_v = GeneralizedTransition::whereDate('start_date', '>=', $start_date)
             ->where('input', 1)
             ->where('type', 'v')
@@ -54,7 +55,7 @@ class InputOverview extends BaseWidget
         $temp_1_v = $tempTransactions->filter(fn($t) => $t->start_date >= $start_date && $t->input == 1 && $t->type == 'v' && ($t->fix ?? 0) == 0)
             ->map(fn($t) => $t->total_value);
         $transactions_1_v = $transactions_1_v->merge($temp_1_v)->toArray();
-        
+
         $transactions_1_p = GeneralizedTransition::whereDate('start_date', '<=', $end_date)
             ->whereDate('end_date', '>=', $start_date)
             ->where('input', 1)
@@ -67,7 +68,7 @@ class InputOverview extends BaseWidget
         $temp_1_p = $tempTransactions->filter(fn($t) => isset($t->end_date) && $t->start_date <= $end_date && $t->end_date >= $start_date && $t->input == 1 && $t->type == 'p' && ($t->fix ?? 0) == 0)
             ->map(fn($t) => $t->installment_value ?? 0);
         $transactions_1_p = $transactions_1_p->merge($temp_1_p)->toArray();
-        
+
         $transactions_0_v = GeneralizedTransition::whereDate('start_date', '>=', $start_date)
             ->where('input', 0)
             ->where('type', 'v')
@@ -79,7 +80,7 @@ class InputOverview extends BaseWidget
         $temp_0_v = $tempTransactions->filter(fn($t) => $t->start_date >= $start_date && $t->input == 0 && $t->type == 'v' && ($t->fix ?? 0) == 0)
             ->map(fn($t) => $t->total_value);
         $transactions_0_v = $transactions_0_v->merge($temp_0_v)->toArray();
-        
+
         $transactions_0_p = GeneralizedTransition::whereDate('start_date', '<=', $end_date)
             ->whereDate('end_date', '>=', $start_date)
             ->where('input', 0)
@@ -92,7 +93,7 @@ class InputOverview extends BaseWidget
         $temp_0_p = $tempTransactions->filter(fn($t) => isset($t->end_date) && $t->start_date <= $end_date && $t->end_date >= $start_date && $t->input == 0 && $t->type == 'p' && ($t->fix ?? 0) == 0)
             ->map(fn($t) => $t->installment_value ?? 0);
         $transactions_0_p = $transactions_0_p->merge($temp_0_p)->toArray();
-        
+
         $transactions_1_v_sum = GeneralizedTransition::whereDate('start_date', '>=', $start_date)
             ->where('input', 1)
             ->where('type', 'v')
@@ -102,7 +103,7 @@ class InputOverview extends BaseWidget
         $temp_1_v_sum = $tempTransactions->filter(fn($t) => $t->start_date >= $start_date && $t->input == 1 && $t->type == 'v' && ($t->fix ?? 0) == 0)
             ->sum('total_value');
         $transactions_1_v_sum += $temp_1_v_sum;
-        
+
         $transactions_1_p_sum = GeneralizedTransition::whereDate('start_date', '<=', $end_date)
             ->whereDate('end_date', '>=', $start_date)
             ->where('input', 1)
@@ -113,7 +114,7 @@ class InputOverview extends BaseWidget
         $temp_1_p_sum = $tempTransactions->filter(fn($t) => isset($t->end_date) && $t->start_date <= $end_date && $t->end_date >= $start_date && $t->input == 1 && $t->type == 'p' && ($t->fix ?? 0) == 0)
             ->sum('installment_value');
         $transactions_1_p_sum += $temp_1_p_sum;
-        
+
         $transactions_0_v_sum = GeneralizedTransition::whereDate('start_date', '>=', $start_date)
             ->where('input', 0)
             ->where('type', 'v')
@@ -123,7 +124,7 @@ class InputOverview extends BaseWidget
         $temp_0_v_sum = $tempTransactions->filter(fn($t) => $t->start_date >= $start_date && $t->input == 0 && $t->type == 'v' && ($t->fix ?? 0) == 0)
             ->sum('total_value');
         $transactions_0_v_sum += $temp_0_v_sum;
-        
+
         $transactions_0_p_sum = GeneralizedTransition::whereDate('start_date', '<=', $end_date)
             ->whereDate('end_date', '>=', $start_date)
             ->where('input', 0)
@@ -144,7 +145,7 @@ class InputOverview extends BaseWidget
         $temp_1_f = $tempTransactions->filter(fn($t) => $t->input == 1 && ($t->fix ?? 0) == 1)
             ->map(fn($t) => $t->total_value);
         $transactions_1_f = $transactions_1_f->merge($temp_1_f)->toArray();
-        
+
         $transactions_0_f = GeneralizedTransition::where('input', 0)
             ->where('fix', 1)
             ->get()
@@ -154,7 +155,7 @@ class InputOverview extends BaseWidget
         $temp_0_f = $tempTransactions->filter(fn($t) => $t->input == 0 && ($t->fix ?? 0) == 1)
             ->map(fn($t) => $t->total_value);
         $transactions_0_f = $transactions_0_f->merge($temp_0_f)->toArray();
-        
+
         $transactions_1_f_sum = GeneralizedTransition::where('input', 1)
             ->where('fix', 1)
             ->get()
@@ -162,7 +163,7 @@ class InputOverview extends BaseWidget
         $temp_1_f_sum = $tempTransactions->filter(fn($t) => $t->input == 1 && ($t->fix ?? 0) == 1)
             ->sum('total_value');
         $transactions_1_f_sum += $temp_1_f_sum;
-        
+
         $transactions_0_f_sum = GeneralizedTransition::where('input', 0)
             ->where('fix', 1)
             ->get()

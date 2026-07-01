@@ -29,6 +29,7 @@ class Preview extends Page implements HasForms, HasActions
     protected static ?string $navigationLabel = 'Simulação';
     protected static ?string $navigationGroup = 'Financeiro';
     protected static bool $shouldRegisterNavigation = false;
+    protected static bool $isDiscovered = false;
 
     public ?array $data = [
         'start_date' => null,

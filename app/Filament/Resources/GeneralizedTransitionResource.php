@@ -34,6 +34,7 @@ class GeneralizedTransitionResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
 
     protected static bool $shouldRegisterNavigation = false;
+    protected static bool $isDiscovered = false;
 
     public static function form(Form $form): Form
     {
