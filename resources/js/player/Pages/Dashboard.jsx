@@ -666,20 +666,6 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                             <div style={{ padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {active_floors && active_floors.length > 0 ? (
                                     active_floors.map(floor => {
-                                        // Boss dictionary mapping
-                                        const BOSSES = {
-                                            1: { name: 'Illfang the Kobold Lord', avatar: '👹', desc: 'Dificuldade Inicial: Junte seus primeiros Col!' },
-                                            22: { name: 'The Witch of the Lake', avatar: '🧙‍♀️', desc: 'Dona do Lago da Floresta: Desbloqueie sua cabana!' },
-                                            48: { name: 'The Wyrm of the Snow', avatar: '🐉', desc: 'Dragão de Gelo Cristalino: Forje sua arma!' },
-                                            74: { name: 'The Gleam Eyes', avatar: '👿', desc: 'O Demônio de Olhos Azuis: Enfrente o boss!' },
-                                            100: { name: 'An Incarnation of the Radius', avatar: '👑', desc: 'O Boss Final de Aincrad!' },
-                                        };
-                                        const boss = BOSSES[floor.floor_number] || {
-                                            name: `Floor ${floor.floor_number} Guardian`,
-                                            avatar: ['👾', '🕷️', '🦁', '🦅', '🦍', '🦂', '👹'][floor.floor_number % 7],
-                                            desc: `Guardião do andar ${floor.floor_number}`
-                                        };
-
                                         const bossMaxHp = floor.target_amount;
                                         const bossCurrentHp = Math.max(0, floor.target_amount - floor.current_amount);
                                         const bossHpPercentage = 100 - floor.progress;
@@ -689,7 +675,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                 padding: '14px',
                                                 borderRadius: '8px',
                                                 background: floor.status === 'cleared' ? 'rgba(74,225,131,0.03)' : 'var(--sao-surface)',
-                                                border: `1px solid ${floor.status === 'cleared' ? 'rgba(74,225,131,0.2)' : floor.status === 'active' ? 'rgba(255,71,87,0.25)' : 'var(--sao-border-subtle)'}`,
+                                                border: `1px solid ${floor.status === 'cleared' ? 'rgba(74,225,131,0.2)' : floor.status === 'active' ? (floor.boss?.category_color ? `${floor.boss.category_color}40` : 'rgba(255,71,87,0.25)') : 'var(--sao-border-subtle)'}`,
                                                 transition: 'border-color 0.2s',
                                                 display: 'flex',
                                                 flexDirection: 'column',
@@ -700,11 +686,22 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                                     <div style={{
                                                         width: '36px', height: '36px', borderRadius: '8px',
-                                                        background: 'var(--sao-bg)', border: `1px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : 'var(--sao-danger)'}`,
+                                                        background: 'var(--sao-dark)', border: `1px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : (floor.boss?.category_color || 'var(--sao-danger)')}`,
                                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                        fontSize: '1.4rem'
+                                                        overflow: 'hidden', flexShrink: 0
                                                     }}>
-                                                        {floor.status === 'cleared' ? '🏆' : boss.avatar}
+                                                        {floor.status === 'cleared' ? (
+                                                            <span style={{ fontSize: '1.4rem' }}>🏆</span>
+                                                        ) : floor.boss?.image_url ? (
+                                                            <img 
+                                                                src={floor.boss.image_url} 
+                                                                alt={floor.boss.name} 
+                                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                                                title={floor.boss.description}
+                                                            />
+                                                        ) : (
+                                                            <span style={{ fontSize: '1.4rem' }}>{floor.boss?.icon || '👹'}</span>
+                                                        )}
                                                     </div>
                                                     <div style={{ flex: 1 }}>
                                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
@@ -712,7 +709,7 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                                 Floor {floor.floor_number}: {floor.name}
                                                             </span>
                                                             {floor.status === 'cleared' ? (
-                                                                <span style={{ fontSize: '9px', fontWeight: 700, color: '#4ae183', background: 'rgba(74,225,131,0.1)', padding: '1px 6px', borderRadius: '3px', border: '1px solid rgba(74,225,131,0.3)', fontFamily: "'JetBrains Mono', monospace" }}>
+                                                                 <span style={{ fontSize: '9px', fontWeight: 700, color: '#4ae183', background: 'rgba(74,225,131,0.1)', padding: '1px 6px', borderRadius: '3px', border: '1px solid rgba(74,225,131,0.3)', fontFamily: "'JetBrains Mono', monospace" }}>
                                                                     DEFEATED
                                                                 </span>
                                                             ) : (
@@ -721,8 +718,24 @@ export default function Dashboard({ stats, xp, recent_trades, active_floors }) {
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <div style={{ fontSize: '0.65rem', color: 'var(--sao-text-dim)', marginTop: '2px' }}>
-                                                            {floor.status === 'cleared' ? 'O boss deste andar foi derrotado!' : `Boss: ${boss.name}`}
+                                                        <div style={{ fontSize: '0.65rem', color: 'var(--sao-text-dim)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                            {floor.status === 'cleared' ? (
+                                                                <span>O boss <strong>{floor.boss?.name || 'Boss'}</strong> foi derrotado!</span>
+                                                            ) : (
+                                                                <>
+                                                                    <span>Boss: <strong>{floor.boss?.name || 'Floor Guardian'}</strong></span>
+                                                                    {floor.boss && (
+                                                                        <span style={{
+                                                                            fontSize: '7px', fontWeight: 700,
+                                                                            color: floor.boss.category_color, background: `${floor.boss.category_color}15`,
+                                                                            padding: '0px 4px', borderRadius: '2px', border: `1px solid ${floor.boss.category_color}30`,
+                                                                            fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase'
+                                                                        }}>
+                                                                            {floor.boss.category_label}
+                                                                        </span>
+                                                                    )}
+                                                                </>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>

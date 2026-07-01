@@ -33,6 +33,8 @@ class GeneralizedTransitionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function form(Form $form): Form
     {
         return $form
@@ -487,7 +489,7 @@ class GeneralizedTransitionResource extends Resource
 
                             $filename = 'transacoes_' . now()->format('Y-m-d_His') . '.json';
                             $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-                            
+
                             return response()->streamDownload(function () use ($json) {
                                 echo $json;
                             }, $filename, [
@@ -554,7 +556,7 @@ class GeneralizedTransitionResource extends Resource
                                 if (isset($record['start_date']) && $record['start_date']) {
                                     $startDate = Carbon::parse($record['start_date'])->format('Y-m-d');
                                 }
-                                
+
                                 $endDate = null;
                                 if (isset($record['end_date']) && $record['end_date']) {
                                     $endDate = Carbon::parse($record['end_date'])->format('Y-m-d');
