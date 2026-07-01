@@ -1058,10 +1058,9 @@
                                 <span class="material-symbols-outlined text-sao-orange" style="font-size: 40px; font-variation-settings: 'FILL' 1;">description</span>
                             </div>
                             <div>
-                                <h3 class="font-bold text-xl" style="font-family: 'Sora', sans-serif; color: var(--sao-text);">SAO SYSTEM ACCESS</h3>
+                                <h3 class="font-bold text-xl uppercase" style="font-family: 'Sora', sans-serif; color: var(--sao-text);">{{ $plan ? $plan->name : 'SAO SYSTEM ACCESS' }}</h3>
                                 <p class="label-caps text-sao-orange mt-0.5">CLASS: UNIQUE ITEM</p>
-                                <p class="text-xs mt-2 leading-relaxed" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Acesso completo a todos os
-                                    módulos, Guilda, suporte e atualizações vitalícias.</p>
+                                <p class="text-xs mt-2 leading-relaxed" style="color: #dac2ad; font-family: 'Hanken Grotesk', sans-serif;">Acesso completo a todos os recursos de Aincrad e assistência com YUI.</p>
                             </div>
                         </div>
 
@@ -1069,7 +1068,17 @@
 
                         {{-- Features --}}
                         <ul class="space-y-2.5 mb-6 text-sm">
-                            @foreach (['8 Módulos de treinamento', 'Guilda (comunidade vitalícia)', 'Suporte direto do Mestre', 'Missões Extras (bônus)', 'Atualizações vitalícias', 'Certificado de Conclusão'] as $f)
+                            @php
+                                $features = $plan ? $plan->features : [
+                                    'Barra de HP (Saldo) e Controle de XP',
+                                    'Trade Log de Combate (Receitas/Despesas)',
+                                    'Inventário Completo de Ativos e Passivos',
+                                    'Guild System (Comunidade, Ranking & Chat)',
+                                    'Assistência por YUI',
+                                    'Evolução pelos 100 Andares de Aincrad'
+                                ];
+                            @endphp
+                            @foreach ($features as $f)
                                 <li class="flex items-center gap-2.5" style="color: var(--sao-text);">
                                     <span
                                         class="w-5 h-5 rounded-full bg-sao-orange flex items-center justify-center flex-shrink-0"
@@ -1087,9 +1096,9 @@
                         <div class="flex items-end justify-between mb-6">
                             <span class="label-caps" style="color: var(--sao-text-muted);">Cost:</span>
                             <div class="text-right">
-                                <span class="block text-sm line-through" style="color: rgba(226,226,236,0.3);">R$ 497</span>
-                                <span class="text-4xl font-black" style="font-family: 'Sora', sans-serif; color: var(--sao-text);">R$ 197</span>
-                                <p class="label-caps text-[10px] mt-0.5" style="color: var(--sao-text-muted);">ou 12x de R$ 19,70</p>
+                                <span class="block text-sm line-through" style="color: rgba(226,226,236,0.3);">R$ 49,90</span>
+                                <span class="text-4xl font-black" style="font-family: 'Sora', sans-serif; color: var(--sao-text);">R$ {{ number_format($plan ? $plan->price : 19.70, 2, ',', '.') }}</span>
+                                <p class="label-caps text-[10px] mt-0.5" style="color: var(--sao-text-muted);">Cobrado mensalmente / Sem fidelidade</p>
                             </div>
                         </div>
 

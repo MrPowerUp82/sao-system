@@ -5,16 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Services\XpService;
+use Laravel\Cashier\Billable;
 use Spatie\Permission\Traits\HasRoles;
 
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Billable;
 
     protected $fillable = [
         'name',

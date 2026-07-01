@@ -14,7 +14,22 @@ class GuildChatTest extends TestCase
     public function test_non_member_cannot_fetch_messages(): void
     {
         $user = User::factory()->create(['email' => 'member1@example.com']);
+        $user->subscriptions()->create([
+            'type' => 'default',
+            'stripe_id' => 'sub_test_1',
+            'stripe_status' => 'active',
+            'stripe_price' => 'price_test',
+            'quantity' => 1,
+        ]);
+
         $otherUser = User::factory()->create(['email' => 'member2@example.com']);
+        $otherUser->subscriptions()->create([
+            'type' => 'default',
+            'stripe_id' => 'sub_test_2',
+            'stripe_status' => 'active',
+            'stripe_price' => 'price_test',
+            'quantity' => 1,
+        ]);
         
         $guild = Guild::create([
             'name' => 'KoB',
@@ -30,6 +45,14 @@ class GuildChatTest extends TestCase
     public function test_member_can_fetch_messages(): void
     {
         $user = User::factory()->create(['email' => 'member1@example.com']);
+        $user->subscriptions()->create([
+            'type' => 'default',
+            'stripe_id' => 'sub_test_1',
+            'stripe_status' => 'active',
+            'stripe_price' => 'price_test',
+            'quantity' => 1,
+        ]);
+
         $guild = Guild::create([
             'name' => 'KoB',
             'master_id' => $user->id,
@@ -54,7 +77,22 @@ class GuildChatTest extends TestCase
     public function test_non_member_cannot_send_messages(): void
     {
         $user = User::factory()->create(['email' => 'member1@example.com']);
+        $user->subscriptions()->create([
+            'type' => 'default',
+            'stripe_id' => 'sub_test_1',
+            'stripe_status' => 'active',
+            'stripe_price' => 'price_test',
+            'quantity' => 1,
+        ]);
+
         $otherUser = User::factory()->create(['email' => 'member2@example.com']);
+        $otherUser->subscriptions()->create([
+            'type' => 'default',
+            'stripe_id' => 'sub_test_2',
+            'stripe_status' => 'active',
+            'stripe_price' => 'price_test',
+            'quantity' => 1,
+        ]);
         
         $guild = Guild::create([
             'name' => 'KoB',
@@ -72,6 +110,14 @@ class GuildChatTest extends TestCase
     public function test_member_can_send_messages(): void
     {
         $user = User::factory()->create(['email' => 'member1@example.com']);
+        $user->subscriptions()->create([
+            'type' => 'default',
+            'stripe_id' => 'sub_test_1',
+            'stripe_status' => 'active',
+            'stripe_price' => 'price_test',
+            'quantity' => 1,
+        ]);
+
         $guild = Guild::create([
             'name' => 'KoB',
             'master_id' => $user->id,

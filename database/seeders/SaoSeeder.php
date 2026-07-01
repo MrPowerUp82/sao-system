@@ -14,6 +14,24 @@ class SaoSeeder extends Seeder
 {
     public function run(): void
     {
+        // 0. Create Default Active Plan
+        \App\Models\Plan::firstOrCreate(
+            ['stripe_price_id' => 'price_sao_pro_monthly'],
+            [
+                'name' => 'Aincrad Full Pass',
+                'price' => 19.70,
+                'features' => [
+                    'Barra de HP (Saldo) e Controle de XP',
+                    'Trade Log de Combate (Receitas/Despesas)',
+                    'Inventário Completo de Ativos e Passivos',
+                    'Guild System (Comunidade, Ranking & Chat)',
+                    'Assistência por Inteligência com YUI',
+                    'Evolução pelos 100 Andares de Aincrad',
+                ],
+                'is_active' => true,
+            ]
+        );
+
         // 1. Create Kirito User
         $user = User::firstOrCreate(
             ['email' => 'kirito@sao.test'],

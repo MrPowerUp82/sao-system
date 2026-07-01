@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class AuthController extends Controller
 {
@@ -91,5 +92,39 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    /**
+     * Exibe a tela de notificação de verificação de e-mail.
+     */
+    public function verifyNotice(Request $request)
+    {
+        return $request->user()->hasVerifiedEmail()
+            ? redirect()->intended(route('player.dashboard'))
+            : Inertia::render('Auth/VerifyEmail', ['status' => session('status')]);
+    }
+
+    /**
+     * Processa a verificação de e-mail.
+     */
+    public function verifyEmail(EmailVerificationRequest $request): RedirectResponse
+    {
+        $request->fulfill();
+
+        return redirect()->route('player.dashboard')->with('success', 'E-mail verificado com sucesso! Link Start!');
+    }
+
+    /**
+     * Reenvia o link de verificação de e-mail.
+     */
+    public function verifySend(Request $request): RedirectResponse
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->intended(route('player.dashboard'));
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('status', 'verification-link-sent');
     }
 }

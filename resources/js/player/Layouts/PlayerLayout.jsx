@@ -146,8 +146,32 @@ export default function PlayerLayout({ children, stats, xp }) {
                     })}
                 </nav>
 
-                {/* Theme & Sound Toggle + Settings */}
+                {/* Theme, Sound & Billing Toggle + Settings */}
                 <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', paddingBottom: '12px', width: '100%' }}>
+                    {/* Billing Portal */}
+                    <Link
+                        href="/player/subscription/portal"
+                        method="post"
+                        as="button"
+                        className="hud-sidebar-link"
+                        onClick={() => play('click')}
+                        style={{
+                            width: '100%', padding: '12px 8px',
+                            borderRadius: '0', border: 'none',
+                            background: 'transparent',
+                            cursor: 'pointer', fontSize: '0.7rem', display: 'flex',
+                            flexDirection: 'column', alignItems: 'center', gap: '4px',
+                            transition: 'all 0.2s ease',
+                            color: 'inherit',
+                        }}
+                        title="Gerenciar assinatura no Stripe"
+                    >
+                        <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
+                            payments
+                        </span>
+                        <span className="label-caps" style={{ fontSize: '9px' }}>BILLING</span>
+                    </Link>
+
                     {/* Theme Toggle */}
                     <button
                         onClick={() => {

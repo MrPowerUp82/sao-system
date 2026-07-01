@@ -24,6 +24,7 @@ class HandleInertiaRequests extends Middleware
                     'col' => $request->user()->col ?? 0,
                     'equipped_title' => $request->user()->equipped_title,
                     'equipped_avatar' => $request->user()->equipped_avatar,
+                    'subscribed' => $request->user()->email === 'kirito@sao.test' || $request->user()->hasRole('super_admin') || ($request->user()->subscribed('default') || $request->user()->subscribed('pro')),
                 ] : null,
             ],
             'flash' => [
