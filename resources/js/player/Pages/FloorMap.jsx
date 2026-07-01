@@ -130,19 +130,23 @@ export default function FloorMap({ floors }) {
                                         {/* Boss/Floor Avatar */}
                                         <div style={{
                                             width: '56px', height: '56px', borderRadius: '12px',
-                                            background: 'var(--sao-bg)',
-                                            border: `2px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : 'var(--sao-danger)'}`,
+                                            background: 'var(--sao-dark)',
+                                            border: `2px solid ${floor.status === 'cleared' ? 'var(--sao-success)' : (floor.boss?.category_color || 'var(--sao-danger)')}`,
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: '2rem', flexShrink: 0
+                                            overflow: 'hidden', flexShrink: 0,
+                                            boxShadow: floor.status === 'cleared' ? 'none' : `0 0 10px ${(floor.boss?.category_color || '#ff4757')}40`,
                                         }}>
-                                            {floor.status === 'cleared' ? '🏆' : (
-                                                {
-                                                    1: '👹',
-                                                    22: '🧙‍♀️',
-                                                    48: '🐉',
-                                                    74: '👿',
-                                                    100: '👑',
-                                                }[floor.floor_number] || ['👾', '🕷️', '🦁', '🦅', '🦍', '🦂', '👹'][floor.floor_number % 7]
+                                            {floor.status === 'cleared' ? (
+                                                <span style={{ fontSize: '2rem' }}>🏆</span>
+                                            ) : floor.boss?.image_url ? (
+                                                <img 
+                                                    src={floor.boss.image_url} 
+                                                    alt={floor.boss.name} 
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                                    title={floor.boss.description}
+                                                />
+                                            ) : (
+                                                <span style={{ fontSize: '2rem' }}>{floor.boss?.icon || '👹'}</span>
                                             )}
                                         </div>
 
@@ -162,17 +166,23 @@ export default function FloorMap({ floors }) {
                                                 )}
                                             </div>
                                             
-                                            <div style={{ fontSize: '0.75rem', color: 'var(--sao-text-dim)', marginTop: '2px' }}>
-                                                {floor.status === 'cleared' ? 'O guardião deste andar foi derrotado com sucesso!' : (
-                                                    `Boss: ${
-                                                        {
-                                                            1: 'Illfang the Kobold Lord',
-                                                            22: 'The Witch of the Lake',
-                                                            48: 'The Wyrm of the Snow',
-                                                            74: 'The Gleam Eyes',
-                                                            100: 'An Incarnation of the Radius',
-                                                        }[floor.floor_number] || `Floor ${floor.floor_number} Guardian`
-                                                    }`
+                                            <div style={{ fontSize: '0.75rem', color: 'var(--sao-text-dim)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                {floor.status === 'cleared' ? (
+                                                    <span>O guardião <strong>{floor.boss?.name || 'Boss'}</strong> foi derrotado com sucesso!</span>
+                                                ) : (
+                                                    <>
+                                                        <span>Guardião: <strong>{floor.boss?.name || 'Floor Guardian'}</strong></span>
+                                                        {floor.boss && (
+                                                            <span style={{
+                                                                fontSize: '8px', fontWeight: 700, 
+                                                                color: floor.boss.category_color, background: `${floor.boss.category_color}15`,
+                                                                padding: '1px 6px', borderRadius: '3px', border: `1px solid ${floor.boss.category_color}30`,
+                                                                fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase'
+                                                            }}>
+                                                                {floor.boss.category_label}
+                                                            </span>
+                                                        )}
+                                                    </>
                                                 )}
                                             </div>
 

@@ -41,6 +41,7 @@ class InventoryController extends Controller
                 'rarity_color' => $item->getRarityColor(),
                 'value' => (float) $item->value,
                 'icon' => $item->icon,
+                'image_url' => $item->image_url,
                 'description' => $item->description,
                 'attributes' => $item->attributes,
                 'equipped' => $item->equipped,

@@ -50,8 +50,13 @@ function ShopItemCard({ item, playerCol, onBuy }) {
                         fontSize: '1.5rem',
                         boxShadow: rarity.glow,
                         flexShrink: 0,
+                        overflow: 'hidden',
                     }}>
-                        {item.icon}
+                        {item.image_url ? (
+                            <img src={item.image_url} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                            item.icon
+                        )}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{

@@ -13,20 +13,59 @@ class FloorMapController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $allMonsters = \App\Models\Monster::all();
 
         $floors = FinancialGoal::where('user_id', $user->id)
             ->orderBy('floor_number')
             ->get()
-            ->map(fn($g) => [
-                'id' => $g->id,
-                'name' => $g->name,
-                'target_amount' => (float) $g->target_amount,
-                'current_amount' => (float) $g->current_amount,
-                'floor_number' => $g->floor_number,
-                'icon' => $g->icon,
-                'status' => $g->status,
-                'progress' => $g->getProgressPercentage(),
-            ]);
+            ->map(function ($g) use ($allMonsters) {
+                // Find boss/guardian
+                // 1. Check if there is a specific floor boss
+                $monster = $allMonsters->where('category', 'boss')
+                    ->where('specific_floor', $g->floor_number)
+                    ->first();
+
+                // 2. If no specific boss, get a monster corresponding to the floor range
+                if (!$monster) {
+                    $category = 'common';
+                    if ($g->floor_number > 75) {
+                        $category = 'master';
+                    } elseif ($g->floor_number > 50) {
+                        $category = 'elite';
+                    } elseif ($g->floor_number > 10) {
+                        $category = 'intermediate';
+                    }
+
+                    $possibleMonsters = $allMonsters->where('category', $category);
+                    if ($possibleMonsters->isEmpty()) {
+                        $possibleMonsters = $allMonsters->where('category', '!=', 'boss');
+                    }
+
+                    if ($possibleMonsters->isNotEmpty()) {
+                        $index = $g->id % $possibleMonsters->count();
+                        $monster = $possibleMonsters->values()->get($index);
+                    }
+                }
+
+                return [
+                    'id' => $g->id,
+                    'name' => $g->name,
+                    'target_amount' => (float) $g->target_amount,
+                    'current_amount' => (float) $g->current_amount,
+                    'floor_number' => $g->floor_number,
+                    'icon' => $g->icon,
+                    'status' => $g->status,
+                    'progress' => $g->getProgressPercentage(),
+                    'boss' => $monster ? [
+                        'name' => $monster->name,
+                        'image_url' => $monster->image_url,
+                        'description' => $monster->description,
+                        'category_label' => $monster->getCategoryLabel(),
+                        'category_color' => $monster->getCategoryColor(),
+                        'icon' => $monster->icon,
+                    ] : null,
+                ];
+            });
 
         return Inertia::render('FloorMap', [
             'floors' => $floors,

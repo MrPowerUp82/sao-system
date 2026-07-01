@@ -48,7 +48,21 @@ function ItemCard({ item, onDelete, onToggleEquip, onConsume }) {
 
             {/* Icon + Name */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                <span style={{ fontSize: '1.8rem' }}>{item.icon}</span>
+                {item.image_url ? (
+                    <div style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        border: `1px solid ${rarity.color}30`,
+                        boxShadow: rarity.glow,
+                        flexShrink: 0,
+                    }}>
+                        <img src={item.image_url} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                ) : (
+                    <span style={{ fontSize: '1.8rem', display: 'inline-block', width: '40px', textAlign: 'center' }}>{item.icon}</span>
+                )}
                 <div>
                     <div style={{
                         fontWeight: 600, color: rarity.color,
