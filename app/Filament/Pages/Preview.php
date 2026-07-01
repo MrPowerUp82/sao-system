@@ -23,12 +23,14 @@ class Preview extends Page implements HasForms, HasActions
 {
     use InteractsWithForms;
     use InteractsWithActions;
-    
+
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static string $view = 'filament.pages.preview';
-     protected static ?string $navigationLabel = 'Simulação';
-       protected static ?string $navigationGroup = 'Financeiro';
-    
+    protected static ?string $navigationLabel = 'Simulação';
+    protected static ?string $navigationGroup = 'Financeiro';
+    protected static bool $shouldRegisterNavigation = false;
+    protected static bool $isDiscovered = false;
+
     public ?array $data = [
         'start_date' => null,
         'end_date' => null,
@@ -61,7 +63,7 @@ class Preview extends Page implements HasForms, HasActions
             ])
             ->statePath('data');
     }
-    
+
     protected function getHeaderActions(): array
     {
         return [
@@ -149,11 +151,11 @@ class Preview extends Page implements HasForms, HasActions
                                         Action::make('autoGet')
                                             ->label('Calcular sem juros?')
                                             ->action(function (Get $get, Set $set) {
-                                                if ($get('total_value') && $get('installment_amount')) {
-                                                    $value = round($get('total_value') / $get('installment_amount'), 2);
-                                                    $set('installment_value', $value);
-                                                }
-                                            })
+                                                    if ($get('total_value') && $get('installment_amount')) {
+                                                        $value = round($get('total_value') / $get('installment_amount'), 2);
+                                                        $set('installment_value', $value);
+                                                    }
+                                                })
                                     )
                                     ->inputMode('decimal'),
                             ],
@@ -177,7 +179,7 @@ class Preview extends Page implements HasForms, HasActions
                     $temporaryTransitions[] = $data;
                     session(['temporary_transitions' => $temporaryTransitions]);
                     $this->loadTemporaryTransitions();
-                    
+
                     Notification::make()
                         ->title('Transação temporária adicionada')
                         ->success()
@@ -192,7 +194,7 @@ class Preview extends Page implements HasForms, HasActions
                 ->action(function () {
                     session()->forget('temporary_transitions');
                     $this->temporaryTransitions = [];
-                    
+
                     Notification::make()
                         ->title('Transações temporárias removidas')
                         ->success()
@@ -228,10 +230,10 @@ class Preview extends Page implements HasForms, HasActions
                             // Log error
                         }
                     }
-                    
+
                     session()->forget('temporary_transitions');
                     $this->temporaryTransitions = [];
-                    
+
                     Notification::make()
                         ->title('Transações salvas')
                         ->success()
@@ -241,7 +243,7 @@ class Preview extends Page implements HasForms, HasActions
                 ->visible(fn() => count($this->temporaryTransitions) > 0),
         ];
     }
-    
+
     public function removeTemporary(int $index): void
     {
         $temporaryTransitions = session('temporary_transitions', []);
@@ -249,13 +251,13 @@ class Preview extends Page implements HasForms, HasActions
         $temporaryTransitions = array_values($temporaryTransitions);
         session(['temporary_transitions' => $temporaryTransitions]);
         $this->loadTemporaryTransitions();
-        
+
         Notification::make()
             ->title('Transação removida')
             ->success()
             ->send();
     }
-    
+
     public function create()
     {
         return redirect()->route($this->getRouteName(), $this->form->getState());

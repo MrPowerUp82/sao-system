@@ -36,6 +36,11 @@ class ShopItemResource extends Resource
                                     ->label('Ícone (Emoji)')
                                     ->default('🛒')
                                     ->maxLength(10),
+                                Forms\Components\TextInput::make('image_url')
+                                    ->label('URL da Imagem (Wiki Fandom)')
+                                    ->url()
+                                    ->maxLength(2048)
+                                    ->helperText('Link para a ilustração oficial da Fandom Wiki.'),
                             ]),
                         Forms\Components\Textarea::make('description')
                             ->label('Descrição')
@@ -97,6 +102,9 @@ class ShopItemResource extends Resource
                     ->label('')
                     ->alignCenter()
                     ->width('50px'),
+                Tables\Columns\ImageColumn::make('image_url')
+                    ->label('Imagem')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nome')
                     ->searchable()

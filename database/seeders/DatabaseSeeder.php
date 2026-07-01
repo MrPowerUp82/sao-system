@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(1)->create();
 
         $this->call(SaoSeeder::class);
+        $this->call(SaoAssetsSeeder::class);
 
         //php artisan shield:super-admin --user=1 --panel=admin
         Artisan::call('shield:super-admin', [

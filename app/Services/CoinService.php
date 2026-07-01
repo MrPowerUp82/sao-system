@@ -80,6 +80,7 @@ class CoinService
                 'rarity' => $item->rarity,
                 'value' => 0.00,
                 'icon' => $item->icon ?: '📦',
+                'image_url' => $item->image_url,
                 'description' => $item->description,
                 'attributes' => [
                     'category' => $item->category,

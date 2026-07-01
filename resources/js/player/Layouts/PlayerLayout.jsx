@@ -14,6 +14,7 @@ const NAV_ITEMS = [
     { icon: 'map', label: 'Floor Map', href: '/player/floor-map', name: 'player.floor-map' },
     { icon: 'inventory_2', label: 'Inventory', href: '/player/inventory', name: 'player.inventory' },
     { icon: 'storefront', label: 'Shop', href: '/player/shop', name: 'player.shop' },
+    { icon: 'menu_book', label: 'Bestiary', href: '/player/bestiary', name: 'player.bestiary' },
     { icon: 'groups', label: 'Guild', href: '/player/guild', name: 'player.guild' },
 ]
 

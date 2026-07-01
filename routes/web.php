@@ -86,6 +86,9 @@ Route::middleware(['auth', \App\Http\Middleware\HandleInertiaRequests::class])
         Route::get('/guild/{guild}/messages', [GuildController::class, 'messages'])->name('player.guild.messages');
         Route::post('/guild/{guild}/messages', [GuildController::class, 'sendMessage'])->name('player.guild.send_message');
 
+        // Bestiary Routes
+        Route::get('/bestiary', [\App\Http\Controllers\Player\BestiaryController::class, 'index'])->name('player.bestiary');
+
         // Y.U.I. Routes
         Route::post('/yui/chat', [YuiController::class, 'sendMessage'])->name('player.yui.chat');
         Route::get('/yui/status', [YuiController::class, 'getStatus'])->name('player.yui.status');

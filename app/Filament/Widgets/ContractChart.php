@@ -13,6 +13,7 @@ class ContractChart extends ChartWidget
     public $start_date;
     public $end_date;
     public $temporaryTransitions = [];
+    protected static bool $isDiscovered = false;
 
     public function mount($start_date = null, $end_date = null, $temporaryTransitions = []): void
     {
@@ -37,7 +38,7 @@ class ContractChart extends ChartWidget
     {
         $year = $this->start_date ? Carbon::parse($this->start_date)->year : now()->year;
         $tempTransactions = $this->getTemporaryTransactionsCollection();
-        
+
         $transactions_1_f = GeneralizedTransition::whereYear('start_date', $year)
             ->where('input', 1)
             ->where('fix', 1)
@@ -53,7 +54,7 @@ class ContractChart extends ChartWidget
                 return $t->start_date->format('F');
             })
             ->map(fn($group) => $group->count());
-            
+
         $transactions_0_f = GeneralizedTransition::whereYear('start_date', $year)
             ->where('input', 0)
             ->where('fix', 1)
@@ -69,7 +70,7 @@ class ContractChart extends ChartWidget
                 return $t->start_date->format('F');
             })
             ->map(fn($group) => $group->count());
-            
+
         $transactions_1_v = GeneralizedTransition::whereYear('start_date', $year)
             ->where('input', 1)
             ->where('type', 'v')
@@ -86,7 +87,7 @@ class ContractChart extends ChartWidget
                 return $t->start_date->format('F');
             })
             ->map(fn($group) => $group->count());
-            
+
         $transactions_1_p = GeneralizedTransition::whereYear('start_date', $year)
             ->where('input', 1)
             ->where('type', 'p')
@@ -103,7 +104,7 @@ class ContractChart extends ChartWidget
                 return $t->start_date->format('F');
             })
             ->map(fn($group) => $group->count());
-            
+
         $transactions_0_v = GeneralizedTransition::whereYear('start_date', $year)
             ->where('input', 0)
             ->where('type', 'v')
@@ -120,7 +121,7 @@ class ContractChart extends ChartWidget
                 return $t->start_date->format('F');
             })
             ->map(fn($group) => $group->count());
-            
+
         $transactions_0_p = GeneralizedTransition::whereYear('start_date', $year)
             ->where('input', 0)
             ->where('type', 'p')
