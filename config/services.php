@@ -31,4 +31,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'stripe' => [
+        // Price ID de fallback caso nenhum Plan ativo exista no banco
+        'price_id' => env('STRIPE_PRICE_ID', 'price_sao_pro_monthly'),
+    ],
+
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+    ],
+
 ];

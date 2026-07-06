@@ -25,6 +25,12 @@ Route::middleware(['guest', \App\Http\Middleware\HandleInertiaRequests::class])-
     Route::post('/login', [AuthController::class, 'store']);
     Route::get('/register', [AuthController::class, 'createRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'storeRegister']);
+
+    // Redefinição de senha
+    Route::get('/forgot-password', [\App\Http\Controllers\Player\PasswordResetController::class, 'requestForm'])->name('password.request');
+    Route::post('/forgot-password', [\App\Http\Controllers\Player\PasswordResetController::class, 'sendLink'])->middleware('throttle:6,1')->name('password.email');
+    Route::get('/reset-password/{token}', [\App\Http\Controllers\Player\PasswordResetController::class, 'resetForm'])->name('password.reset');
+    Route::post('/reset-password', [\App\Http\Controllers\Player\PasswordResetController::class, 'reset'])->middleware('throttle:6,1')->name('password.update');
 });
 
 Route::post('/logout', [AuthController::class, 'destroy'])

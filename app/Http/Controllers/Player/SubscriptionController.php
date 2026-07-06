@@ -27,7 +27,7 @@ class SubscriptionController extends Controller
 
         return Inertia::render('Auth/Subscription/Pricing', [
             'stripeKey' => config('cashier.key'),
-            'envMode' => empty(env('STRIPE_SECRET')) ? 'sandbox_mock' : 'stripe_live',
+            'envMode' => $this->stripeConfigured() ? 'stripe_live' : 'sandbox_mock',
             'plan' => $plan ? [
                 'name' => $plan->name,
                 'price' => $plan->price,
@@ -42,14 +42,21 @@ class SubscriptionController extends Controller
     public function checkout(Request $request)
     {
         $user = $request->user();
-        
+
         // Carrega o plano ativo do banco de dados
         $plan = Plan::where('is_active', true)->first();
-        $priceId = $plan ? $plan->stripe_price_id : env('STRIPE_PRICE_ID', 'price_sao_pro_monthly');
+        $priceId = $plan ? $plan->stripe_price_id : config('services.stripe.price_id');
 
-        // FALLBACK DE DESENVOLVIMENTO: Se as chaves do Stripe não estiverem no .env, simulamos o sucesso local
-        if (empty(env('STRIPE_SECRET'))) {
-            // Cria uma assinatura de teste local diretamente no banco
+        if (! $this->stripeConfigured()) {
+            // Em produção, nunca conceder assinatura simulada: é falha de configuração
+            if (app()->environment('production')) {
+                report(new \RuntimeException('Stripe não configurado (STRIPE_SECRET ausente) com aplicação em produção.'));
+
+                return redirect()->route('player.subscription.pricing')
+                    ->with('error', 'O sistema de pagamentos está temporariamente indisponível. Tente novamente em instantes.');
+            }
+
+            // FALLBACK DE DESENVOLVIMENTO: sem chaves do Stripe, simulamos o sucesso local
             $user->subscriptions()->create([
                 'type' => 'default',
                 'stripe_id' => 'sub_mock_' . uniqid(),
@@ -90,12 +97,20 @@ class SubscriptionController extends Controller
         $user = $request->user();
 
         // Se for assinatura simulada
-        if (empty(env('STRIPE_SECRET'))) {
+        if (! $this->stripeConfigured()) {
             return back()->with('error', 'O portal financeiro do Stripe não está disponível no modo de simulação Sandbox.');
         }
 
         return $user->redirectToBillingPortal(
             route('player.dashboard')
         );
+    }
+
+    /**
+     * Indica se as credenciais do Stripe estão configuradas.
+     */
+    protected function stripeConfigured(): bool
+    {
+        return ! empty(config('cashier.secret'));
     }
 }

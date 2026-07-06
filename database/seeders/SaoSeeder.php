@@ -43,6 +43,7 @@ class SaoSeeder extends Seeder
                 'xp' => 10500, // Level 10 approx
                 'avatar_url' => null,
                 'col' => 500,
+                'email_verified_at' => Carbon::now(),
             ]
         );
 

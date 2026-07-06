@@ -110,6 +110,25 @@ class UserResource extends Resource
                     ->numeric()
                     ->color('warning')
                     ->weight('bold'),
+                Tables\Columns\TextColumn::make('subscription_status')
+                    ->label('Assinatura')
+                    ->badge()
+                    ->state(function (User $record): string {
+                        $subscription = $record->subscription('default');
+
+                        return match (true) {
+                            ! $subscription || ! $subscription->valid() => 'Sem assinatura',
+                            str_starts_with($subscription->stripe_id, 'sub_comp_') => 'Cortesia',
+                            str_starts_with($subscription->stripe_id, 'sub_mock_') => 'Simulada',
+                            default => 'Ativa',
+                        };
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'Ativa' => 'success',
+                        'Cortesia' => 'info',
+                        'Simulada' => 'warning',
+                        default => 'gray',
+                    }),
             ])
             ->filters([])
             ->actions([
@@ -192,6 +211,42 @@ class UserResource extends Resource
                     ->modalHeading('Remover Col')
                     ->modalDescription(fn(User $record) => 'Saldo atual: 🪙 ' . number_format($record->col, 0, ',', '.'))
                     ->modalSubmitActionLabel('Remover'),
+
+                Tables\Actions\Action::make('grantSubscription')
+                    ->label('Conceder Assinatura')
+                    ->icon('heroicon-o-gift')
+                    ->color('info')
+                    ->visible(fn (User $record): bool => ! $record->subscribed('default'))
+                    ->form([
+                        Forms\Components\DatePicker::make('ends_at')
+                            ->label('Válida até (opcional)')
+                            ->minDate(now()->addDay())
+                            ->helperText('Deixe em branco para acesso sem prazo. Com data, o acesso expira automaticamente.'),
+                    ])
+                    ->requiresConfirmation()
+                    ->modalHeading('Conceder assinatura cortesia')
+                    ->modalDescription(fn (User $record) => 'Libera o acesso completo para ' . $record->getDisplayName() . ' sem cobrança — ideal para staff e testes. Não cria nada no Stripe.')
+                    ->modalSubmitActionLabel('Conceder')
+                    ->action(function (User $record, array $data): void {
+                        try {
+                            \App\Services\SubscriptionService::grantComplimentary(
+                                $record,
+                                filled($data['ends_at']) ? \Illuminate\Support\Carbon::parse($data['ends_at'])->endOfDay() : null
+                            );
+
+                            Notification::make()
+                                ->title('Assinatura cortesia concedida')
+                                ->body($record->getDisplayName() . ' agora tem acesso completo ao sistema.')
+                                ->success()
+                                ->send();
+                        } catch (\RuntimeException $e) {
+                            Notification::make()
+                                ->title('Não foi possível conceder')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

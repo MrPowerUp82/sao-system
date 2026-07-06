@@ -1,31 +1,30 @@
 import React, { useEffect } from 'react';
-import { useForm, Link } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import GuestLayout from '../../Layouts/GuestLayout';
 
-export default function Login({ status }) {
+export default function ResetPassword({ token, email }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
+        token: token,
+        email: email || '',
         password: '',
-        remember: false,
+        password_confirmation: '',
     });
 
     useEffect(() => {
         return () => {
-            reset('password');
+            reset('password', 'password_confirmation');
         };
     }, []);
 
     const submit = (e) => {
         e.preventDefault();
-        post('/login');
+        post('/reset-password');
     };
 
     return (
-        <GuestLayout title="Log In">
-            <h2 className="auth-title">Link Start!</h2>
-            <p className="auth-subtitle">System Authentication Protocol</p>
-
-            {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
+        <GuestLayout title="Redefinir Senha">
+            <h2 className="auth-title">Nova Senha</h2>
+            <p className="auth-subtitle">Defina uma nova senha para reativar seu Link Start.</p>
 
             <form onSubmit={submit}>
                 <div className="auth-input-group">
@@ -51,47 +50,36 @@ export default function Login({ status }) {
                         name="password"
                         value={data.password}
                         className="auth-input"
-                        autoComplete="current-password"
+                        autoComplete="new-password"
                         placeholder=" "
                         onChange={(e) => setData('password', e.target.value)}
                         required
                     />
-                    <label htmlFor="password" className="auth-label">Password</label>
+                    <label htmlFor="password" className="auth-label">Nova Senha</label>
                     {errors.password && <div style={{ color: 'var(--sao-danger)', fontSize: '0.7rem', marginTop: '4px' }}>{errors.password}</div>}
                 </div>
 
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <input
-                            type="checkbox"
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) => setData('remember', e.target.checked)}
-                            style={{ accentColor: 'var(--sao-orange)' }}
-                        />
-                        <span className="ms-2 text-sm text-gray-400" style={{ fontSize: '0.8rem' }}>Remember me</span>
-                    </label>
+                <div className="auth-input-group">
+                    <input
+                        id="password_confirmation"
+                        type="password"
+                        name="password_confirmation"
+                        value={data.password_confirmation}
+                        className="auth-input"
+                        autoComplete="new-password"
+                        placeholder=" "
+                        onChange={(e) => setData('password_confirmation', e.target.value)}
+                        required
+                    />
+                    <label htmlFor="password_confirmation" className="auth-label">Confirmar Nova Senha</label>
+                    {errors.password_confirmation && <div style={{ color: 'var(--sao-danger)', fontSize: '0.7rem', marginTop: '4px' }}>{errors.password_confirmation}</div>}
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
                     <button className="auth-btn" disabled={processing}>
-                        {processing ? 'Connecting...' : 'Link Start!'}
+                        {processing ? 'Salvando...' : 'Redefinir Senha'}
                     </button>
                 </div>
-
-                <Link
-                    href="/register"
-                    className="auth-link"
-                >
-                    Initialize New Account Data
-                </Link>
-
-                <Link
-                    href="/forgot-password"
-                    className="auth-link"
-                >
-                    Esqueci minha senha
-                </Link>
             </form>
         </GuestLayout>
     );
